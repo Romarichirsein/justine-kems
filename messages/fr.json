@@ -1,0 +1,57 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "about": "À propos",
+    "services": "Services",
+    "catalogue": "Catalogue",
+    "blog": "Blog",
+    "formations": "Formations",
+    "models": "Modèles",
+    "contact": "Contact",
+    "cta": "Prendre RDV"
+  },
+  "hero": {
+    "title": "Justine Kem's",
+    "subtitle": "L'élégance façonnée sur mesure",
+    "cta1": "Découvrir les collections",
+    "cta2": "Prendre rendez-vous"
+  },
+  "trustBar": {
+    "custom": "Créations sur mesure",
+    "shipping": "Expédition Cameroun & International",
+    "guarantee": "Satisfaction garantie"
+  },
+  "scrollStory": {
+    "step1": "Diagnostic personnalisé de vos envies",
+    "step2": "Sélection des plus beaux tissus",
+    "step3": "Confection artisanale minutieuse",
+    "step4": "Votre création unique livrée",
+    "step5": "L'élégance à votre image"
+  },
+  "whatsapp": {
+    "buttonText": "Discutons sur WhatsApp",
+    "defaultMessage": "Bonjour Justine, je souhaite en savoir plus sur vos créations."
+  },
+  "catalogue": {
+    "title": "Catalogue de Créations",
+    "subtitle": "Découvrez nos collections exclusives",
+    "filterCategory": "Catégories",
+    "filterOccasion": "Occasions",
+    "categories": {
+      "all": "Toutes",
+      "haute-couture": "Haute Couture",
+      "pret-a-porter": "Prêt-à-porter",
+      "location": "Location",
+      "accessoires": "Accessoires"
+    },
+    "occasions": {
+      "all": "Toutes",
+      "mariage": "Mariage",
+      "gala": "Gala",
+      "quotidien": "Quotidien",
+      "professionnel": "Professionnel"
+    },
+    "onQuote": "Sur devis",
+    "noResults": "Aucun résultat."
+  }
+}

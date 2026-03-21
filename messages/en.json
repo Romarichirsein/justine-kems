@@ -1,0 +1,57 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "catalogue": "Catalogue",
+    "blog": "Blog",
+    "formations": "Training",
+    "models": "Portfolio",
+    "contact": "Contact",
+    "cta": "Book Appointment"
+  },
+  "hero": {
+    "title": "Justine Kem's",
+    "subtitle": "Elegance tailored to perfection",
+    "cta1": "Discover collections",
+    "cta2": "Book an appointment"
+  },
+  "scrollStory": {
+    "step1": "Personalized diagnosis of your desires",
+    "step2": "Selection of the finest fabrics",
+    "step3": "Meticulous artisanal craftsmanship",
+    "step4": "Your unique creation delivered",
+    "step5": "Elegance in your image"
+  },
+  "trustBar": {
+    "custom": "Bespoke creations",
+    "shipping": "Cameroon & International Shipping",
+    "guarantee": "Satisfaction guaranteed"
+  },
+  "whatsapp": {
+    "buttonText": "Chat on WhatsApp",
+    "defaultMessage": "Hello Justine, I would like to know more about your creations."
+  },
+  "catalogue": {
+    "title": "Creations Catalogue",
+    "subtitle": "Discover our exclusive collections",
+    "filterCategory": "Categories",
+    "filterOccasion": "Occasions",
+    "categories": {
+      "all": "All",
+      "haute-couture": "Haute Couture",
+      "pret-a-porter": "Ready-to-wear",
+      "location": "Rental",
+      "accessoires": "Accessories"
+    },
+    "occasions": {
+      "all": "All",
+      "mariage": "Wedding",
+      "gala": "Gala",
+      "quotidien": "Daily",
+      "professionnel": "Professional"
+    },
+    "onQuote": "On quote",
+    "noResults": "No results found."
+  }
+}
