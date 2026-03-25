@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { locales } from '@/i18n/request'
 import { Providers } from '../providers'
-import { getMessages, setRequestLocale } from 'next-intl/server'
+import { getMessages, setRequestLocale, getTranslations } from 'next-intl/server'
 import '../globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'

@@ -96,6 +96,9 @@ export default function ServicesPage() {
   const t = useTranslations('services')
   const locale = useLocale()
 
+  const prevLabel = t('prev')
+  const nextLabel = t('next')
+
   const [modalOpen, setModalOpen] = useState(false)
   const [formConfig, setFormConfig] = useState<{ type: 'order' | 'rental' | 'training'; title: string }>({
     type: 'order',

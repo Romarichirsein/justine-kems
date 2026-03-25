@@ -138,7 +138,11 @@ export function CatalogClient({ initialModels, locale }: CatalogClientProps) {
               model={model}
               onSelect={() => setSelectedModel(model)}
               hasError={imgErrors.has(model.id)}
-              onError={() => setImgErrors(prev => new Set([...prev, model.id]))}
+              onError={() => setImgErrors(prev => {
+                const next = new Set(prev)
+                next.add(model.id)
+                return next
+              })}
               formatPrice={formatPrice}
               viewDetailLabel={t('controls.viewDetail')}
               notAvailableLabel={t('controls.notAvailable')}

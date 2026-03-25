@@ -122,10 +122,10 @@ export function FormationsClient({ heroOnly = false, locale = 'fr' }: { heroOnly
   }
 
   // Data helpers
-  const programKeys = ['f1', 'f2', 'f3'] as const
-  const processKeys = ['s1', 's2', 's3', 's4'] as const
-  const testimonialKeys = ['t1', 't2', 't3'] as const
-  const faqKeys = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6'] as const
+  const programKeys = ['f1', 'f2', 'f3'] as const;
+  const processKeys = ['s1', 's2', 's3', 's4'] as const;
+  const testimonialKeys = ['t1', 't2', 't3'] as const;
+  const faqKeys = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6'] as const;
 
   const programs = programKeys.map((key, i) => ({
     level: t(`programmes.items.${key}.level`),
@@ -138,25 +138,25 @@ export function FormationsClient({ heroOnly = false, locale = 'fr' }: { heroOnly
     borderColor: i === 0 ? 'border-green-400/30' : i === 1 ? 'border-jk-royal-gold/40' : 'border-purple-400/30',
     isBest: i === 1,
     modules: [0, 1, 2, 3].map(m => t(`programmes.items.${key}.modules.${m}`))
-  }))
+  }));
 
   const steps = processKeys.map((key, i) => ({
     num: `0${i + 1}`,
     title: t(`process.steps.${key}.title`),
     desc: t(`process.steps.${key}.desc`)
-  }))
+  }));
 
   const testimonials = testimonialKeys.map(key => ({
     name: t(`testimonials.items.${key}.name`),
     role: t(`testimonials.items.${key}.role`),
     text: t(`testimonials.items.${key}.text`),
     stars: 5
-  }))
+  }));
 
   const faqs = faqKeys.map(key => ({
     q: t(`faq.items.${key}.q`),
     a: t(`faq.items.${key}.a`)
-  }))
+  }));
 
   return (
     <>
@@ -296,7 +296,7 @@ export function FormationsClient({ heroOnly = false, locale = 'fr' }: { heroOnly
               {t('ctaFinal.btnWhatsapp')}
             </button>
           </div>
-        </div>
+        </RevealOnScroll>
         <WhatsAppFormHandler
           isOpen={modalOpen}
           onClose={() => setModalOpen(false)}

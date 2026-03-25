@@ -23,5 +23,3 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: s
     </div>
   )
 }
-  )
-}
