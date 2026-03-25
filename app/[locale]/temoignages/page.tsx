@@ -1,72 +1,38 @@
 import { safeFetch, queries } from '@/sanity/client'
 import { RevealOnScroll } from '@/components/RevealOnScroll'
-import { setRequestLocale } from 'next-intl/server'
+import { setRequestLocale, getTranslations } from 'next-intl/server'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Metadata } from 'next'
 
-export const metadata = {
-  title: 'Témoignages | Justine Kem\'s Atelier',
-  description: 'Découvrez les avis et témoignages authentiques de nos clientes à travers le monde — Cameroun, France, Europe et diaspora africaine.',
-  robots: { index: false, follow: false }, // Page non-indexée, hors header
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'temoignages.metadata' })
+
+  return {
+    title: t('title'),
+    description: t('description'),
+    robots: { index: false, follow: false },
+  }
 }
 
 export default async function TemoignagesPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   setRequestLocale(locale)
+  const t = await getTranslations({ locale, namespace: 'temoignages' })
 
   const testimonials = await safeFetch(queries.testimonials) ?? []
 
   // Témoignages statiques de secours si Sanity est vide
-  const fallbackTestimonials = [
-    {
-      _id: 'f1',
-      name: 'Serena B.',
-      city: 'Yaoundé',
-      rating: 5,
-      content: 'Justine a su créer la robe de mes rêves pour mon mariage. Le souci du détail est tout simplement incroyable. Chaque pli, chaque broderie raconte une histoire. Je recommande les yeux fermés.',
-      avatar: null,
-    },
-    {
-      _id: 'f2',
-      name: 'Marie-Claire K.',
-      city: 'Douala',
-      rating: 5,
-      content: 'Un professionnalisme exemplaire. Les finitions sont dignes des plus grandes maisons de couture européennes. Ma tenue pour le baptême de ma fille était parfaite du premier essayage.',
-      avatar: null,
-    },
-    {
-      _id: 'f3',
-      name: 'Inès T.',
-      city: 'Paris',
-      rating: 5,
-      content: 'Même à distance, la communication et les mesures étaient parfaites. Ma robe est arrivée impeccablement emballée depuis Yaoundé. La qualité a ébloui tous mes invités.',
-      avatar: null,
-    },
-    {
-      _id: 'f4',
-      name: 'Amina D.',
-      city: 'Lyon',
-      rating: 5,
-      content: 'Je cherchais quelqu\'un capable de marier les tissus africains avec un style moderne. Justine a dépassé toutes mes attentes. Mon wax fusionné avec de la dentelle — un chef-d\'œuvre.',
-      avatar: null,
-    },
-    {
-      _id: 'f5',
-      name: 'Fatou N.',
-      city: 'Dakar',
-      rating: 5,
-      content: 'Rapide, précise et talentueuse. J\'ai passé commande depuis le Sénégal et tout s\'est déroulé sans accroc. La robe événementielle que j\'ai reçue était au-delà de mes espérances.',
-      avatar: null,
-    },
-    {
-      _id: 'f6',
-      name: 'Céline A.',
-      city: 'Abidjan',
-      rating: 5,
-      content: 'L\'atelier de Justine, c\'est l\'excellence à chaque couture. Ma tenue pour la cérémonie traditionnelle a fait l\'unanimité. Merci pour les conseils et la douceur avec laquelle vous avez travaillé.',
-      avatar: null,
-    },
-  ]
+  const fallbackKeys = ['f1', 'f2', 'f3', 'f4', 'f5', 'f6'] as const
+  const fallbackTestimonials = fallbackKeys.map(key => ({
+    _id: key,
+    name: t(`written.items.${key}.name`),
+    city: t(`written.items.${key}.city`),
+    rating: 5,
+    content: t(`written.items.${key}.content`),
+    avatar: null,
+  }))
 
   const allTestimonials = testimonials.length > 0 ? testimonials : fallbackTestimonials
 
@@ -80,14 +46,14 @@ export default async function TemoignagesPage({ params }: { params: Promise<{ lo
         <div className="container mx-auto px-4 relative z-10 text-center">
           <RevealOnScroll variant="blur-in">
             <p className="text-jk-royal-gold uppercase text-xs tracking-[4px] font-bold mb-4">
-              Elles témoignent
+              {t('hero.tagline')}
             </p>
             <h1 className="text-5xl md:text-6xl font-script text-jk-cream mb-6">
-              Paroles de nos clientes
+              {t('hero.title')}
             </h1>
             <div className="w-24 h-0.5 bg-jk-royal-gold mx-auto mb-8" />
             <p className="text-gray-400 max-w-xl mx-auto text-lg leading-relaxed">
-              Des centaines de femmes à travers le monde ont confié leur rêve à Justine Kem&apos;s. Voici ce qu&apos;elles en disent.
+              {t('hero.desc')}
             </p>
           </RevealOnScroll>
         </div>
@@ -99,7 +65,7 @@ export default async function TemoignagesPage({ params }: { params: Promise<{ lo
         <div className="container mx-auto px-4 relative z-10">
           <RevealOnScroll variant="fade-up">
             <h2 className="text-3xl font-script text-jk-royal-gold text-center mb-4">
-              Témoignages écrits
+              {t('written.title')}
             </h2>
             <div className="w-16 h-0.5 bg-jk-royal-gold mx-auto mb-16" />
           </RevealOnScroll>
@@ -152,7 +118,7 @@ export default async function TemoignagesPage({ params }: { params: Promise<{ lo
                         {testimonial.name}
                       </h4>
                       <p className="text-[10px] text-gray-500 uppercase tracking-widest mt-0.5">
-                        {testimonial.city || 'Cameroun'}
+                        {testimonial.city || t('written.items.f2.city')}
                       </p>
                     </div>
                   </div>
@@ -163,16 +129,16 @@ export default async function TemoignagesPage({ params }: { params: Promise<{ lo
         </div>
       </section>
 
-      {/* ── Captures d'écran (à compléter) ── */}
+      {/* ── Captures d'écran ── */}
       <section className="py-24 bg-jk-dark-surface relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <RevealOnScroll variant="fade-up">
             <h2 className="text-3xl font-script text-jk-royal-gold text-center mb-4">
-              Captures d&apos;écran de clientes
+              {t('screenshots.title')}
             </h2>
             <div className="w-16 h-0.5 bg-jk-royal-gold mx-auto mb-6" />
             <p className="text-center text-gray-500 text-sm mb-16 max-w-md mx-auto">
-              Messages WhatsApp, avis Facebook et Instagram — l&apos;authenticité de nos clientes.
+              {t('screenshots.desc')}
             </p>
           </RevealOnScroll>
 
@@ -183,7 +149,7 @@ export default async function TemoignagesPage({ params }: { params: Promise<{ lo
                 <div className="aspect-[3/4] rounded-xl border border-jk-royal-gold/10 bg-jk-dark-bg flex flex-col items-center justify-center text-center p-4 hover:border-jk-royal-gold/30 transition-all">
                   <div className="text-3xl mb-3 opacity-20">📱</div>
                   <p className="text-gray-600 text-xs">
-                    Capture à venir
+                    {t('screenshots.placeholder')}
                   </p>
                 </div>
               </RevealOnScroll>
@@ -192,7 +158,7 @@ export default async function TemoignagesPage({ params }: { params: Promise<{ lo
 
           <RevealOnScroll variant="fade-up" delay={0.4}>
             <p className="text-center text-gray-600 text-xs mt-10 max-w-sm mx-auto">
-              Vous êtes cliente ? Partagez votre expérience sur WhatsApp et nous serons ravis de vous mettre en avant ici ✦
+              {t('screenshots.submitMsg')}
             </p>
           </RevealOnScroll>
         </div>
@@ -204,10 +170,10 @@ export default async function TemoignagesPage({ params }: { params: Promise<{ lo
         <div className="container mx-auto px-4 relative z-10">
           <RevealOnScroll variant="zoom-in">
             <h2 className="text-3xl md:text-4xl font-script text-jk-royal-gold mb-4">
-              Prête à vivre votre expérience ?
+              {t('cta.title')}
             </h2>
             <p className="text-jk-cream/70 mb-8 max-w-md mx-auto">
-              Rejoignez nos clientes satisfaites et créons ensemble la tenue dont vous rêvez.
+              {t('cta.desc')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
@@ -216,13 +182,13 @@ export default async function TemoignagesPage({ params }: { params: Promise<{ lo
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-jk-royal-gold text-jk-black hover:bg-jk-royal-gold-dark px-8 py-4 rounded-full font-semibold text-base transition-all hover:scale-105 shadow-xl"
               >
-                💬 WhatsApp — Commander maintenant
+                {t('cta.btnOrder')}
               </a>
               <Link
                 href={`/${locale}`}
                 className="inline-flex items-center gap-2 border border-jk-royal-gold/40 text-jk-cream hover:border-jk-royal-gold px-8 py-4 rounded-full font-semibold text-base transition-all hover:scale-105"
               >
-                ← Retour à l&apos;accueil
+                {t('cta.btnHome')}
               </Link>
             </div>
           </RevealOnScroll>

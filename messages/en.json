@@ -87,6 +87,8 @@
     "ctaButton": "Book an appointment"
   },
   "services": {
+    "prev": "Previous",
+    "next": "Next",
     "heroTitle": "Service Designed for Your Elegance",
     "heroSubtitle": "Bespoke haute couture, prestige rental, training — excellence at every step.",
     "hauteCouture": {
@@ -108,12 +110,14 @@
     "soiree": {
       "title": "Evening Collection",
       "description": "Elegant and refined dresses for your high-end events, cocktails, and galas.",
-      "cta": "See all evening dresses →"
+      "cta": "See all evening dresses →",
+      "label": "Evening Dress {price} FCFA"
     },
     "mariage": {
       "title": "Wedding Collection",
       "description": "Sublime bridal gowns, handcrafted for the most beautiful day of your life.",
-      "cta": "See all wedding dresses →"
+      "cta": "See all wedding dresses →",
+      "label": "Wedding Dress {price} FCFA"
     },
     "couple": {
       "title": "Couple Outfits",
@@ -143,7 +147,9 @@
     "others": {
       "title": "Other Collections",
       "traditional": "Traditional Outfits",
+      "traditionalLabel": "Traditional Outfit {price} FCFA",
       "city": "City Outfits",
+      "cityLabel": "City Outfit {price} FCFA",
       "cta": "Discover →"
     },
     "ctaFinal": {
@@ -152,53 +158,136 @@
     }
   },
   "formations": {
-    "heroTitle": "Our Trainings",
-    "heroSubtitle": "Learn the art of sewing from the experts",
-    "heroTagline": "Transmission of African luxury craftsmanship",
-    "introTitle": "Why train at Justine Kem's?",
-    "introDesc": "Our trainings are designed to transmit not only techniques but also the philosophy of couture excellence. Learn from passionate professionals in a caring and stimulating environment.",
-    "formation1Title": "Introduction to Sewing",
-    "formation1Level": "Beginner",
-    "formation1Duration": "4 weeks",
-    "formation1Sessions": "2 sessions/week",
-    "formation1Desc": "Discover the fundamentals of sewing: fabric correction, basic pattern, seams and finishes. Ideal for beginners wishing to learn with solid foundations.",
-    "formation2Title": "Intermediate Sewing",
-    "formation2Level": "Intermediate",
-    "formation2Duration": "8 weeks",
-    "formation2Sessions": "3 sessions/week",
-    "formation2Desc": "Perfect your techniques with more elaborate projects: structured dresses, fitted garments, working with African fabrics (wax, kente, bazin).",
-    "formation3Title": "Haute Couture & Creation",
-    "formation3Level": "Advanced",
-    "formation3Duration": "3 months",
-    "formation3Sessions": "5 sessions/week",
-    "formation3Desc": "Master haute couture techniques: draping, custom pattern making, embroidery, luxury finishes. Complete training to create a collection.",
-    "formation4Title": "Styling & Image Consulting",
-    "formation4Level": "All levels",
-    "formation4Duration": "6 weeks",
-    "formation4Sessions": "2 sessions/week",
-    "formation4Desc": "Learn professional styling codes: morphological analysis, color harmony, wardrobe construction, client consulting.",
-    "advantagesTitle": "Advantages of our trainings",
-    "adv1Title": "Experienced Trainers",
-    "adv1Desc": "All our trainers have over 10 years of professional experience in luxury couture.",
-    "adv2Title": "Small Groups",
-    "adv2Desc": "Maximum 8 students per group for personalized follow-up and rapid progress.",
-    "adv3Title": "Materials Provided",
-    "adv3Desc": "Fabrics, threads, sewing tools provided during training. You leave with your creations.",
-    "adv4Title": "Recognized Certificate",
-    "adv4Desc": "At the end of each training, receive a skills certificate that can be used professionally.",
-    "enrollTitle": "Enroll in a training",
-    "enrollDesc": "Select your training and contact us to start your learning journey.",
-    "enrollButton": "I'm enrolling",
-    "priceLabel": "Rate",
-    "durationLabel": "Duration",
-    "levelLabel": "Level",
-    "sessionLabel": "Rhythm",
-    "learnMore": "Learn more",
-    "ctaTitle": "Your passion for sewing starts here",
-    "ctaDesc": "Join our students and master the art of creating unique pieces with Justine Kem's expertise.",
-    "ctaButton": "Consult the trainings"
+    "metadata": {
+      "title": "Sewing & Fashion Design Training in Yaoundé - Justine Kem's",
+      "description": "Learn the art of haute couture. Certifying training for beginners, intermediates, and professionals. Become a fashion designer."
+    },
+    "hero": {
+      "tagline": "Justine Kem's Academy",
+      "title": "Become a Professional\nFashion Designer",
+      "subtitle": "Certifying training with Justine Kem, with more than {exp} years of expertise",
+      "btnPrograms": "Discover the programs",
+      "btnWhatsapp": "Questions? WhatsApp →",
+      "stats": {
+        "students": "120+ Students trained",
+        "satisfaction": "95% Satisfaction",
+        "cert": "Recognized certification"
+      }
+    },
+    "profil": {
+      "tagline": "Your Trainer",
+      "name": "Justine Kem",
+      "quote": "\"I am committed to transmitting the secrets of African and European elegance. Every student will leave with the tools to excel — technically and professionally.\"",
+      "labels": {
+        "exp": "10+ Years of expertise",
+        "senior": "Senior Designer",
+        "mentor": "Mentor & Coach"
+      }
+    },
+    "programmes": {
+      "tagline": "Our Programs",
+      "title": "Choose your path",
+      "mostPopular": "⭐ Most popular",
+      "ctaRegister": "Enroll in this program",
+      "items": {
+        "f1": {
+          "level": "Beginners",
+          "title": "Introduction to Sewing",
+          "desc": "Master the absolute basics of sewing — reading patterns, measurements, using the sewing machine — in 4 months of intensive practice.",
+          "duration": "4 months • 2 sessions/week",
+          "price": "85 000 FCFA",
+          "modules": [
+            "Introduction to the sewing machine",
+            "Reading and creating simple patterns",
+            "Making basic city clothes",
+            "Notions of fabric and maintenance"
+          ]
+        },
+        "f2": {
+          "level": "Intermediates",
+          "title": "Advanced Sewing & African Fabrics",
+          "desc": "Perfect your technique with African fabrics (wax, bazin, kente) and discover the secrets of Cameroonian haute couture making.",
+          "duration": "6 months • 3 sessions/week",
+          "price": "135 000 FCFA",
+          "modules": [
+            "Mastery of premium African fabrics",
+            "Complex patterns and adjustments",
+            "Ceremonial & traditional outfits",
+            "Embroideries and ornamentations"
+          ]
+        },
+        "f3": {
+          "level": "Professionals",
+          "title": "Fashion Designer Entrepreneur Training",
+          "desc": "From studio to company: develop your brand, create your collections, manage an atelier, and access a network of premium clients.",
+          "duration": "12 months • Full program",
+          "price": "350 000 FCFA",
+          "modules": [
+            "Collection creation and brand identity",
+            "Atelier management and accounting",
+            "Digital marketing for dressmakers",
+            "Professional network & premium clients"
+          ]
+        }
+      }
+    },
+    "process": {
+      "tagline": "How to enroll",
+      "title": "A simple 4-step process",
+      "steps": {
+        "s1": { "title": "Contact us", "desc": "Via WhatsApp or the form below — we respond in less than 24h." },
+        "s2": { "title": "Discovery interview", "desc": "Free 30 min session to evaluate your current level and goals." },
+        "s3": { "title": "Enrollment & payment", "desc": "Choose your program and pay in one or several installments." },
+        "s4": { "title": "Start your journey", "desc": "Join your group and start creating from the first week!" }
+      }
+    },
+    "testimonials": {
+      "tagline": "Testimonials",
+      "title": "What our students say",
+      "items": {
+        "t1": {
+          "name": "Mariette Ngono",
+          "role": "Former student • Beginners",
+          "text": "In 4 months, I went from zero to creating my own evening dresses. Justine teaches with infinite patience and contagious passion!"
+        },
+        "t2": {
+          "name": "Claudia Biya",
+          "role": "Former student • Advanced",
+          "text": "The training gave me all the keys to open my own atelier in Douala. The entrepreneurship module was particularly valuable."
+        },
+        "t3": {
+          "name": "Amina Traoré",
+          "role": "Former student • Professional",
+          "text": "I now sell my creations online in Paris and Abidjan. Justine taught me to believe in my talent and make a business out of it."
+        }
+      }
+    },
+    "faq": {
+      "tagline": "Frequently asked questions",
+      "title": "Your Questions, our Answers",
+      "items": {
+        "q1": { "q": "Do I need sewing basics to enroll?", "a": "No! Our Introduction training is specially designed for people without any experience. We welcome absolute beginners." },
+        "q2": { "q": "Are the trainings in-person or online?", "a": "The trainings are mainly in-person at our Yaoundé atelier. We also offer online sessions for some theoretical modules." },
+        "q3": { "q": "Is there a certificate at the end of the training?", "a": "Yes! Each training concludes with a Justine Kem's certificate of achievement, recognized in the fashion sector in Cameroon and internationally." },
+        "q4": { "q": "Can I pay in installments?", "a": "Absolutely. We offer payment facilities in 2 or 3 monthly installments without additional fees. Contact us to discuss it." },
+        "q5": { "q": "What does the 12-month Professional training include?", "a": "The full training includes: advanced technical courses, business management courses, practical internships in the atelier, access to our client network, and support in launching your brand." },
+        "q6": { "q": "When does the next session start?", "a": "Enrollment for the next session of September 2025 is open. Places are limited to 8 students per group for optimal follow-up. Enroll now to reserve your spot." }
+      }
+    },
+    "ctaFinal": {
+      "nextSession": "Next session — September {year}",
+      "title": "Ready to launch your career?",
+      "desc": "Places limited to {count} students per group. Don't miss your chance.",
+      "btnReserve": "Reserve my spot now",
+      "btnWhatsapp": "Chat on WhatsApp",
+      "enrollViaWhatsapp": "Enroll via WhatsApp"
+    }
   },
   "contact": {
+    "metadata": {
+      "title": "Contact Justine Kem's - Haute Couture in Yaoundé",
+      "description": "Book an appointment for a bespoke creation or outfit rental. Our atelier in Essos, Yaoundé welcomes you."
+    },
     "heroTitle": "Let's Talk About Your Project",
     "info": {
       "phone": "+237 677 463 484",
@@ -241,10 +330,19 @@
       "uploadSuccess": "Photo attached to the sending",
       "consent": "I agree to be contacted via WhatsApp to follow up on this request.*",
       "submit": "Send on WhatsApp",
-      "loading": "Opening WhatsApp..."
+      "loading": "Opening WhatsApp...",
+      "validation": {
+        "nameRequired": "Name required",
+        "emailInvalid": "Invalid email",
+        "phoneInvalid": "Invalid phone (+237...)",
+        "subjectRequired": "Subject required",
+        "messageMin": "Please provide more details (min 20 characters)",
+        "consentRequired": "You must agree to be contacted via WhatsApp"
+      }
     },
     "map": {
       "title": "Our Location — Essos Market, Yaoundé",
+      "iframeTitle": "Justine Kem's Location — Essos, Yaoundé",
       "openMaps": "Open in Maps"
     }
   },
@@ -332,6 +430,343 @@
       "desc": "Contact us today and let's start creating the outfit of your dreams together.",
       "btnAppointment": "✉️ Book an appointment",
       "btnWhatsapp": "💬 WhatsApp direct"
+    }
+  },
+  "aboutExt": {
+    "hero": {
+      "tagline": "Our story",
+      "title": "The story behind\nevery seam",
+      "subtitle": "From passion to excellence, from Yaoundé to the world."
+    },
+    "stats": {
+      "s1Value": "13",
+      "s1Suffix": " years",
+      "s1Label": "Of experience",
+      "s2Value": "500",
+      "s2Suffix": "+",
+      "s2Label": "Creations made",
+      "s3Value": "100",
+      "s3Suffix": "+",
+      "s3Label": "Countries served",
+      "s4Value": "100",
+      "s4Suffix": "%",
+      "s4Label": "Satisfied clients"
+    },
+    "story": {
+      "ch1Num": "Chapter 1",
+      "ch1Title": "The beginnings",
+      "ch1Desc": "Born from an early passion for fabrics and creation, Justine Kem's began her journey in the fashion world as a teenager. Trained in traditional Cameroonian sewing techniques and later enriched by European influences, she quickly developed a unique signature blending African heritage with timeless elegance.",
+      "ch2Num": "Chapter 2",
+      "ch2Title": "The vision",
+      "ch2Desc": "Creating pieces that tell a story, that of the woman wearing them. Each Justine Kem's creation is designed to enhance the unique personality of her client, far from fast-fashion standards. The goal: a bespoke wardrobe where every piece becomes iconic.",
+      "ch3Num": "Chapter 3",
+      "ch3Title": "The commitment",
+      "ch3Desc": "Rooted in Yaoundé while shining internationally, Justine Kem's is committed to ethical fashion: high-quality fabrics, local craftsmanship, total transparency in the creation process, and the transmission of know-how through our professional training programs.",
+      "commit1": "Locally sourced fabrics",
+      "commit2": "Zero material waste",
+      "commit3": "Valuing Cameroonian artisans",
+      "commit4": "Free training sessions every quarter"
+    },
+    "timeline": {
+      "title": "Our Journey",
+      "y1Year": "2015",
+      "y1Text": "Creation of the atelier",
+      "y2Year": "2017",
+      "y2Text": "First capsule collection",
+      "y3Year": "2019",
+      "y3Text": "Launch of training programs",
+      "y4Year": "2021",
+      "y4Text": "International expansion",
+      "y5Year": "2023",
+      "y5Text": "500+ creations delivered",
+      "y6Year": "2025",
+      "y6Text": "Opening of rental service"
+    },
+    "values": {
+      "title": "Our values",
+      "v1Label": "Excellence",
+      "v1Desc": "Every stitch is made with meticulous precision, with no compromise on quality.",
+      "v2Label": "Authenticity",
+      "v2Desc": "Our creations draw from African heritage to offer unique and meaningful pieces.",
+      "v3Label": "Transmission",
+      "v3Desc": "Sharing our expertise to train the next generation of African designers."
+    },
+    "cta": {
+      "title": "Ready to create your unique piece?",
+      "desc": "Join hundreds of clients who trust us.",
+      "btn": "Book an appointment →"
+    }
+  },
+  "temoignages": {
+    "metadata": {
+      "title": "Testimonials | Justine Kem's Atelier",
+      "description": "Discover authentic reviews and testimonials from our clients across the world — Cameroon, France, Europe, and the African diaspora."
+    },
+    "hero": {
+      "tagline": "They testify",
+      "title": "Client Stories",
+      "desc": "Hundreds of women around the world have entrusted their dreams to Justine Kem's. Here is what they say."
+    },
+    "written": {
+      "title": "Written testimonials",
+      "items": {
+        "f1": {
+          "name": "Serena B.",
+          "city": "Yaoundé",
+          "content": "Justine was able to create the dress of my dreams for my wedding. The attention to detail is simply incredible. Every fold, every embroidery tells a story. I recommend her with my eyes closed."
+        },
+        "f2": {
+          "name": "Marie-Claire K.",
+          "city": "Douala",
+          "content": "Exemplary professionalism. The finishes are worthy of the greatest European couture houses. My outfit for my daughter's baptism was perfect from the first fitting."
+        },
+        "f3": {
+          "name": "Inès T.",
+          "city": "Paris",
+          "content": "Even from afar, the communication and measurements were perfect. My dress arrived impeccablement packed from Yaoundé. The quality dazzled all my guests."
+        },
+        "f4": {
+          "name": "Amina D.",
+          "city": "Lyon",
+          "content": "I was looking for someone capable of marrying African fabrics with a modern style. Justine exceeded all my expectations. My wax merged with lace — a masterpiece."
+        },
+        "f5": {
+          "name": "Fatou N.",
+          "city": "Dakar",
+          "content": "Fast, precise, and talented. I placed an order from Senegal and everything went smoothly. The event dress I received was beyond my expectations."
+        },
+        "f6": {
+          "name": "Céline A.",
+          "city": "Abidjan",
+          "content": "Justine's atelier is excellence in every stitch. My outfit for the traditional ceremony won everyone over. Thank you for the advice and the gentleness with which you worked."
+        }
+      }
+    },
+    "screenshots": {
+      "title": "Client screenshots",
+      "desc": "WhatsApp messages, Facebook and Instagram reviews — our clients' authenticity.",
+      "placeholder": "Screenshot coming soon",
+      "submitMsg": "Are you a client? Share your experience on WhatsApp and we will be delighted to feature you here ✦"
+    },
+    "cta": {
+      "title": "Ready to experience it yourself?",
+      "desc": "Join our satisfied clients and let's create the outfit of your dreams together.",
+      "btnOrder": "💬 WhatsApp — Order now",
+      "btnHome": "← Back to home"
+    }
+  },
+  "modeles": {
+    "metadata": {
+      "title": "Catalog & Models - Justine Kem's Atelier",
+      "description": "Discover our exclusive collections: Wedding dresses, evening gowns, couple outfits, and traditional wear. Bespoke creations in Yaoundé."
+    },
+    "hero": {
+      "tagline": "Exclusive Collection",
+      "title": "Our Models",
+      "desc": "Each creation is unique, bespoke tailored with passion and precision in Yaoundé, Cameroon."
+    },
+    "filters": {
+      "all": "See all",
+      "mariages": "Wedding Dresses",
+      "soirees": "Evening Gowns",
+      "couple": "Couple Outfits",
+      "traditionnels": "Traditional Wear",
+      "etat-civil": "Civil Wedding",
+      "ville": "City Wear"
+    },
+    "controls": {
+      "results": "{count} models",
+      "viewDetail": "View detail",
+      "notAvailable": "Image not available"
+    },
+    "modal": {
+      "close": "×",
+      "selectOutfit": "Select the outfit:",
+      "man": "🤵 Man",
+      "woman": "👗 Woman",
+      "bespoke": "Bespoke creation",
+      "desc": "Exclusive creation from Justine Kem's house. Each piece is bespoke crafted in Yaoundé with premium quality fabrics.",
+      "features": [
+        "Personalized measurements and adjustments",
+        "Carefully selected quality fabrics",
+        "Meticulous artisanal finishes",
+        "Crafting time: 2 to 4 weeks"
+      ],
+      "addToCart": "Add to cart",
+      "orderWhatsapp": "Order via WhatsApp"
+    },
+    "cart": {
+      "title": "My Cart",
+      "empty": "Cart is empty",
+      "total": "Total",
+      "sendOrder": "Send order",
+      "footerNote": "Your choices will be sent directly via WhatsApp",
+      "items": "{count} items"
+    },
+    "whatsapp": {
+      "orderTitle": "🛍️ *Justine Kem's Order*",
+      "orderTotal": "💰 *Total: {total}*",
+      "orderThanks": "Please confirm my order!",
+      "singleInterest": "Hello! I am interested in this model from your *{cat}* collection ({price}). Can you give me more information?"
+    }
+  },
+  "catalogue": {
+    "metadata": {
+      "title": "Refined Catalog - Justine Kem's Atelier",
+      "description": "Explore our African haute couture catalog. Wedding dresses, evening creations, and traditional bespoke outfits."
+    },
+    "hero": {
+      "title": "Our Catalog",
+      "subtitle": "{count} artisanal creations — Exceptional Cameroonian fashion"
+    },
+    "filters": {
+      "category": "Category",
+      "gender": "For:",
+      "results": "{count} result{s}",
+      "all": "All creations",
+      "genders": {
+        "all": "All",
+        "femme": "👗 Woman",
+        "homme": "👔 Man",
+        "couple": "💑 Couple"
+      }
+    },
+    "card": {
+      "viewDetail": "View details",
+      "femme": "Woman",
+      "homme": "Man",
+      "couple": "Couple"
+    },
+    "modal": {
+      "description": "Description",
+      "price": "Price",
+      "total": "Set Total",
+      "indicative": "* Indicative price — varies based on measurements and finishes",
+      "order": "Order via WhatsApp",
+      "features": [
+        "✂️ Bespoke tailoring",
+        "🇨🇲 Cameroonian craftsmanship",
+        "📦 Delivery available",
+        "💬 WhatsApp support"
+      ],
+      "modelFemme": "Woman Model",
+      "modelHomme": "Man Model",
+      "tenueCouple": "Couple Outfit",
+      "generic": "Justine Kem's Creation",
+      "descCouple": "Matching couple outfit — a harmonious set for two. Top-quality Cameroonian craftsmanship, bespoke tailored by Justine Kem's.",
+      "descGeneric": "{cat} creation signed by Justine Kem's. Handcrafted with top-quality materials, this unique piece is available upon request and can be adjusted to your measurements."
+    },
+    "whatsapp": {
+      "greeting": "Hello Justine Kem's! 🌟",
+      "interest": "I am interested in:",
+      "category": "📁 Category: {cat}",
+      "for": "👤 For: {gender}",
+      "price": "💰 Price: {price}",
+      "thanks": "Could you give me more information? Thank you!"
+    }
+  },
+  "blog": {
+    "metadata": {
+      "title": "The Journal | Justine Kem's Boutique",
+      "description": "Fashion tips, atelier behind-the-scenes, and couture inspirations from Justine Kem's in Yaoundé."
+    },
+    "hero": {
+      "tagline": "Fashion Journal",
+      "title": "Inspiration & Behind the Scenes",
+      "subtitle": "Dive into the Justine Kem's universe",
+      "search": "Search an article..."
+    },
+    "filters": {
+      "all": "All news",
+      "title": "Themes"
+    },
+    "search": {
+      "results": "{count} result{s} for \"{query}\""
+    },
+    "card": {
+      "read": "Read article",
+      "published": "{date}",
+      "readingTime": "{time} min",
+      "featured": "Featured",
+      "readFull": "Read full article →"
+    },
+    "empty": {
+      "searchTitle": "No results found",
+      "catTitle": "No articles in this category",
+      "searchDesc": "Try with different keywords.",
+      "catDesc": "First articles coming soon!",
+      "back": "See all articles"
+    },
+    "sidebar": {
+      "cta": {
+        "title": "Looking for a creation?",
+        "desc": "Let's turn your inspiration into haute couture reality.",
+        "btn": "Chat with Justine"
+      },
+      "newsletter": {
+        "title": "Don't miss anything 💌",
+        "desc": "New collections, fashion tips, and exclusive offers.",
+        "btn": "Follow via WhatsApp"
+      }
+    }
+  },
+  "inscription": {
+    "metadata": {
+      "title": "Academy Registration - Justine Kem's",
+      "description": "Join our fashion academy. Training in sewing, fashion design, and fashion business in Yaoundé."
+    },
+    "hero": {
+      "title": "Join the Academy",
+      "subtitle": "Fill out this form to submit your application to one of our professional training programs."
+    },
+    "form": {
+      "firstName": "First Name *",
+      "firstNamePlaceholder": "Sarah",
+      "lastName": "Last Name *",
+      "lastNamePlaceholder": "Mouelle",
+      "email": "Email *",
+      "emailPlaceholder": "sarah@email.com",
+      "phone": "Phone (WhatsApp) *",
+      "phonePlaceholder": "+237...",
+      "trainingLabel": "Desired Training *",
+      "trainingPlaceholder": "Select a program",
+      "levelLabel": "Your Level *",
+      "levelPlaceholder": "Select your level",
+      "motivationsLabel": "Why do you want to take this training? *",
+      "motivationsPlaceholder": "Tell us about your goals, your passion, what you expect from the training...",
+      "submit": "Submit my application via WhatsApp",
+      "submitting": "Sending in progress...",
+      "footer": "Your application will be sent directly to our official WhatsApp for rapid processing.",
+      "redirection": "Redirecting to WhatsApp...",
+      "whatsappHeader": "🎓 NEW REGISTRATION REQUEST",
+      "whatsappCandidate": "👤 Candidate: {name}",
+      "whatsappEmail": "📧 Email: {email}",
+      "whatsappPhone": "📱 Phone: {phone}",
+      "whatsappTraining": "📚 Chosen Training: {training}",
+      "whatsappLevel": "📊 Current Level: {level}",
+      "whatsappMotivations": "💬 Motivations:"
+    },
+    "options": {
+      "trainings": [
+        "Sewing Initiation (3 months)",
+        "Advanced Fashion Design (6 months)",
+        "Fashion Business (2 months)"
+      ],
+      "levels": [
+        "Never touched a machine",
+        "Basic notions (I can sew straight)",
+        "Intermediate (I make simple clothes)",
+        "Advanced (Technical improvement)"
+      ]
+    },
+    "validation": {
+      "firstName": "First name required",
+      "lastName": "Last name required",
+      "email": "Invalid email",
+      "phone": "Invalid phone",
+      "training": "Please choose a training",
+      "level": "Please indicate your level",
+      "motivations": "Please tell us more (min 20 characters)"
     }
   }
 }

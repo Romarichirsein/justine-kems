@@ -87,6 +87,8 @@
     "ctaButton": "Prendre rendez-vous"
   },
   "services": {
+    "prev": "Précédent",
+    "next": "Suivant",
     "heroTitle": "Un service pensé pour votre élégance",
     "heroSubtitle": "Haute couture sur mesure, location de prestige, formations — l'excellence à chaque étape.",
     "hauteCouture": {
@@ -108,12 +110,14 @@
     "soiree": {
       "title": "Collection Soirée",
       "description": "Robes élégantes et raffinées pour vos événements haut de gamme, cocktails et galas.",
-      "cta": "Voir toutes les robes de soirée →"
+      "cta": "Voir toutes les robes de soirée →",
+      "label": "Robe Soirée {price} FCFA"
     },
     "mariage": {
       "title": "Collection Mariage",
       "description": "Des robes nuptiales sublimes, façonnées à la main pour le plus beau jour de votre vie.",
-      "cta": "Voir toutes les robes de mariage →"
+      "cta": "Voir toutes les robes de mariage →",
+      "label": "Robe de Mariage {price} FCFA"
     },
     "couple": {
       "title": "Tenues de Couple",
@@ -143,7 +147,9 @@
     "others": {
       "title": "Autres Collections",
       "traditional": "Tenues Traditionnelles",
+      "traditionalLabel": "Tenue Traditionnelle {price} FCFA",
       "city": "Tenues de Ville",
+      "cityLabel": "Tenue Ville {price} FCFA",
       "cta": "Découvrir →"
     },
     "ctaFinal": {
@@ -152,53 +158,136 @@
     }
   },
   "formations": {
-    "heroTitle": "Nos Formations",
-    "heroSubtitle": "Apprenez l'art de la couture auprès des expertes",
-    "heroTagline": "Transmission du savoir-faire africain de luxe",
-    "introTitle": "Pourquoi se former chez Justine Kem's ?",
-    "introDesc": "Nos formations sont conçues pour vous transmettre non seulement des techniques, mais aussi la philosophie d'une couture d'excellence. Apprenez auprès de professionnelles passionnées dans un cadre bienveillant et stimulant.",
-    "formation1Title": "Initiation à la Couture",
-    "formation1Level": "Débutant",
-    "formation1Duration": "4 semaines",
-    "formation1Sessions": "2 sessions/semaine",
-    "formation1Desc": "Découvrez les fondamentaux de la couture : manipulation des tissus, patron de base, coutures et finitions. Idéal pour les débutants souhaitant apprendre avec des bases solides.",
-    "formation2Title": "Couture Intermédiaire",
-    "formation2Level": "Intermédiaire",
-    "formation2Duration": "8 semaines",
-    "formation2Sessions": "3 sessions/semaine",
-    "formation2Desc": "Perfectionnez vos techniques avec des projets plus élaborés : robes structurées, vêtements ajustés, travail sur les tissus africains (wax, kente, bazin).",
-    "formation3Title": "Haute Couture & Création",
-    "formation3Level": "Avancé",
-    "formation3Duration": "3 mois",
-    "formation3Sessions": "5 sessions/semaine",
-    "formation3Desc": "Maîtrisez les techniques de la haute couture : draping, patronage sur mesure, broderies, finitions luxe. Formation complète pour créer une collection.",
-    "formation4Title": "Stylisme & Conseil en Image",
-    "formation4Level": "Tous niveaux",
-    "formation4Duration": "6 semaines",
-    "formation4Sessions": "2 sessions/semaine",
-    "formation4Desc": "Apprenez les codes du stylisme professionnel : analyse morphologique, harmonie des couleurs, construction d'une garde-robe, conseil client.",
-    "advantagesTitle": "Les avantages de nos formations",
-    "adv1Title": "Formatrices Expérimentées",
-    "adv1Desc": "Toutes nos formatrices ont plus de 10 ans d'expérience professionnelle dans la couture de luxe.",
-    "adv2Title": "Petits Groupes",
-    "adv2Desc": "Maximum 8 apprenantes par groupe pour un suivi personnalisé et des progrès rapides.",
-    "adv3Title": "Matériel Fourni",
-    "adv3Desc": "Tissus, fils, outils de couture fournis pendant la formation. Vous repartez avec vos créations.",
-    "adv4Title": "Certificat Reconnu",
-    "adv4Desc": "À la fin de chaque formation, recevez un certificat de compétences valorisable professionnellement.",
-    "enrollTitle": "S'inscrire à une formation",
-    "enrollDesc": "Sélectionnez votre formation et contactez-nous pour démarrer votre parcours d'apprentissage.",
-    "enrollButton": "Je m'inscris",
-    "priceLabel": "Tarif",
-    "durationLabel": "Durée",
-    "levelLabel": "Niveau",
-    "sessionLabel": "Rythme",
-    "learnMore": "En savoir plus",
-    "ctaTitle": "Votre passion pour la couture commence ici",
-    "ctaDesc": "Rejoignez nos apprenantes et maîtrisez l'art de créer des pièces uniques avec le savoir-faire de Justine Kem's.",
-    "ctaButton": "Consulter les formations"
+    "metadata": {
+      "title": "Formations Couture & Stylisme à Yaoundé - Justine Kem's",
+      "description": "Apprenez l'art de la haute couture. Formations certifiantes pour débutantes, intermédiaires et professionnelles. Devenez créatrice de mode."
+    },
+    "hero": {
+      "tagline": "Académie Justine Kem's",
+      "title": "Devenez Créatrice\nde Mode Professionnelle",
+      "subtitle": "Formations certifiantes avec Justine Kem, forte de plus de {exp} ans d'expertise",
+      "btnPrograms": "Découvrir les programmes",
+      "btnWhatsapp": "Questions ? WhatsApp →",
+      "stats": {
+        "students": "120+ Étudiantes formées",
+        "satisfaction": "95% Satisfaction",
+        "cert": "Certification reconnue"
+      }
+    },
+    "profil": {
+      "tagline": "Votre Formatrice",
+      "name": "Justine Kem",
+      "quote": "\"J'ai à cœur de transmettre les secrets de l'élégance africaine et européenne. Chaque étudiante repartira avec les outils pour exceller — techniquement et professionnellement.\"",
+      "labels": {
+        "exp": "10+ Ans d'expertise",
+        "senior": "Créatrice Senior",
+        "mentor": "Mentor & Coach"
+      }
+    },
+    "programmes": {
+      "tagline": "Nos Programmes",
+      "title": "Choisissez votre parcours",
+      "mostPopular": "⭐ Plus populaire",
+      "ctaRegister": "S'inscrire à ce programme",
+      "items": {
+        "f1": {
+          "level": "Débutantes",
+          "title": "Initiation à la Couture",
+          "desc": "Maîtrisez les bases absolues de la couture — lecture de patrons, mesures, utilisation de la machine à coudre — en 4 mois de pratique intensive.",
+          "duration": "4 mois • 2 séances/semaine",
+          "price": "85 000 FCFA",
+          "modules": [
+            "Initiation à la machine à coudre",
+            "Lecture et création de patrons simples",
+            "Réalisation de vêtements de ville basiques",
+            "Notions de tissu et entretien"
+          ]
+        },
+        "f2": {
+          "level": "Intermédiaires",
+          "title": "Couture Avancée & Tissus Africains",
+          "desc": "Perfectionnez votre technique avec les tissus africains (wax, bazin, kente) et découvrez les secrets de la confection haute couture camerounaise.",
+          "duration": "6 mois • 3 séances/semaine",
+          "price": "135 000 FCFA",
+          "modules": [
+            "Maîtrise des tissus africains premium",
+            "Patrons complexes et ajustements",
+            "Tenues de cérémonie & tenues traditionnelles",
+            "Broderies et ornementations"
+          ]
+        },
+        "f3": {
+          "level": "Professionnelles",
+          "title": "Formation Créatrice Entrepreneure",
+          "desc": "Du studio à l'entreprise : développez votre marque, créez vos collections, gérez un atelier et accédez à un réseau de clientes premium.",
+          "duration": "12 mois • Programme complet",
+          "price": "350 000 FCFA",
+          "modules": [
+            "Création de collection et identité de marque",
+            "Gestion d'atelier et comptabilité",
+            "Marketing digital pour couturières",
+            "Réseau professionnel & clients premium"
+          ]
+        }
+      }
+    },
+    "process": {
+      "tagline": "Comment s'inscrire",
+      "title": "Un processus simple en 4 étapes",
+      "steps": {
+        "s1": { "title": "Contactez-nous", "desc": "Via WhatsApp ou le formulaire ci-dessous — nous répondons en moins de 24h." },
+        "s2": { "title": "Entretien découverte", "desc": "Session gratuite de 30 min pour évaluer votre niveau actuel et vos objectifs." },
+        "s3": { "title": "Inscription & paiement", "desc": "Choisissez votre programme et réglez en une ou plusieurs fois." },
+        "s4": { "title": "Démarrez votre voyage", "desc": "Rejoignez votre groupe et commencez à créer dès la première semaine !" }
+      }
+    },
+    "testimonials": {
+      "tagline": "Témoignages",
+      "title": "Ce que disent nos étudiantes",
+      "items": {
+        "t1": {
+          "name": "Mariette Ngono",
+          "role": "Ancienne étudiante • Débutantes",
+          "text": "En 4 mois, je suis passée de zéro à créer mes propres robes de soirée. Justine enseigne avec une patience infinie et une passion contagieuse !"
+        },
+        "t2": {
+          "name": "Claudia Biya",
+          "role": "Ancienne étudiante • Avancée",
+          "text": "La formation m'a donné toutes les clés pour ouvrir mon propre atelier à Douala. Le module entrepreneuriat était particulièrement précieux."
+        },
+        "t3": {
+          "name": "Amina Traoré",
+          "role": "Ancienne étudiante • Professionnelle",
+          "text": "Je vends maintenant mes créations en ligne à Paris et Abidjan. Justine m'a appris à croire en mon talent et à en faire un business."
+        }
+      }
+    },
+    "faq": {
+      "tagline": "Questions fréquentes",
+      "title": "Vos Questions, nos Réponses",
+      "items": {
+        "q1": { "q": "Faut-il avoir des bases en couture pour s'inscrire ?", "a": "Non ! Notre formation Initiation est spécialement conçue pour les personnes sans aucune expérience. Nous accueillons des débutantes absolues." },
+        "q2": { "q": "Les formations se déroulent en présentiel ou en ligne ?", "a": "Les formations sont principalement en présentiel à notre atelier de Yaoundé. Nous proposons également des sessions en ligne pour certains modules théoriques." },
+        "q3": { "q": "Y a-t-il un certificat à la fin de la formation ?", "a": "Oui ! Chaque formation se conclut par un certificat de réussite Justine Kem's, reconnu dans le secteur de la mode au Cameroun et à l'international." },
+        "q4": { "q": "Peut-on payer en plusieurs fois ?", "a": "Absolument. Nous proposons des facilités de paiement en 2 ou 3 mensualités sans frais supplémentaires. Contactez-nous pour en discuter." },
+        "q5": { "q": "Que comprend la formation Professionnelle sur 12 mois ?", "a": "La formation complète comprend : cours techniques avancés, cours de gestion d'entreprise, stages pratiques en atelier, accès à notre réseau de clientes, et accompagnement au lancement de votre marque." },
+        "q6": { "q": "Quand commence la prochaine session ?", "a": "Les inscriptions pour la prochaine session de septembre 2025 sont ouvertes. Les places sont limitées à 8 étudiantes par groupe pour un suivi optimal. Inscrivez-vous maintenant pour réserver votre place." }
+      }
+    },
+    "ctaFinal": {
+      "nextSession": "Prochaine session — Septembre {year}",
+      "title": "Prête à lancer votre carrière ?",
+      "desc": "Places limitées à {count} étudiantes par groupe. Ne ratez pas votre chance.",
+      "btnReserve": "Réserver ma place maintenant",
+      "btnWhatsapp": "Discuter sur WhatsApp",
+      "enrollViaWhatsapp": "S'inscrire via WhatsApp"
+    }
   },
   "contact": {
+    "metadata": {
+      "title": "Contactez Justine Kem's - Haute Couture à Yaoundé",
+      "description": "Prenez rendez-vous pour une création sur mesure ou une location de tenue. Notre atelier à Essos, Yaoundé vous accueille."
+    },
     "heroTitle": "Parlons de Votre Projet",
     "info": {
       "phone": "+237 677 463 484",
@@ -241,10 +330,19 @@
       "uploadSuccess": "Photo jointe à l'envoi",
       "consent": "J'accepte d'être contacté(e) par WhatsApp pour donner suite à cette demande.*",
       "submit": "Envoyer sur WhatsApp",
-      "loading": "Ouverture WhatsApp..."
+      "loading": "Ouverture WhatsApp...",
+      "validation": {
+        "nameRequired": "Nom requis",
+        "emailInvalid": "Email invalide",
+        "phoneInvalid": "Téléphone invalide (+237...)",
+        "subjectRequired": "Objet requis",
+        "messageMin": "Veuillez détailler (min 20 caractères)",
+        "consentRequired": "Vous devez accepter d'être contacté via WhatsApp"
+      }
     },
     "map": {
       "title": "Notre emplacement — Marché Essos, Yaoundé",
+      "iframeTitle": "Localisation Justine Kem's — Essos, Yaoundé",
       "openMaps": "Ouvrir dans Maps"
     }
   },
@@ -332,6 +430,343 @@
       "desc": "Contactez-nous dès aujourd'hui et commençons à créer ensemble la tenue dont vous rêvez.",
       "btnAppointment": "✉️ Prendre rendez-vous",
       "btnWhatsapp": "💬 WhatsApp direct"
+    }
+  },
+  "aboutExt": {
+    "hero": {
+      "tagline": "Notre histoire",
+      "title": "L'histoire derrière\nchaque couture",
+      "subtitle": "De la passion à l'excellence, depuis Yaoundé jusqu'au monde."
+    },
+    "stats": {
+      "s1Value": "13",
+      "s1Suffix": " ans",
+      "s1Label": "D'expérience",
+      "s2Value": "500",
+      "s2Suffix": "+",
+      "s2Label": "Créations réalisées",
+      "s3Value": "100",
+      "s3Suffix": "+",
+      "s3Label": "Pays desservis",
+      "s4Value": "100",
+      "s4Suffix": "%",
+      "s4Label": "Clientes satisfaites"
+    },
+    "story": {
+      "ch1Num": "Chapitre 1",
+      "ch1Title": "Les débuts",
+      "ch1Desc": "Née d'une passion précoce pour les tissus et la création, Justine Kem's a débuté son parcours dans l'univers de la mode dès son adolescence. Formée aux techniques traditionnelles de couture camerounaise puis enrichie par des influences européennes, elle développe rapidement une signature unique mêlant héritage africain et élégance intemporelle.",
+      "ch2Num": "Chapitre 2",
+      "ch2Title": "La vision",
+      "ch2Desc": "Créer des pièces qui racontent une histoire, celle de la femme qui les porte. Chaque création Justine Kem's est pensée pour sublimer la personnalité unique de sa cliente, loin des standards de la fast-fashion. L'objectif : une garde-robe sur-mesure où chaque pièce devient iconique.",
+      "ch3Num": "Chapitre 3",
+      "ch3Title": "L'engagement",
+      "ch3Desc": "Ancrée à Yaoundé tout en rayonnant à l'international, la maison Justine Kem's s'engage pour une mode éthique : tissus de qualité, artisanat local, transparence totale du processus de création, et transmission du savoir-faire via nos formations professionnelles.",
+      "commit1": "Tissus sourcés localement",
+      "commit2": "Zéro gaspillage de matière",
+      "commit3": "Artisans camerounais valorisés",
+      "commit4": "Formations gratuites chaque trimestre"
+    },
+    "timeline": {
+      "title": "Notre Parcours",
+      "y1Year": "2015",
+      "y1Text": "Création de l'atelier",
+      "y2Year": "2017",
+      "y2Text": "Première collection capsule",
+      "y3Year": "2019",
+      "y3Text": "Lancement formations",
+      "y4Year": "2021",
+      "y4Text": "Expansion internationale",
+      "y5Year": "2023",
+      "y5Text": "500+ créations livrées",
+      "y6Year": "2025",
+      "y6Text": "Ouverture service location"
+    },
+    "values": {
+      "title": "Nos valeurs",
+      "v1Label": "Excellence",
+      "v1Desc": "Chaque point de couture est réalisé avec une précision méticuleuse, sans compromis sur la qualité.",
+      "v2Label": "Authenticité",
+      "v2Desc": "Nos créations puisent dans le patrimoine africain pour offrir des pièces uniques et significatives.",
+      "v3Label": "Transmission",
+      "v3Desc": "Partager notre savoir-faire pour former la prochaine génération de créateurs africains."
+    },
+    "cta": {
+      "title": "Prête à créer votre pièce unique ?",
+      "desc": "Rejoignez les centaines de clientes qui nous font confiance.",
+      "btn": "Prendre rendez-vous →"
+    }
+  },
+  "temoignages": {
+    "metadata": {
+      "title": "Témoignages | Justine Kem's Atelier",
+      "description": "Découvrez les avis et témoignages authentiques de nos clientes à travers le monde — Cameroun, France, Europe et diaspora africaine."
+    },
+    "hero": {
+      "tagline": "Elles témoignent",
+      "title": "Paroles de nos clientes",
+      "desc": "Des centaines de femmes à travers le monde ont confié leur rêve à Justine Kem's. Voici ce qu'elles en disent."
+    },
+    "written": {
+      "title": "Témoignages écrits",
+      "items": {
+        "f1": {
+          "name": "Serena B.",
+          "city": "Yaoundé",
+          "content": "Justine a su créer la robe de mes rêves pour mon mariage. Le souci du détail est tout simplement incroyable. Chaque pli, chaque broderie raconte une histoire. Je recommande les yeux fermés."
+        },
+        "f2": {
+          "name": "Marie-Claire K.",
+          "city": "Douala",
+          "content": "Un professionnalisme exemplaire. Les finitions sont dignes des plus grandes maisons de couture européennes. Ma tenue pour le baptême de ma fille était parfaite du premier essayage."
+        },
+        "f3": {
+          "name": "Inès T.",
+          "city": "Paris",
+          "content": "Même à distance, la communication et les mesures étaient parfaites. Ma robe est arrivée impeccablement emballée depuis Yaoundé. La qualité a ébloui tous mes invités."
+        },
+        "f4": {
+          "name": "Amina D.",
+          "city": "Lyon",
+          "content": "Je cherchais quelqu'un capable de marier les tissus africains avec un style moderne. Justine a dépassé toutes mes attentes. Mon wax fusionné avec de la dentelle — un chef-d'œuvre."
+        },
+        "f5": {
+          "name": "Fatou N.",
+          "city": "Dakar",
+          "content": "Rapide, précise et talentueuse. J'ai passé commande depuis le Sénégal et tout s'est déroulé sans accroc. La robe événementielle que j'ai reçue était au-delà de mes espérances."
+        },
+        "f6": {
+          "name": "Céline A.",
+          "city": "Abidjan",
+          "content": "L'atelier de Justine, c'est l'excellence à chaque couture. Ma tenue pour la cérémonie traditionnelle a fait l'unanimité. Merci pour les conseils et la douceur avec laquelle vous avez travaillé."
+        }
+      }
+    },
+    "screenshots": {
+      "title": "Captures d'écran de clientes",
+      "desc": "Messages WhatsApp, avis Facebook et Instagram — l'authenticité de nos clientes.",
+      "placeholder": "Capture à venir",
+      "submitMsg": "Vous êtes cliente ? Partagez votre expérience sur WhatsApp et nous serons ravis de vous mettre en avant ici ✦"
+    },
+    "cta": {
+      "title": "Prête à vivre votre expérience ?",
+      "desc": "Rejoignez nos clientes satisfaites et créons ensemble la tenue dont vous rêvez.",
+      "btnOrder": "💬 WhatsApp — Commander maintenant",
+      "btnHome": "← Retour à l'accueil"
+    }
+  },
+  "modeles": {
+    "metadata": {
+      "title": "Catalogue & Modèles - Justine Kem's Atelier",
+      "description": "Découvrez nos collections exclusives : Robes de mariée, soirées, tenues de couple et traditionnelles. Créations sur mesure à Yaoundé."
+    },
+    "hero": {
+      "tagline": "Collection exclusive",
+      "title": "Nos Modèles",
+      "desc": "Chaque création est unique, taillée sur mesure avec passion et précision à Yaoundé, Cameroun."
+    },
+    "filters": {
+      "all": "Tout voir",
+      "mariages": "Robes de Mariages",
+      "soirees": "Robes de Soirées",
+      "couple": "Tenues de Couple",
+      "traditionnels": "Tenues Traditionnelles",
+      "etat-civil": "État Civil",
+      "ville": "Tenues de Ville"
+    },
+    "controls": {
+      "results": "{count} modèles",
+      "viewDetail": "Voir le détail",
+      "notAvailable": "Image non disponible"
+    },
+    "modal": {
+      "close": "×",
+      "selectOutfit": "Sélectionnez la tenue :",
+      "man": "🤵 Homme",
+      "woman": "👗 Femme",
+      "bespoke": "Création sur mesure",
+      "desc": "Création exclusive de la maison Justine Kem's. Chaque pièce est confectionnée sur mesure à Yaoundé avec des tissus de qualité premium.",
+      "features": [
+        "Mesures et ajustements personnalisés",
+        "Tissus de qualité sélectionnés avec soin",
+        "Finitions artisanales soignées",
+        "Délai de confection : 2 à 4 semaines"
+      ],
+      "addToCart": "Ajouter au panier",
+      "orderWhatsapp": "Commander via WhatsApp"
+    },
+    "cart": {
+      "title": "Mon Panier",
+      "empty": "Panier vide",
+      "total": "Total",
+      "sendOrder": "Envoyer la commande",
+      "footerNote": "Vos choix seront envoyés directement sur WhatsApp",
+      "items": "{count} articles"
+    },
+    "whatsapp": {
+      "orderTitle": "🛍️ *Commande Justine Kem's*",
+      "orderTotal": "💰 *Total: {total}*",
+      "orderThanks": "Merci de confirmer ma commande !",
+      "singleInterest": "Bonjour ! Je suis intéressé(e) par ce modèle de votre collection *{cat}* ({price}). Pouvez-vous me donner plus d'informations ?"
+    }
+  },
+  "catalogue": {
+    "metadata": {
+      "title": "Catalogue Raffiné - Justine Kem's Atelier",
+      "description": "Explorez notre catalogue de haute couture africaine. Robes de mariée, créations de soirée et tenues traditionnelles sur mesure."
+    },
+    "hero": {
+      "title": "Notre Catalogue",
+      "subtitle": "{count} créations artisanales — Mode camerounaise d'exception"
+    },
+    "filters": {
+      "category": "Catégorie",
+      "gender": "Pour :",
+      "results": "{count} résultat{s}",
+      "all": "Toutes les créations",
+      "genders": {
+        "all": "Tous",
+        "femme": "👗 Femme",
+        "homme": "👔 Homme",
+        "couple": "💑 Couple"
+      }
+    },
+    "card": {
+      "viewDetail": "Voir détails",
+      "femme": "Femme",
+      "homme": "Homme",
+      "couple": "Couple"
+    },
+    "modal": {
+      "description": "Description",
+      "price": "Prix",
+      "total": "Total ensemble",
+      "indicative": "* Prix indicatif — variations selon mesures et finitions",
+      "order": "Commander via WhatsApp",
+      "features": [
+        "✂️ Confection sur mesure",
+        "🇨🇲 Artisanat camerounais",
+        "📦 Livraison disponible",
+        "💬 Support WhatsApp"
+      ],
+      "modelFemme": "Modèle Femme",
+      "modelHomme": "Modèle Homme",
+      "tenueCouple": "Tenue de Couple",
+      "generic": "Création Justine Kem's",
+      "descCouple": "Tenue de couple assortie — un ensemble harmonieux pour deux. Artisanat camerounais de qualité supérieure, confectionné sur mesure par Justine Kem's.",
+      "descGeneric": "Création {cat} signée Justine Kem's. Confectionnée à la main avec des matériaux de qualité supérieure, cette pièce unique est disponible sur commande et peut être ajustée à vos mesures."
+    },
+    "whatsapp": {
+      "greeting": "Bonjour Justine Kem's ! 🌟",
+      "interest": "Je suis intéressé(e) par :",
+      "category": "📁 Catégorie : {cat}",
+      "for": "👤 Pour : {gender}",
+      "price": "💰 Prix : {price}",
+      "thanks": "Pourriez-vous me donner plus d'informations ? Merci !"
+    }
+  },
+  "blog": {
+    "metadata": {
+      "title": "Le Journal | Justine Kem's Boutique",
+      "description": "Conseils mode, coulisses de l'atelier et inspirations couture de Justine Kem's à Yaoundé."
+    },
+    "hero": {
+      "tagline": "Journal de Mode",
+      "title": "Inspirations & Coulisses",
+      "subtitle": "Plongez dans l'univers Justine Kem's",
+      "search": "Rechercher un article..."
+    },
+    "filters": {
+      "all": "Toutes les actualités",
+      "title": "Thématiques"
+    },
+    "search": {
+      "results": "{count} résultat{s} pour \"{query}\""
+    },
+    "card": {
+      "read": "Lire l'article",
+      "published": "{date}",
+      "readingTime": "{time} min",
+      "featured": "À la Une",
+      "readFull": "Lire l'article complet →"
+    },
+    "empty": {
+      "searchTitle": "Aucun résultat trouvé",
+      "catTitle": "Aucun article dans cette catégorie",
+      "searchDesc": "Essayez avec d'autres mots-clés.",
+      "catDesc": "Les premiers articles arrivent bientôt !",
+      "back": "Voir tous les articles"
+    },
+    "sidebar": {
+      "cta": {
+        "title": "Envie d'une création ?",
+        "desc": "Transformons votre inspiration en réalité haute couture.",
+        "btn": "Discuter avec Justine"
+      },
+      "newsletter": {
+        "title": "Ne ratez rien 💌",
+        "desc": "Nouvelles collections, conseils mode et offres exclusives.",
+        "btn": "Suivre via WhatsApp"
+      }
+    }
+  },
+  "inscription": {
+    "metadata": {
+      "title": "Inscription à l'Académie - Justine Kem's",
+      "description": "Rejoignez notre académie de mode. Formations en couture, stylisme et business de la mode à Yaoundé."
+    },
+    "hero": {
+      "title": "Rejoignez l'Académie",
+      "subtitle": "Remplissez ce formulaire pour soumettre votre candidature à l'une de nos formations professionnelles."
+    },
+    "form": {
+      "firstName": "Prénom *",
+      "firstNamePlaceholder": "Sarah",
+      "lastName": "Nom *",
+      "lastNamePlaceholder": "Mouelle",
+      "email": "Email *",
+      "emailPlaceholder": "sarah@email.com",
+      "phone": "Téléphone (WhatsApp) *",
+      "phonePlaceholder": "+237...",
+      "trainingLabel": "Formation souhaitée *",
+      "trainingPlaceholder": "Sélectionnez un programme",
+      "levelLabel": "Votre niveau *",
+      "levelPlaceholder": "Sélectionnez votre niveau",
+      "motivationsLabel": "Pourquoi souhaitez-vous suivre cette formation ? *",
+      "motivationsPlaceholder": "Parlez-nous de vos objectifs, de votre passion, de ce que vous attendez de la formation...",
+      "submit": "Soumettre ma candidature via WhatsApp",
+      "submitting": "Envoi en cours...",
+      "footer": "Votre candidature sera envoyée directement sur notre WhatsApp officiel pour un traitement rapide.",
+      "redirection": "Redirection vers WhatsApp...",
+      "whatsappHeader": "🎓 NOUVELLE DEMANDE D'INSCRIPTION",
+      "whatsappCandidate": "👤 Candidate : {name}",
+      "whatsappEmail": "📧 Email : {email}",
+      "whatsappPhone": "📱 Téléphone : {phone}",
+      "whatsappTraining": "📚 Formation choisie : {training}",
+      "whatsappLevel": "📊 Niveau actuel : {level}",
+      "whatsappMotivations": "💬 Motivations :"
+    },
+    "options": {
+      "trainings": [
+        "Couture Initiation (3 mois)",
+        "Stylisme Avancé (6 mois)",
+        "Business Mode (2 mois)"
+      ],
+      "levels": [
+        "Jamais touché une machine",
+        "Notions de base (Je sais coudre droit)",
+        "Intermédiaire (Je réalise des vêtements simples)",
+        "Avancé (Perfectionnement technique)"
+      ]
+    },
+    "validation": {
+      "firstName": "Prénom requis",
+      "lastName": "Nom requis",
+      "email": "Email invalide",
+      "phone": "Téléphone invalide",
+      "training": "Veuillez choisir une formation",
+      "level": "Veuillez indiquer votre niveau",
+      "motivations": "Veuillez nous en dire plus (min 20 caractères)"
     }
   }
 }

@@ -1,15 +1,24 @@
 import { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import Image from 'next/image'
 import Link from 'next/link'
 import { RevealOnScroll } from '@/components/RevealOnScroll'
 import { AnimatedCounter } from '@/components/AnimatedCounter'
 
-export const metadata: Metadata = {
-  title: "À propos de Justine Kem's - Créatrice de Mode à Yaoundé | Notre Histoire",
-  description: "Découvrez l'histoire de Justine Kem's, créatrice de mode à Yaoundé. De la passion à l'excellence en haute couture sur mesure depuis 2015. Créations uniques, savoir-faire africain.",
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'aboutExt' })
+
+  return {
+    title: t('hero.title').replace('\n', ' '),
+    description: t('hero.subtitle'),
+  }
 }
 
-export default function AboutPage() {
+export default async function AboutPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'aboutExt' })
+
   return (
     <div className="bg-jk-cream dark:bg-jk-dark-bg min-h-screen">
       
@@ -31,13 +40,13 @@ export default function AboutPage() {
         {/* Text Area */}
         <div className="w-full md:w-1/2 md:ml-auto relative z-10 p-8 md:p-16 flex flex-col justify-center animate-fade-in-right">
           <p className="text-sm uppercase tracking-[0.3em] text-jk-royal-gold mb-4 font-medium">
-            Notre histoire
+            {t('hero.tagline')}
           </p>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-script text-white mb-6 leading-tight">
-            L'histoire derrière<br/>chaque couture
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-script text-white mb-6 leading-tight whitespace-pre-line">
+            {t('hero.title')}
           </h1>
           <p className="text-xl font-display text-jk-cream/80">
-            De la passion à l'excellence, depuis Yaoundé jusqu'au monde.
+            {t('hero.subtitle')}
           </p>
         </div>
       </section>
@@ -48,12 +57,12 @@ export default function AboutPage() {
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[
-              { value: 13, suffix: ' ans', label: "D'expérience" },
-              { value: 500, suffix: '+', label: 'Créations réalisées' },
-              { value: 100, suffix: '+', label: 'Pays desservis' },
-              { value: 100, suffix: '%', label: 'Clientes satisfaites' },
+              { value: parseInt(t('stats.s1Value')), suffix: t('stats.s1Suffix'), label: t('stats.s1Label') },
+              { value: parseInt(t('stats.s2Value')), suffix: t('stats.s2Suffix'), label: t('stats.s2Label') },
+              { value: parseInt(t('stats.s3Value')), suffix: t('stats.s3Suffix'), label: t('stats.s3Label') },
+              { value: parseInt(t('stats.s4Value')), suffix: t('stats.s4Suffix'), label: t('stats.s4Label') },
             ].map((stat, i) => (
-              <RevealOnScroll key={stat.label} delay={i * 0.1} variant="zoom-in">
+              <RevealOnScroll key={i} delay={i * 0.1} variant="zoom-in">
                 <div>
                   <div className="text-4xl md:text-5xl font-bold text-jk-black mb-1 leading-none">
                     <AnimatedCounter target={stat.value} suffix={stat.suffix} />
@@ -73,10 +82,10 @@ export default function AboutPage() {
         <RevealOnScroll variant="fade-left">
           <div className="grid md:grid-cols-2 gap-12 items-center mb-32">
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-jk-royal-gold mb-4">Chapitre 1</p>
-              <h2 className="text-4xl font-display text-jk-imperial-green dark:text-jk-royal-gold mb-6">Les débuts</h2>
+              <p className="text-xs uppercase tracking-[0.3em] text-jk-royal-gold mb-4">{t('story.ch1Num')}</p>
+              <h2 className="text-4xl font-display text-jk-imperial-green dark:text-jk-royal-gold mb-6">{t('story.ch1Title')}</h2>
               <p className="text-lg text-jk-text-muted dark:text-gray-300 leading-relaxed">
-                Née d'une passion précoce pour les tissus et la création, Justine Kem's a débuté son parcours dans l'univers de la mode dès son adolescence. Formée aux techniques traditionnelles de couture camerounaise puis enrichie par des influences européennes, elle développe rapidement une signature unique mêlant héritage africain et élégance intemporelle.
+                {t('story.ch1Desc')}
               </p>
             </div>
             <div className="rounded-2xl overflow-hidden shadow-2xl h-[400px] relative group">
@@ -95,10 +104,10 @@ export default function AboutPage() {
         <RevealOnScroll delay={0.15} variant="fade-right">
           <div className="grid md:grid-cols-2 gap-12 items-center mb-32 md:flex-row-reverse">
             <div className="md:order-2">
-              <p className="text-xs uppercase tracking-[0.3em] text-jk-royal-gold mb-4">Chapitre 2</p>
-              <h2 className="text-4xl font-display text-jk-imperial-green dark:text-jk-royal-gold mb-6">La vision</h2>
+              <p className="text-xs uppercase tracking-[0.3em] text-jk-royal-gold mb-4">{t('story.ch2Num')}</p>
+              <h2 className="text-4xl font-display text-jk-imperial-green dark:text-jk-royal-gold mb-6">{t('story.ch2Title')}</h2>
               <p className="text-lg text-jk-text-muted dark:text-gray-300 leading-relaxed">
-                Créer des pièces qui racontent une histoire, celle de la femme qui les porte. Chaque création Justine Kem's est pensée pour sublimer la personnalité unique de sa cliente, loin des standards de la fast-fashion. L'objectif : une garde-robe sur-mesure où chaque pièce devient iconique.
+                {t('story.ch2Desc')}
               </p>
             </div>
             <div className="rounded-2xl overflow-hidden shadow-2xl h-[400px] relative group md:order-1">
@@ -116,14 +125,14 @@ export default function AboutPage() {
         <RevealOnScroll delay={0.15} variant="fade-left">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-jk-royal-gold mb-4">Chapitre 3</p>
-              <h2 className="text-4xl font-display text-jk-imperial-green dark:text-jk-royal-gold mb-6">L'engagement</h2>
+              <p className="text-xs uppercase tracking-[0.3em] text-jk-royal-gold mb-4">{t('story.ch3Num')}</p>
+              <h2 className="text-4xl font-display text-jk-imperial-green dark:text-jk-royal-gold mb-6">{t('story.ch3Title')}</h2>
               <p className="text-lg text-jk-text-muted dark:text-gray-300 leading-relaxed">
-                Ancrée à Yaoundé tout en rayonnant à l'international, la maison Justine Kem's s'engage pour une mode éthique : tissus de qualité, artisanat local, transparence totale du processus de création, et transmission du savoir-faire via nos formations professionnelles.
+                {t('story.ch3Desc')}
               </p>
               <ul className="mt-6 space-y-3 text-jk-text-muted dark:text-gray-400">
-                {['Tissus sourcés localement', 'Zéro gaspillage de matière', 'Artisans camerounais valorisés', 'Formations gratuites chaque trimestre'].map((item) => (
-                  <li key={item} className="flex items-center gap-3">
+                {[t('story.commit1'), t('story.commit2'), t('story.commit3'), t('story.commit4')].map((item, index) => (
+                  <li key={index} className="flex items-center gap-3">
                     <span className="w-5 h-5 flex-shrink-0 rounded-full bg-jk-royal-gold/20 text-jk-royal-gold text-xs flex items-center justify-center">✓</span>
                     {item}
                   </li>
@@ -147,7 +156,7 @@ export default function AboutPage() {
         <div className="absolute top-0 right-0 w-80 h-80 bg-jk-royal-gold/5 rounded-full blur-3xl -mr-40 -mt-40" />
         <div className="container mx-auto px-4 text-center relative z-10">
           <RevealOnScroll variant="blur-in">
-            <h2 className="text-5xl font-script text-jk-royal-gold mb-4">Notre Parcours</h2>
+            <h2 className="text-5xl font-script text-jk-royal-gold mb-4">{t('timeline.title')}</h2>
             <div className="w-20 h-0.5 bg-jk-royal-gold mx-auto mb-16" />
           </RevealOnScroll>
           <div className="flex flex-col md:flex-row justify-between items-start relative max-w-5xl mx-auto gap-8 md:gap-0">
@@ -155,14 +164,14 @@ export default function AboutPage() {
             <div className="hidden md:block absolute top-8 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-jk-royal-gold/40 to-transparent -z-10" />
             
             {[
-              { year: '2015', text: "Création de l'atelier", icon: '✂️' },
-              { year: '2017', text: "Première collection capsule", icon: '👗' },
-              { year: '2019', text: "Lancement formations", icon: '📚' },
-              { year: '2021', text: "Expansion internationale", icon: '🌍' },
-              { year: '2023', text: "500+ créations livrées", icon: '🏆' },
-              { year: '2025', text: "Ouverture service location", icon: '✨' },
+              { year: t('timeline.y1Year'), text: t('timeline.y1Text'), icon: '✂️' },
+              { year: t('timeline.y2Year'), text: t('timeline.y2Text'), icon: '👗' },
+              { year: t('timeline.y3Year'), text: t('timeline.y3Text'), icon: '📚' },
+              { year: t('timeline.y4Year'), text: t('timeline.y4Text'), icon: '🌍' },
+              { year: t('timeline.y5Year'), text: t('timeline.y5Text'), icon: '🏆' },
+              { year: t('timeline.y6Year'), text: t('timeline.y6Text'), icon: '✨' },
             ].map((item, i) => (
-              <RevealOnScroll key={item.year} delay={i * 0.1} variant="fade-up">
+              <RevealOnScroll key={i} delay={i * 0.1} variant="fade-up">
                 <div className="flex flex-col items-center w-28 relative group">
                   <div className="w-16 h-16 rounded-full bg-jk-royal-gold/10 border border-jk-royal-gold/40 flex items-center justify-center mb-4 group-hover:bg-jk-royal-gold/20 group-hover:border-jk-royal-gold transition-all duration-300 text-2xl">
                     {item.icon}
@@ -181,17 +190,17 @@ export default function AboutPage() {
         <div className="container mx-auto px-4">
           <RevealOnScroll variant="blur-in">
             <h2 className="text-4xl font-script text-jk-imperial-green dark:text-jk-royal-gold text-center mb-4">
-              Nos valeurs
+              {t('values.title')}
             </h2>
             <div className="w-20 h-0.5 bg-jk-royal-gold mx-auto mb-16" />
           </RevealOnScroll>
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {[
-              { label: 'Excellence', desc: "Chaque point de couture est réalisé avec une précision méticuleuse, sans compromis sur la qualité.", icon: '💎' },
-              { label: 'Authenticité', desc: "Nos créations puisent dans le patrimoine africain pour offrir des pièces uniques et significatives.", icon: '🌺' },
-              { label: 'Transmission', desc: "Partager notre savoir-faire pour former la prochaine génération de créateurs africains.", icon: '🤝' },
+              { label: t('values.v1Label'), desc: t('values.v1Desc'), icon: '💎' },
+              { label: t('values.v2Label'), desc: t('values.v2Desc'), icon: '🌺' },
+              { label: t('values.v3Label'), desc: t('values.v3Desc'), icon: '🤝' },
             ].map((val, i) => (
-              <RevealOnScroll key={val.label} delay={i * 0.15} variant="fade-up">
+              <RevealOnScroll key={i} delay={i * 0.15} variant="fade-up">
                 <div className="text-center p-8 rounded-2xl hover:bg-jk-royal-gold/5 transition-colors group">
                   <div className="text-5xl mb-6 group-hover:scale-110 transition-transform duration-300 inline-block">
                     {val.icon}
@@ -215,16 +224,16 @@ export default function AboutPage() {
         <div className="relative z-10 max-w-2xl mx-auto">
           <RevealOnScroll variant="zoom-in">
             <h2 className="text-4xl md:text-5xl font-display text-jk-black mb-6">
-              Prête à créer votre pièce unique ?
+              {t('cta.title')}
             </h2>
             <p className="text-jk-black/70 text-lg mb-10">
-              Rejoignez les centaines de clientes qui nous font confiance.
+              {t('cta.desc')}
             </p>
             <Link
-              href="/fr/contact"
+              href={`/${locale}/contact`}
               className="inline-flex items-center gap-2 bg-jk-black text-white hover:bg-jk-imperial-green px-8 py-4 rounded-full font-semibold text-lg transition-all hover:scale-105 shadow-xl"
             >
-              Prendre rendez-vous →
+              {t('cta.btn')}
             </Link>
           </RevealOnScroll>
         </div>

@@ -16,7 +16,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const featuredProducts = await safeFetch(queries.featuredProducts) ?? []
   const testimonials = await safeFetch(queries.testimonials) ?? []
   
-  const t = await getTranslations('trustBar')
+  const tTrust = await getTranslations({ locale, namespace: 'trustBar' })
+  const tHome = await getTranslations({ locale, namespace: 'homeExt' })
 
   return (
     <>
@@ -33,15 +34,15 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           <div className="flex flex-col md:flex-row justify-around items-center gap-4 text-center">
             <div className="flex items-center gap-2">
               <span className="text-jk-royal-gold">✦</span>
-              <span>{t('custom')}</span>
+              <span>{tTrust('custom')}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-jk-royal-gold">✦</span>
-              <span>{t('shipping')}</span>
+              <span>{tTrust('shipping')}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-jk-royal-gold">✦</span>
-              <span>{t('guarantee')}</span>
+              <span>{tTrust('guarantee')}</span>
             </div>
           </div>
         </div>
@@ -53,16 +54,16 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <div className="container mx-auto px-4">
           <RevealOnScroll variant="blur-in">
             <p className="text-center text-sm uppercase tracking-[0.3em] text-jk-royal-gold mb-12 font-medium">
-              Nos chiffres parlent d'eux-mêmes
+              {tHome('stats.title')}
             </p>
           </RevealOnScroll>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4 max-w-2xl mx-auto">
             {[
-              { value: 500, suffix: '+', label: 'Créations livrées', icon: '✂️' },
-              { value: 13, suffix: ' ans', label: "D'expérience", icon: '⭐' },
-              { value: 100, suffix: '+ pays', label: 'Livraison mondiale', icon: '🌍' },
+              { value: 500, suffix: tHome('stats.s1Suffix'), label: tHome('stats.s1Label'), icon: '✂️' },
+              { value: 13, suffix: tHome('stats.s2Suffix'), label: tHome('stats.s2Label'), icon: '⭐' },
+              { value: 100, suffix: tHome('stats.s3Suffix'), label: tHome('stats.s3Label'), icon: '🌍' },
             ].map((stat, i) => (
-              <RevealOnScroll key={stat.label} delay={i * 0.12} variant="zoom-in">
+              <RevealOnScroll key={i} delay={i * 0.12} variant="zoom-in">
                 <div className="text-center group">
                   <div className="text-2xl mb-3">{stat.icon}</div>
                   <div className="text-4xl md:text-5xl font-display font-bold text-jk-imperial-green dark:text-jk-royal-gold mb-2 leading-none">
@@ -83,7 +84,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <div className="container mx-auto px-4">
           <RevealOnScroll variant="fade-up">
             <h2 className="text-5xl font-script text-jk-imperial-green dark:text-jk-royal-gold text-center mb-4">
-              Notre savoir-faire
+              {tHome('savoirFaire.title')}
             </h2>
             <div className="w-20 h-0.5 bg-jk-royal-gold mx-auto mb-16" />
           </RevealOnScroll>
@@ -98,16 +99,16 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                   </svg>
                 </div>
                 <h3 className="text-2xl font-display text-jk-imperial-green dark:text-jk-cream mb-4 text-center">
-                  Haute Couture
+                  {tHome('savoirFaire.hcTitle')}
                 </h3>
                 <p className="text-jk-text-muted dark:text-gray-400 text-center mb-6 flex-1">
-                  Créations uniques pensées pour sublimer votre silhouette
+                  {tHome('savoirFaire.hcDesc')}
                 </p>
                 <Link
-                  href="/fr/services#haute-couture"
+                  href={`/${locale}/services#haute-couture`}
                   className="block text-center text-jk-royal-gold hover:text-jk-royal-gold-dark font-medium transition-colors"
                 >
-                  En savoir plus →
+                  {tHome('savoirFaire.learnMore')}
                 </Link>
               </div>
             </RevealOnScroll>
@@ -121,16 +122,16 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                   </svg>
                 </div>
                 <h3 className="text-2xl font-display text-jk-imperial-green dark:text-jk-cream mb-4 text-center">
-                  Location de Prestige
+                  {tHome('savoirFaire.locTitle')}
                 </h3>
                 <p className="text-jk-text-muted dark:text-gray-400 text-center mb-6 flex-1">
-                  Des tenues d'exception disponibles pour vos événements
+                  {tHome('savoirFaire.locDesc')}
                 </p>
                 <Link
-                  href="/fr/services#location"
+                  href={`/${locale}/services#location`}
                   className="block text-center text-jk-royal-gold hover:text-jk-royal-gold-dark font-medium transition-colors"
                 >
-                  En savoir plus →
+                  {tHome('savoirFaire.learnMore')}
                 </Link>
               </div>
             </RevealOnScroll>
@@ -144,16 +145,16 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                   </svg>
                 </div>
                 <h3 className="text-2xl font-display text-jk-imperial-green dark:text-jk-cream mb-4 text-center">
-                  Formations
+                  {tHome('savoirFaire.formTitle')}
                 </h3>
                 <p className="text-jk-text-muted dark:text-gray-400 text-center mb-6 flex-1">
-                  Transmettre notre passion à la nouvelle génération
+                  {tHome('savoirFaire.formDesc')}
                 </p>
                 <Link
-                  href="/fr/formations"
+                  href={`/${locale}/formations`}
                   className="block text-center text-jk-royal-gold hover:text-jk-royal-gold-dark font-medium transition-colors"
                 >
-                  En savoir plus →
+                  {tHome('savoirFaire.learnMore')}
                 </Link>
               </div>
             </RevealOnScroll>
@@ -167,7 +168,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <div className="container mx-auto px-4">
           <RevealOnScroll variant="blur-in">
             <h2 className="text-4xl md:text-5xl font-script text-jk-royal-gold text-center mb-4">
-              Comment ça marche ?
+              {tHome('process.title')}
             </h2>
             <div className="w-20 h-0.5 bg-jk-royal-gold mx-auto mb-16" />
           </RevealOnScroll>
@@ -175,10 +176,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             {/* Connecting line */}
             <div className="hidden md:block absolute top-10 left-[12.5%] right-[12.5%] h-0.5 bg-gradient-to-r from-transparent via-jk-royal-gold/40 to-transparent" />
             {[
-              { step: '01', title: 'Contact', desc: 'Décrivez votre projet via WhatsApp ou notre formulaire.' },
-              { step: '02', title: 'Consultation', desc: 'Prise de mesures et choix des tissus ensemble.' },
-              { step: '03', title: 'Création', desc: 'Notre atelier réalise votre pièce avec soin, sur mesure, en qualité supérieure.' },
-              { step: '04', title: 'Livraison', desc: 'Réception impeccable, partout dans le monde.' },
+              { step: '01', title: tHome('process.s1Title'), desc: tHome('process.s1Desc') },
+              { step: '02', title: tHome('process.s2Title'), desc: tHome('process.s2Desc') },
+              { step: '03', title: tHome('process.s3Title'), desc: tHome('process.s3Desc') },
+              { step: '04', title: tHome('process.s4Title'), desc: tHome('process.s4Desc') },
             ].map((item, i) => (
               <RevealOnScroll key={item.step} delay={i * 0.15} variant="fade-up">
                 <div className="text-center">
@@ -205,7 +206,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           <RevealOnScroll variant="blur-in">
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-script text-jk-royal-gold mb-4">
-                Ce que disent nos clientes
+                {tHome('testimonials.title')}
               </h2>
               <div className="w-24 h-1 bg-jk-royal-gold mx-auto" />
             </div>
@@ -257,9 +258,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               // Fallback static testimonials
               <>
                 {[
-                  { name: "Serena B.", city: "Yaoundé", content: "Justine a su créer la robe de mes rêves pour mon mariage. Le souci du détail est tout simplement incroyable." },
-                  { name: "Marie-Claire K.", city: "Douala", content: "Un professionnalisme exemplaire. Les finitions sont dignes des plus grandes maisons de couture européennes." },
-                  { name: "Inès T.", city: "Paris", content: "Même à distance, la communication et les mesures étaient parfaites. Ma robe est arrivée impeccablement emballée." }
+                  { name: tHome('testimonials.fallback.t1Name'), city: tHome('testimonials.fallback.t1City'), content: tHome('testimonials.fallback.t1Content') },
+                  { name: tHome('testimonials.fallback.t2Name'), city: tHome('testimonials.fallback.t2City'), content: tHome('testimonials.fallback.t2Content') },
+                  { name: tHome('testimonials.fallback.t3Name'), city: tHome('testimonials.fallback.t3City'), content: tHome('testimonials.fallback.t3Content') }
                 ].map((item, i) => (
                   <RevealOnScroll key={i} delay={i * 0.12} variant="fade-up">
                     <div className="bg-white/5 p-8 rounded-2xl border border-white/5 hover:border-jk-royal-gold/20 transition-all h-full flex flex-col">
@@ -291,7 +292,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 href={`/${locale}/temoignages`}
                 className="inline-flex items-center gap-3 border border-jk-royal-gold text-jk-royal-gold hover:bg-jk-royal-gold hover:text-jk-black px-8 py-4 rounded-full font-semibold text-base transition-all hover:scale-105 group"
               >
-                <span>Voir plus de témoignages</span>
+                <span>{tHome('testimonials.seeMore')}</span>
                 <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
@@ -311,17 +312,17 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <div className="relative z-10 container mx-auto px-4 text-center">
           <RevealOnScroll variant="zoom-in">
             <h2 className="text-4xl md:text-6xl font-script text-jk-royal-gold mb-6">
-              Votre pièce unique vous attend
+              {tHome('cta.title')}
             </h2>
             <p className="text-jk-cream/80 text-lg mb-10 max-w-xl mx-auto">
-              Contactez-nous dès aujourd&apos;hui et commençons à créer ensemble la tenue dont vous rêvez.
+              {tHome('cta.desc')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href={`/${locale}/contact`}
                 className="inline-flex items-center gap-2 bg-jk-royal-gold text-jk-black hover:bg-jk-royal-gold-dark px-8 py-4 rounded-full font-semibold text-lg transition-all hover:scale-105 shadow-xl"
               >
-                ✉️ Prendre rendez-vous
+                {tHome('cta.btnAppointment')}
               </Link>
               <a
                 href="https://wa.me/237677463484"
@@ -329,7 +330,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-white/10 text-jk-cream hover:bg-white/20 border border-white/20 px-8 py-4 rounded-full font-semibold text-lg transition-all hover:scale-105"
               >
-                💬 WhatsApp direct
+                {tHome('cta.btnWhatsapp')}
               </a>
             </div>
           </RevealOnScroll>

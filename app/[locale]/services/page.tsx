@@ -7,58 +7,19 @@ import { RevealOnScroll } from '@/components/RevealOnScroll'
 import { WhatsAppFormHandler } from '@/components/WhatsAppFormHandler'
 import { useTranslations, useLocale } from 'next-intl'
 
-// ─── Slider soirée ─────────────────────────────────────────────────────────
-const soireeImages = [
-  { src: '/catalogue/robes-soirees/120.000as.jpg', label: 'Robe Soirée 120 000 FCFA' },
-  { src: '/catalogue/robes-soirees/150.000.jpeg', label: 'Robe Soirée 150 000 FCFA' },
-  { src: '/catalogue/robes-soirees/200.000 C.jpg', label: 'Robe Soirée 200 000 FCFA' },
-  { src: '/catalogue/robes-soirees/250.000yy.jpg', label: 'Robe Soirée 250 000 FCFA' },
-  { src: '/catalogue/robes-soirees/300.000 a.jpg', label: 'Robe Soirée 300 000 FCFA' },
-  { src: '/catalogue/robes-soirees/350.000e.jpg', label: 'Robe Soirée 350 000 FCFA' },
-]
 
-// ─── Slider mariage ─────────────────────────────────────────────────────────
-const mariageImages = [
-  { src: '/catalogue/robes-mariage/250.000 C.jpg', label: 'Robe de Mariage 250 000 FCFA' },
-  { src: '/catalogue/robes-mariage/300.000 Q.jpg', label: 'Robe de Mariage 300 000 FCFA' },
-  { src: '/catalogue/robes-mariage/350.000 SA.jpg', label: 'Robe de Mariage 350 000 FCFA' },
-  { src: '/catalogue/robes-mariage/400.000.jpg',   label: 'Robe de Mariage 400 000 FCFA' },
-  { src: '/catalogue/robes-mariage/500.000.jpg',   label: 'Robe de Mariage 500 000 FCFA' },
-]
-
-// ─── Slider tenue de ville ────────────────────────────────────────────────
-const villeImages = [
-  { src: '/catalogue/tenue-ville/45.000.jpg',    label: 'Tenue Ville 45 000 FCFA' },
-  { src: '/catalogue/tenue-ville/70.000 F.jpg', label: 'Tenue Ville 70 000 FCFA' },
-  { src: '/catalogue/tenue-ville/80.000D.jpg',   label: 'Tenue Ville 80 000 FCFA' },
-  { src: '/catalogue/tenue-ville/120.000.jpg',   label: 'Tenue Ville 120 000 FCFA' },
-]
-
-// ─── Slider traditionnel ──────────────────────────────────────────────────
-const traditionnelImages = [
-  { src: '/catalogue/tenue-traditionnels/150.000 X.jpg', label: 'Tenue Traditionnelle 150 000 FCFA' },
-  { src: '/catalogue/tenue-traditionnels/200.000A.jpg',   label: 'Tenue Traditionnelle 200 000 FCFA' },
-  { src: '/catalogue/tenue-traditionnels/250.000c.jpg',   label: 'Tenue Traditionnelle 250 000 FCFA' },
-  { src: '/catalogue/tenue-traditionnels/350.000c.jpg',   label: 'Tenue Traditionnelle 350 000 FCFA' },
-]
-
-// ─── Slider couple ────────────────────────────────────────────────────────
-const coupleImages = [
-  { src: '/modeles/Tenu%20de%20couple/h120.000%20;%20f250.000.jpg', label: 'Tenue Couple' },
-  { src: '/modeles/Tenu%20de%20couple/h130.000%20;%20f150.000.jpg', label: 'Tenue Couple' },
-  { src: '/modeles/Tenu%20de%20couple/h140.000%20;%20f250.000.jpg', label: 'Tenue Couple' },
-  { src: '/modeles/Tenu%20de%20couple/h150.000%20;%20f350.000.jpg', label: 'Tenue Couple' },
-  { src: '/modeles/Tenu%20de%20couple/h160.000%20;%20f%20380.000.jpg', label: 'Tenue Couple' },
-  { src: '/modeles/Tenu%20de%20couple/h80.000%20;%20f%20200.000.jpg', label: 'Tenue Couple' },
-]
 
 // ─── ImageSlider composant interne ─────────────────────────────────────────
 function ImageSlider({
   images,
   autoPlayMs = 3500,
+  prevAriaLabel,
+  nextAriaLabel,
 }: {
   images: { src: string; label: string }[]
   autoPlayMs?: number
+  prevAriaLabel: string
+  nextAriaLabel: string
 }) {
   const [current, setCurrent] = useState(0)
 
@@ -76,6 +37,7 @@ function ImageSlider({
     <div className="relative w-full h-full rounded-2xl overflow-hidden group">
       <AnimatePresence mode="wait">
         <motion.div
+// ... existing code ...
           key={current}
           initial={{ opacity: 0, scale: 1.04 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -100,14 +62,14 @@ function ImageSlider({
       {/* Arrows */}
       <button
         onClick={prev}
-        aria-label="Précédent"
+        aria-label={prevAriaLabel}
         className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-jk-royal-gold hover:text-black"
       >
         ‹
       </button>
       <button
         onClick={next}
-        aria-label="Suivant"
+        aria-label={nextAriaLabel}
         className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-jk-royal-gold hover:text-black"
       >
         ›
@@ -133,11 +95,58 @@ function ImageSlider({
 export default function ServicesPage() {
   const t = useTranslations('services')
   const locale = useLocale()
+
   const [modalOpen, setModalOpen] = useState(false)
   const [formConfig, setFormConfig] = useState<{ type: 'order' | 'rental' | 'training'; title: string }>({
     type: 'order',
     title: '',
   })
+
+  // ─── Slider soirée ─────────────────────────────────────────────────────────
+  const soireeImages = [
+    { src: '/catalogue/robes-soirees/120.000as.jpg', label: t('soiree.label', { price: '120 000' }) },
+    { src: '/catalogue/robes-soirees/150.000.jpeg', label: t('soiree.label', { price: '150 000' }) },
+    { src: '/catalogue/robes-soirees/200.000 C.jpg', label: t('soiree.label', { price: '200 000' }) },
+    { src: '/catalogue/robes-soirees/250.000yy.jpg', label: t('soiree.label', { price: '250 000' }) },
+    { src: '/catalogue/robes-soirees/300.000 a.jpg', label: t('soiree.label', { price: '300 000' }) },
+    { src: '/catalogue/robes-soirees/350.000e.jpg', label: t('soiree.label', { price: '350 000' }) },
+  ]
+
+  // ─── Slider mariage ─────────────────────────────────────────────────────────
+  const mariageImages = [
+    { src: '/catalogue/robes-mariage/250.000 C.jpg', label: t('mariage.label', { price: '250 000' }) },
+    { src: '/catalogue/robes-mariage/300.000 Q.jpg', label: t('mariage.label', { price: '300 000' }) },
+    { src: '/catalogue/robes-mariage/350.000 SA.jpg', label: t('mariage.label', { price: '350 000' }) },
+    { src: '/catalogue/robes-mariage/400.000.jpg',   label: t('mariage.label', { price: '400 000' }) },
+    { src: '/catalogue/robes-mariage/500.000.jpg',   label: t('mariage.label', { price: '500 000' }) },
+  ]
+
+  // ─── Slider tenue de ville ────────────────────────────────────────────────
+  const villeImages = [
+    { src: '/catalogue/tenue-ville/45.000.jpg',    label: t('others.cityLabel', { price: '45 000' }) },
+    { src: '/catalogue/tenue-ville/70.000 F.jpg', label: t('others.cityLabel', { price: '70 000' }) },
+    { src: '/catalogue/tenue-ville/80.000D.jpg',   label: t('others.cityLabel', { price: '80 000' }) },
+    { src: '/catalogue/tenue-ville/120.000.jpg',   label: t('others.cityLabel', { price: '120 000' }) },
+  ]
+
+  // ─── Slider traditionnel ──────────────────────────────────────────────────
+  const traditionnelImages = [
+    { src: '/catalogue/tenue-traditionnels/150.000 X.jpg', label: t('others.traditionalLabel', { price: '150 000' }) },
+    { src: '/catalogue/tenue-traditionnels/200.000A.jpg',   label: t('others.traditionalLabel', { price: '200 000' }) },
+    { src: '/catalogue/tenue-traditionnels/250.000c.jpg',   label: t('others.traditionalLabel', { price: '250 000' }) },
+    { src: '/catalogue/tenue-traditionnels/350.000c.jpg',   label: t('others.traditionalLabel', { price: '350 000' }) },
+  ]
+
+  // ─── Slider couple ────────────────────────────────────────────────────────
+  const coupleLabel = locale === 'en' ? 'Couple Outfit' : 'Tenue Couple'
+  const coupleImages = [
+    { src: '/modeles/Tenu%20de%20couple/h120.000%20;%20f250.000.jpg', label: coupleLabel },
+    { src: '/modeles/Tenu%20de%20couple/h130.000%20;%20f150.000.jpg', label: coupleLabel },
+    { src: '/modeles/Tenu%20de%20couple/h140.000%20;%20f250.000.jpg', label: coupleLabel },
+    { src: '/modeles/Tenu%20de%20couple/h150.000%20;%20f350.000.jpg', label: coupleLabel },
+    { src: '/modeles/Tenu%20de%20couple/h160.000%20;%20f%20380.000.jpg', label: coupleLabel },
+    { src: '/modeles/Tenu%20de%20couple/h80.000%20;%20f%20200.000.jpg', label: coupleLabel },
+  ]
 
   const openForm = (type: 'order' | 'rental' | 'training', title: string) => {
     setFormConfig({ type, title })
@@ -260,7 +269,7 @@ export default function ServicesPage() {
             {/* Slider principal */}
             <RevealOnScroll>
               <div className="h-[520px]">
-                <ImageSlider images={soireeImages} autoPlayMs={3800} />
+                <ImageSlider images={soireeImages} autoPlayMs={3800} prevAriaLabel={t('prev')} nextAriaLabel={t('next')} />
               </div>
             </RevealOnScroll>
 
@@ -326,7 +335,7 @@ export default function ServicesPage() {
           {/* Slider mariage */}
           <RevealOnScroll delay={0.15}>
             <div className="h-[520px]">
-              <ImageSlider images={mariageImages} autoPlayMs={4200} />
+              <ImageSlider images={mariageImages} autoPlayMs={4200} prevAriaLabel={t('prev')} nextAriaLabel={t('next')} />
             </div>
           </RevealOnScroll>
         </div>
@@ -357,7 +366,7 @@ export default function ServicesPage() {
             {/* Slider principal */}
             <RevealOnScroll>
               <div className="h-[520px]">
-                <ImageSlider images={coupleImages} autoPlayMs={3900} />
+                <ImageSlider images={coupleImages} autoPlayMs={3900} prevAriaLabel={t('prev')} nextAriaLabel={t('next')} />
               </div>
             </RevealOnScroll>
 
@@ -477,7 +486,7 @@ export default function ServicesPage() {
 
             {/* Slider Collection Soirée — location */}
             <div className="order-1 lg:order-2 h-[600px]">
-              <ImageSlider images={soireeImages} autoPlayMs={3200} />
+              <ImageSlider images={soireeImages} autoPlayMs={3200} prevAriaLabel={prevLabel} nextAriaLabel={nextLabel} />
             </div>
           </div>
         </RevealOnScroll>
@@ -500,7 +509,7 @@ export default function ServicesPage() {
                   {t('others.traditional')}
                 </h3>
                 <div className="h-[400px]">
-                  <ImageSlider images={traditionnelImages} autoPlayMs={4000} />
+                  <ImageSlider images={traditionnelImages} autoPlayMs={4000} prevAriaLabel={prevLabel} nextAriaLabel={nextLabel} />
                 </div>
                 <div className="text-center mt-5">
                   <a
@@ -520,7 +529,7 @@ export default function ServicesPage() {
                   {t('others.city')}
                 </h3>
                 <div className="h-[400px]">
-                  <ImageSlider images={villeImages} autoPlayMs={3600} />
+                  <ImageSlider images={villeImages} autoPlayMs={3600} prevAriaLabel={prevLabel} nextAriaLabel={nextLabel} />
                 </div>
                 <div className="text-center mt-5">
                   <a

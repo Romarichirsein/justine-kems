@@ -15,23 +15,14 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params
-
-  const titles = {
-    fr: 'Justine Kem\'s - Haute Couture sur Mesure à Yaoundé',
-    en: 'Justine Kem\'s - Bespoke Haute Couture in Yaoundé'
-  }
-
-  const descriptions = {
-    fr: 'Maison de haute couture à Yaoundé, Cameroun. Créations sur mesure, location de tenues de prestige et formations professionnelles en couture.',
-    en: 'Haute couture house in Yaoundé, Cameroon. Bespoke creations, luxury garment rentals and professional sewing training.'
-  }
+  const t = await getTranslations({ locale, namespace: 'metadata' })
 
   return {
     title: {
-      default: titles[locale as keyof typeof titles],
+      default: t('title'),
       template: `%s | Justine Kem's`
     },
-    description: descriptions[locale as keyof typeof descriptions],
+    description: t('description'),
     keywords: [
       'haute couture Yaoundé',
       'couture sur mesure Cameroun',
@@ -59,8 +50,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       locale: locale === 'fr' ? 'fr_CM' : 'en_US',
       url: 'https://justinekems.com',
       siteName: 'Justine Kem\'s',
-      title: titles[locale as keyof typeof titles],
-      description: descriptions[locale as keyof typeof descriptions],
+      title: t('title'),
+      description: t('description'),
       images: [
         {
           url: '/og-image.jpg',
@@ -72,8 +63,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: 'summary_large_image',
-      title: titles[locale as keyof typeof titles],
-      description: descriptions[locale as keyof typeof descriptions],
+      title: t('title'),
+      description: t('description'),
       images: ['/og-image.jpg'],
     },
     robots: {
