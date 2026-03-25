@@ -68,13 +68,21 @@ export default async function BlogPostPage({ params }: Props) {
       }} />
 
       {/* Hero Article */}
-      <header className="relative w-full h-[60vh] md:h-[70vh] flex items-end pb-16 justify-center">
-        {post.mainImage && (
+      <header className="relative w-full h-[60vh] md:h-[70vh] flex items-end pb-16 justify-center bg-jk-imperial-green">
+        {post.mainImage ? (
           <Image
             src={urlForImage(post.mainImage).url()}
             alt={post.title}
             fill
             className="object-cover"
+            priority
+          />
+        ) : (
+          <Image
+            src="/modeles/Robes%20de%20soirees/120.000d.jpg"
+            alt={post.title}
+            fill
+            className="object-cover opacity-80"
             priority
           />
         )}

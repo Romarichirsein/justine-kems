@@ -23,9 +23,11 @@ export default {
         list: [
           { title: 'Mode', value: 'mode' },
           { title: 'Tendances', value: 'tendances' },
-          { title: 'Conseil couture', value: 'conseil' },
+          { title: 'Conseil couture', value: 'couture' },
           { title: 'Behind the scenes', value: 'backstage' },
-          { title: 'Événements', value: 'evenements' }
+          { title: 'Événements', value: 'evenements' },
+          { title: 'Formation', value: 'formation' },
+          { title: 'Mariage', value: 'mariage' }
         ]
       }
     },
@@ -56,7 +58,7 @@ export default {
     {
       name: 'publishedAt',
       title: 'Date de publication',
-      type: 'datetime'
+      type: 'date'
     },
     {
       name: 'readingTime',

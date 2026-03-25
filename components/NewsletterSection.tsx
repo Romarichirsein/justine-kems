@@ -2,8 +2,10 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 
 export function NewsletterSection() {
+  const t = useTranslations('newsletter')
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
@@ -12,7 +14,7 @@ export function NewsletterSection() {
     e.preventDefault()
     
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setErrorMsg('Veuillez entrer une adresse email valide.')
+      setErrorMsg(t('errorEmail'))
       return
     }
     
@@ -26,7 +28,7 @@ export function NewsletterSection() {
       setEmail('')
     } catch {
       setStatus('error')
-      setErrorMsg('Une erreur est survenue. Veuillez réessayer.')
+      setErrorMsg(t('errorGeneral'))
     }
   }
 
@@ -47,12 +49,12 @@ export function NewsletterSection() {
         </div>
 
         {/* Title */}
-        <p className="text-jk-royal-gold uppercase text-xs tracking-[4px] font-bold mb-3">Exclusivités & Coulisses</p>
+
         <h2 className="text-3xl md:text-4xl font-script text-jk-cream mb-4">
-          Restez dans l&apos;univers Justine Kem&apos;s
+          {t('title')}
         </h2>
         <p className="text-gray-400 mb-10 leading-relaxed max-w-lg mx-auto">
-          Recevez en avant-première nos nouvelles collections, conseils mode et offres exclusives — aucun spam, promis ✦
+          {t('subtitle')}
         </p>
 
         {/* Form */}
@@ -65,8 +67,8 @@ export function NewsletterSection() {
               className="bg-jk-royal-gold/10 border border-jk-royal-gold/30 rounded-2xl p-8"
             >
               <div className="text-4xl mb-3">✦</div>
-              <h3 className="text-jk-royal-gold font-display text-xl mb-2">Bienvenue dans notre cercle !</h3>
-              <p className="text-gray-400 text-sm">Vous recevrez bientôt nos exclusivités dans votre boîte mail.</p>
+              <h3 className="text-jk-royal-gold font-display text-xl mb-2">{t('successTitle')}</h3>
+              <p className="text-gray-400 text-sm">{t('successMessage')}</p>
             </motion.div>
           ) : (
             <motion.form
@@ -79,7 +81,7 @@ export function NewsletterSection() {
                   type="email"
                   value={email}
                   onChange={(e) => { setEmail(e.target.value); setErrorMsg('') }}
-                  placeholder="votre@email.com"
+                  placeholder={t('placeholder')}
                   className={`w-full px-5 py-4 rounded-full bg-white/8 border ${errorMsg ? 'border-red-500/50' : 'border-white/10 focus:border-jk-royal-gold/50'} text-white placeholder:text-gray-500 outline-none transition-all focus:ring-2 focus:ring-jk-royal-gold/20 text-sm text-center sm:text-left`}
                   disabled={status === 'loading'}
                 />
@@ -104,10 +106,10 @@ export function NewsletterSection() {
                 {status === 'loading' ? (
                   <span className="flex items-center gap-2 justify-center">
                     <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-                    Envoi…
+                    {t('loading')}
                   </span>
                 ) : (
-                  'Je m\'abonne'
+                  t('button')
                 )}
               </button>
             </motion.form>
@@ -116,7 +118,7 @@ export function NewsletterSection() {
 
         {/* Trust */}
         <p className="text-gray-600 text-xs mt-6">
-          🔒 Vos données sont protégées • Désabonnement en 1 clic
+          {t('privacy')}
         </p>
       </div>
     </section>

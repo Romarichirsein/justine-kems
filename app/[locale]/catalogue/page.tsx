@@ -312,7 +312,7 @@ export default function CataloguePage() {
               </button>
 
               {/* Image grande */}
-              <div className="relative md:w-1/2 h-72 md:h-auto bg-gray-100 dark:bg-gray-800 shrink-0">
+              <div className="relative md:w-1/2 h-72 md:h-auto md:min-h-[400px] bg-gray-100 dark:bg-gray-800 shrink-0">
                 {imgErrors.has(selectedProduct.id) ? (
                   <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
                     <span className="text-6xl mb-3">{getCategoryEmoji(selectedProduct.category)}</span>

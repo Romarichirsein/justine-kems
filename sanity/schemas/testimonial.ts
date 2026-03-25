@@ -37,7 +37,12 @@ export default {
       options: {
         list: [
           { title: 'Client Haute Couture', value: 'client' },
-          { title: 'Étudiante Formation', value: 'student' }
+          { title: 'Étudiante Formation', value: 'student' },
+          { title: 'Mariage', value: 'mariage' },
+          { title: 'Soirée', value: 'soiree' },
+          { title: 'Formation', value: 'formation' },
+          { title: 'Quotidien', value: 'quotidien' },
+          { title: 'Traditionnel', value: 'traditionnel' }
         ]
       }
     }

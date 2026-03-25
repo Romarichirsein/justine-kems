@@ -6,7 +6,8 @@ import { useLocale, useTranslations } from 'next-intl'
 
 export default function Footer() {
   const locale = useLocale()
-  const t = useTranslations('nav')
+  const tNav = useTranslations('nav')
+  const tFooter = useTranslations('footer')
   
   return (
     <footer className="bg-jk-imperial-green text-jk-cream py-16 relative z-30 shadow-[0_-10px_50px_rgba(0,0,0,0.3)]">
@@ -24,24 +25,24 @@ export default function Footer() {
                 className="object-contain"
               />
             </div>
-            <p className="italic text-jk-royal-gold mb-4 font-display">L'élégance façonnée sur mesure</p>
+            <p className="italic text-jk-royal-gold mb-4 font-display">{tFooter('tagline')}</p>
             <p className="text-sm text-gray-300 leading-relaxed">
-              Maison de haute couture à Yaoundé — Quartier Essos. Robes de mariée, tenues traditionnelles, soirée et créations sur mesure depuis 2015.
+              {tFooter('descShort')}
             </p>
           </div>
 
           {/* Navigation */}
           <div>
-            <h4 className="text-lg font-bold mb-6 uppercase tracking-wider text-jk-royal-gold">Navigation</h4>
+            <h4 className="text-lg font-bold mb-6 uppercase tracking-wider text-jk-royal-gold">{tFooter('navigation')}</h4>
             <ul className="space-y-3">
               {[
-                { href: `/${locale}/a-propos`, label: t('about') },
-                { href: `/${locale}/services`, label: t('services') },
-                { href: `/${locale}/catalogue`, label: t('catalogue') },
-                { href: `/${locale}/formations`, label: t('formations') },
-                { href: `/${locale}/modeles`, label: t('models') },
-                { href: `/${locale}/blog`, label: t('blog') },
-                { href: `/${locale}/contact`, label: t('contact') },
+                { href: `/${locale}/a-propos`, label: tNav('about') },
+                { href: `/${locale}/services`, label: tNav('services') },
+                { href: `/${locale}/catalogue`, label: tNav('catalogue') },
+                { href: `/${locale}/formations`, label: tNav('formations') },
+                { href: `/${locale}/modeles`, label: tNav('models') },
+                { href: `/${locale}/blog`, label: tNav('blog') },
+                { href: `/${locale}/contact`, label: tNav('contact') },
               ].map(link => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-gray-300 hover:text-jk-royal-gold transition-colors">
@@ -54,27 +55,27 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="text-lg font-bold mb-6 uppercase tracking-wider text-jk-royal-gold">Contact</h4>
+            <h4 className="text-lg font-bold mb-6 uppercase tracking-wider text-jk-royal-gold">{tFooter('contact')}</h4>
             <ul className="space-y-4">
               <li className="flex items-start gap-3 text-gray-300">
                 <svg className="w-5 h-5 mt-0.5 shrink-0 text-jk-royal-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                 <div>
                   <a href="tel:+237677463484" className="hover:text-jk-royal-gold transition-colors block">+237 677 463 484</a>
-                  <span className="text-xs text-gray-400">WhatsApp disponible</span>
+                  <span className="text-xs text-gray-400">{tFooter('whatsappAvailable')}</span>
                 </div>
               </li>
               <li className="flex items-start gap-3 text-gray-300">
                 <svg className="w-5 h-5 mt-0.5 shrink-0 text-jk-royal-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                 <div>
-                  <p className="hover:text-jk-royal-gold transition-colors">En face du Marché Essos</p>
-                  <p className="text-xs text-gray-400">Quartier Essos, Yaoundé — Cameroun</p>
+                  <p className="hover:text-jk-royal-gold transition-colors">{tFooter('addressMain')}</p>
+                  <p className="text-xs text-gray-400">{tFooter('addressSub')}</p>
                 </div>
               </li>
               <li className="flex items-start gap-3 text-gray-300">
                 <svg className="w-5 h-5 mt-0.5 shrink-0 text-jk-royal-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <div>
-                  <p className="text-sm">9h00 – 18h00 (Lun-Ven)</p>
-                  <p className="text-xs text-jk-royal-gold mt-1 font-semibold">Sur rendez-vous uniquement</p>
+                  <p className="text-sm">{tFooter('hoursWeek')}</p>
+                  <p className="text-xs text-jk-royal-gold mt-1 font-semibold">{tFooter('appointmentOnly')}</p>
                 </div>
               </li>
             </ul>
@@ -82,7 +83,7 @@ export default function Footer() {
 
           {/* Social */}
           <div>
-            <h4 className="text-lg font-bold mb-6 uppercase tracking-wider text-jk-royal-gold">Suivez-nous</h4>
+            <h4 className="text-lg font-bold mb-6 uppercase tracking-wider text-jk-royal-gold">{tFooter('followUs')}</h4>
             <div className="flex gap-4 mb-8">
               <a href="https://facebook.com/justinekems" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-jk-royal-gold hover:bg-jk-royal-gold hover:text-black transition-all">
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
@@ -96,18 +97,18 @@ export default function Footer() {
             </div>
             {/* Repères */}
             <div className="bg-white/5 rounded-xl p-4 border border-jk-royal-gold/20">
-              <h5 className="text-[10px] font-bold text-jk-royal-gold uppercase tracking-widest mb-2">À proximité</h5>
-              <p className="text-[10px] text-gray-400">Marché Essos, DOVV Essos, Pharmacie du Marché</p>
+              <h5 className="text-[10px] font-bold text-jk-royal-gold uppercase tracking-widest mb-2">{tFooter('proximityTitle')}</h5>
+              <p className="text-[10px] text-gray-400">{tFooter('proximityDesc')}</p>
             </div>
           </div>
         </div>
 
         {/* Footer Bottom */}
         <div className="pt-8 border-t border-jk-royal-gold/20 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-400">
-          <p>© {new Date().getFullYear()} Justine Kem's — Yaoundé. Tous droits réservés.</p>
-          <p className="text-gray-500 italic">Powered by <span className="text-jk-royal-gold font-semibold uppercase tracking-widest px-1">NHR_Ethical_Hackers</span></p>
+          <p>{tFooter('copyright', { year: new Date().getFullYear() })}</p>
+          <p className="text-gray-500 italic">{tFooter('poweredBy')} <span className="text-jk-royal-gold font-semibold uppercase tracking-widest px-1">NHR_Ethical_Hackers</span></p>
           <div className="flex gap-4">
-            <Link href={`/${locale}/mentions-legales`} className="hover:text-jk-royal-gold transition-colors">Mentions légales</Link>
+            <Link href={`/${locale}/mentions-legales`} className="hover:text-jk-royal-gold transition-colors">{tFooter('legal')}</Link>
           </div>
         </div>
       </div>

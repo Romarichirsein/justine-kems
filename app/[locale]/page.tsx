@@ -4,7 +4,7 @@ import { OrganizationSchema } from '@/components/StructuredData'
 import { CustomCursor } from '@/components/CustomCursor'
 import { RevealOnScroll } from '@/components/RevealOnScroll'
 import { AnimatedCounter } from '@/components/AnimatedCounter'
-import { NewsletterSection } from '@/components/NewsletterSection'
+
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -56,12 +56,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               Nos chiffres parlent d'eux-mêmes
             </p>
           </RevealOnScroll>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4 max-w-2xl mx-auto">
             {[
               { value: 500, suffix: '+', label: 'Créations livrées', icon: '✂️' },
-              { value: 10, suffix: ' ans', label: "D'expérience", icon: '⭐' },
-              { value: 48, suffix: 'h', label: 'Délai express', icon: '⚡' },
-              { value: 3, suffix: ' pays', label: 'Livraison internationale', icon: '🌍' },
+              { value: 13, suffix: ' ans', label: "D'expérience", icon: '⭐' },
+              { value: 100, suffix: '+ pays', label: 'Livraison mondiale', icon: '🌍' },
             ].map((stat, i) => (
               <RevealOnScroll key={stat.label} delay={i * 0.12} variant="zoom-in">
                 <div className="text-center group">
@@ -178,7 +177,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             {[
               { step: '01', title: 'Contact', desc: 'Décrivez votre projet via WhatsApp ou notre formulaire.' },
               { step: '02', title: 'Consultation', desc: 'Prise de mesures et choix des tissus ensemble.' },
-              { step: '03', title: 'Création', desc: 'Notre atelier réalise votre pièce avec soin.' },
+              { step: '03', title: 'Création', desc: 'Notre atelier réalise votre pièce avec soin, sur mesure, en qualité supérieure.' },
               { step: '04', title: 'Livraison', desc: 'Réception impeccable, partout dans le monde.' },
             ].map((item, i) => (
               <RevealOnScroll key={item.step} delay={i * 0.15} variant="fade-up">
@@ -284,11 +283,26 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               </>
             )}
           </div>
+
+          {/* Bouton voir plus */}
+          <RevealOnScroll variant="fade-up" delay={0.3}>
+            <div className="text-center mt-12">
+              <Link
+                href={`/${locale}/temoignages`}
+                className="inline-flex items-center gap-3 border border-jk-royal-gold text-jk-royal-gold hover:bg-jk-royal-gold hover:text-jk-black px-8 py-4 rounded-full font-semibold text-base transition-all hover:scale-105 group"
+              >
+                <span>Voir plus de témoignages</span>
+                <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </div>
+          </RevealOnScroll>
         </div>
       </section>
 
       {/* ── Newsletter Section ── */}
-      <NewsletterSection />
+
 
       {/* ── CTA Finale Banner ── */}
       <section className="py-24 bg-gradient-to-br from-jk-imperial-green via-jk-imperial-green-dk to-jk-black relative overflow-hidden">

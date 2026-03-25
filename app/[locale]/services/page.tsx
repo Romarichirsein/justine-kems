@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { RevealOnScroll } from '@/components/RevealOnScroll'
 import { WhatsAppFormHandler } from '@/components/WhatsAppFormHandler'
+import { useTranslations, useLocale } from 'next-intl'
 
 // ─── Slider soirée ─────────────────────────────────────────────────────────
 const soireeImages = [
@@ -39,6 +40,16 @@ const traditionnelImages = [
   { src: '/catalogue/tenue-traditionnels/200.000A.jpg',   label: 'Tenue Traditionnelle 200 000 FCFA' },
   { src: '/catalogue/tenue-traditionnels/250.000c.jpg',   label: 'Tenue Traditionnelle 250 000 FCFA' },
   { src: '/catalogue/tenue-traditionnels/350.000c.jpg',   label: 'Tenue Traditionnelle 350 000 FCFA' },
+]
+
+// ─── Slider couple ────────────────────────────────────────────────────────
+const coupleImages = [
+  { src: '/modeles/Tenu%20de%20couple/h120.000%20;%20f250.000.jpg', label: 'Tenue Couple' },
+  { src: '/modeles/Tenu%20de%20couple/h130.000%20;%20f150.000.jpg', label: 'Tenue Couple' },
+  { src: '/modeles/Tenu%20de%20couple/h140.000%20;%20f250.000.jpg', label: 'Tenue Couple' },
+  { src: '/modeles/Tenu%20de%20couple/h150.000%20;%20f350.000.jpg', label: 'Tenue Couple' },
+  { src: '/modeles/Tenu%20de%20couple/h160.000%20;%20f%20380.000.jpg', label: 'Tenue Couple' },
+  { src: '/modeles/Tenu%20de%20couple/h80.000%20;%20f%20200.000.jpg', label: 'Tenue Couple' },
 ]
 
 // ─── ImageSlider composant interne ─────────────────────────────────────────
@@ -120,6 +131,8 @@ function ImageSlider({
 
 // ───────────────────────────────────────────────────────────────────────────
 export default function ServicesPage() {
+  const t = useTranslations('services')
+  const locale = useLocale()
   const [modalOpen, setModalOpen] = useState(false)
   const [formConfig, setFormConfig] = useState<{ type: 'order' | 'rental' | 'training'; title: string }>({
     type: 'order',
@@ -135,10 +148,10 @@ export default function ServicesPage() {
     <div className="bg-jk-cream dark:bg-jk-dark-bg min-h-screen">
 
       {/* ── Hero ── */}
-      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden pt-28">
         <div className="absolute inset-0 z-0">
           <Image
-            src="/catalogue/robes-soirees/300.000 x.jpg"
+            src="/catalogue/robes-mariage/300.000 Q.jpg"
             alt="Atelier couture Justine Kem's"
             fill
             className="object-cover"
@@ -148,10 +161,10 @@ export default function ServicesPage() {
         </div>
         <div className="relative z-10 text-center px-4 animate-fade-in-up">
           <h1 className="text-6xl md:text-7xl font-script text-jk-royal-gold mb-6 text-shadow-gold">
-            Un service pensé<br />pour votre élégance
+            {t.rich('heroTitle', { br: () => <br /> })}
           </h1>
           <p className="text-white/80 text-lg max-w-xl mx-auto">
-            Haute couture sur mesure, location de prestige, formations — l'excellence à chaque étape.
+            {t('heroSubtitle')}
           </p>
         </div>
       </section>
@@ -163,20 +176,18 @@ export default function ServicesPage() {
             {/* Texte */}
             <div className="order-2 lg:order-1">
               <h2 className="text-4xl md:text-5xl font-display text-jk-imperial-green dark:text-jk-cream mb-6">
-                Haute Couture sur Mesure
+                {t('hauteCouture.title')}
               </h2>
               <p className="text-lg text-jk-text-muted dark:text-gray-300 mb-8 leading-relaxed">
-                De la prise de mesures à la livraison, vivez l'expérience d'une création entièrement
-                pensée pour vous. Chaque pièce est unique, ajustée à votre morphologie et conçue
-                selon vos envies.
+                {t('hauteCouture.description')}
               </p>
 
               <ul className="space-y-6 mb-10">
                 {[
-                  { title: 'Consultation privée', desc: 'Échange sur vos besoins, style, occasion' },
-                  { title: 'Choix des tissus', desc: 'Sélection parmi nos collections premium (wax, soie, crêpe)' },
-                  { title: 'Prise de mesures', desc: '15 points de mesure pour ajustement parfait' },
-                  { title: 'Essayages', desc: '2-3 séances pour ajustements finaux' },
+                  { title: t('hauteCouture.f1Title'), desc: t('hauteCouture.f1Desc') },
+                  { title: t('hauteCouture.f2Title'), desc: t('hauteCouture.f2Desc') },
+                  { title: t('hauteCouture.f3Title'), desc: t('hauteCouture.f3Desc') },
+                  { title: t('hauteCouture.f4Title'), desc: t('hauteCouture.f4Desc') },
                 ].map((item, i) => (
                   <li key={i} className="flex gap-4">
                     <span className="text-jk-royal-gold mt-1">✦</span>
@@ -189,15 +200,15 @@ export default function ServicesPage() {
               </ul>
 
               <div className="bg-gray-100 dark:bg-jk-dark-surface p-6 rounded-xl border border-gray-200 dark:border-gray-800 mb-8 inline-block">
-                <span className="text-gray-500 text-sm uppercase block mb-1">Tarification</span>
-                <span className="text-2xl font-bold text-jk-royal-gold">À partir de 85 000 FCFA</span>
+                <span className="text-gray-500 text-sm uppercase block mb-1">{t('hauteCouture.pricingLabel')}</span>
+                <span className="text-2xl font-bold text-jk-royal-gold">{t('hauteCouture.pricingValue')}</span>
               </div>
 
               <button
-                onClick={() => openForm('order', 'Création Sur Mesure')}
+                onClick={() => openForm('order', t('hauteCouture.title'))}
                 className="btn-primary w-full md:w-auto"
               >
-                Commander une création
+                {t('hauteCouture.cta')}
               </button>
             </div>
 
@@ -225,7 +236,7 @@ export default function ServicesPage() {
                   />
                 </div>
                 <div className="bg-jk-imperial-green rounded-2xl shadow-lg flex items-center justify-center p-6 text-center">
-                  <h3 className="text-2xl font-script text-jk-royal-gold">L'artisanat absolu</h3>
+                  <h3 className="text-2xl font-script text-jk-royal-gold">{t('hauteCouture.artisanat')}</h3>
                 </div>
               </div>
             </div>
@@ -238,10 +249,10 @@ export default function ServicesPage() {
         <div className="container mx-auto px-4 max-w-7xl">
           <RevealOnScroll>
             <h2 className="text-4xl font-display text-center text-jk-imperial-green dark:text-jk-cream mb-4">
-              Collection Soirée
+              {t('soiree.title')}
             </h2>
             <p className="text-center text-jk-text-muted dark:text-gray-400 mb-12 max-w-xl mx-auto">
-              Robes élégantes et raffinées pour vos événements haut de gamme, cocktails et galas.
+              {t('soiree.description')}
             </p>
           </RevealOnScroll>
 
@@ -274,10 +285,10 @@ export default function ServicesPage() {
 
           <div className="text-center mt-10">
             <a
-              href="/fr/catalogue?category=robes-soirees"
+              href={`/${locale}/catalogue?category=robes-soirees`}
               className="inline-block border border-jk-imperial-green dark:border-jk-royal-gold text-jk-imperial-green dark:text-jk-royal-gold px-8 py-3 rounded-full font-semibold hover:bg-jk-imperial-green hover:text-white dark:hover:bg-jk-royal-gold dark:hover:text-black transition-all"
             >
-              Voir toutes les robes de soirée →
+              {t('soiree.cta')}
             </a>
           </div>
         </div>
@@ -287,10 +298,10 @@ export default function ServicesPage() {
       <section id="mariage" className="py-24 container mx-auto px-4 max-w-7xl">
         <RevealOnScroll>
           <h2 className="text-4xl font-display text-center text-jk-imperial-green dark:text-jk-cream mb-4">
-            Collection Mariage
+            {t('mariage.title')}
           </h2>
           <p className="text-center text-jk-text-muted dark:text-gray-400 mb-12 max-w-xl mx-auto">
-            Des robes nuptiales sublimes, façonnées à la main pour le plus beau jour de votre vie.
+            {t('mariage.description')}
           </p>
         </RevealOnScroll>
 
@@ -322,19 +333,70 @@ export default function ServicesPage() {
 
         <div className="text-center mt-10">
           <a
-            href="/fr/catalogue?category=robes-mariage"
+            href={`/${locale}/catalogue?category=robes-mariage`}
             className="inline-block border border-jk-imperial-green dark:border-jk-royal-gold text-jk-imperial-green dark:text-jk-royal-gold px-8 py-3 rounded-full font-semibold hover:bg-jk-imperial-green hover:text-white dark:hover:bg-jk-royal-gold dark:hover:text-black transition-all"
           >
-            Voir toutes les robes de mariage →
+            {t('mariage.cta')}
           </a>
         </div>
       </section>
+
+      {/* ── Collection Couple (slider) ── */}
+      <section id="couple" className="bg-white dark:bg-jk-dark-surface py-24 border-t border-gray-100 dark:border-gray-800">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <RevealOnScroll>
+            <h2 className="text-4xl font-display text-center text-jk-imperial-green dark:text-jk-cream mb-4">
+              {t('couple.title')}
+            </h2>
+            <p className="text-center text-jk-text-muted dark:text-gray-400 mb-12 max-w-xl mx-auto">
+              {t('couple.description')}
+            </p>
+          </RevealOnScroll>
+
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Slider principal */}
+            <RevealOnScroll>
+              <div className="h-[520px]">
+                <ImageSlider images={coupleImages} autoPlayMs={3900} />
+              </div>
+            </RevealOnScroll>
+
+            {/* Miniatures fixes */}
+            <RevealOnScroll delay={0.15}>
+              <div className="grid grid-cols-3 gap-3 h-[520px]">
+                {coupleImages.slice(0, 6).map((img, i) => (
+                  <div key={i} className="relative rounded-xl overflow-hidden shadow-md group">
+                    <Image
+                      src={img.src}
+                      alt={img.label}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      sizes="15vw"
+                    />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
+                  </div>
+                ))}
+              </div>
+            </RevealOnScroll>
+          </div>
+
+          <div className="text-center mt-10">
+            <a
+              href={`/${locale}/catalogue?category=tenues-couple`}
+              className="inline-block border border-jk-imperial-green dark:border-jk-royal-gold text-jk-imperial-green dark:text-jk-royal-gold px-8 py-3 rounded-full font-semibold hover:bg-jk-imperial-green hover:text-white dark:hover:bg-jk-royal-gold dark:hover:text-black transition-all"
+            >
+              {t('couple.cta')}
+            </a>
+          </div>
+        </div>
+      </section>
+
 
       {/* ── Processus 4 étapes ── */}
       <section className="bg-white dark:bg-jk-dark-surface py-24 border-y border-gray-100 dark:border-gray-800">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-display text-center text-jk-imperial-green dark:text-jk-cream mb-16">
-            Votre création en 4 étapes
+            {t('process.title')}
           </h2>
 
           <div className="relative max-w-5xl mx-auto">
@@ -349,10 +411,10 @@ export default function ServicesPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-12 text-center relative z-10">
               {[
-                { step: 1, title: 'Consultation', desc: 'Échange sur vos envies, essayage tissu' },
-                { step: 2, title: 'Conception', desc: 'Création et confection artisanale' },
-                { step: 3, title: 'Essayage', desc: 'Ajustements pour un tombé parfait' },
-                { step: 4, title: 'Livraison', desc: 'Remise exclusive, certificat inclus' },
+                { step: 1, title: t('process.s1.title'), desc: t('process.s1.desc') },
+                { step: 2, title: t('process.s2.title'), desc: t('process.s2.desc') },
+                { step: 3, title: t('process.s3.title'), desc: t('process.s3.desc') },
+                { step: 4, title: t('process.s4.title'), desc: t('process.s4.desc') },
               ].map((item, i) => (
                 <RevealOnScroll key={i} delay={i * 0.2}>
                   <div className="flex flex-col items-center">
@@ -376,41 +438,40 @@ export default function ServicesPage() {
             {/* Texte */}
             <div className="order-2 lg:order-1">
               <h2 className="text-4xl md:text-5xl font-display text-jk-imperial-green dark:text-jk-cream mb-6">
-                Location de Tenues de Prestige
+                {t('location.title')}
               </h2>
               <p className="text-lg text-jk-text-muted dark:text-gray-300 mb-8 leading-relaxed">
-                Pour vos événements spéciaux, accédez à notre garde-robe exclusive. Robes de soirée,
-                costumes sur-mesure, tenues de cérémonie prêtes à sublimer votre instant.
+                {t('location.description')}
               </p>
 
               <div className="bg-jk-cream dark:bg-jk-dark-surface p-8 rounded-2xl border border-jk-royal-gold/20 mb-8">
                 <h4 className="font-bold text-jk-text-dark dark:text-jk-cream mb-4 uppercase tracking-wide">
-                  Conditions de location
+                  {t('location.conditions')}
                 </h4>
                 <ul className="space-y-3">
                   <li className="flex justify-between border-b border-gray-200 dark:border-gray-700 pb-2">
-                    <span className="text-jk-text-muted dark:text-gray-400">Durée standard</span>
-                    <span className="font-semibold text-jk-imperial-green dark:text-jk-cream">1 à 7 jours</span>
+                    <span className="text-jk-text-muted dark:text-gray-400">{t('location.duration')}</span>
+                    <span className="font-semibold text-jk-imperial-green dark:text-jk-cream">{t('location.durationValue')}</span>
                   </li>
                   <li className="flex justify-between border-b border-gray-200 dark:border-gray-700 pb-2">
-                    <span className="text-jk-text-muted dark:text-gray-400">Nettoyage pressing</span>
-                    <span className="font-semibold text-green-600">Inclus</span>
+                    <span className="text-jk-text-muted dark:text-gray-400">{t('location.cleaning')}</span>
+                    <span className="font-semibold text-green-600">{t('location.cleaningValue')}</span>
                   </li>
                   <li className="flex justify-between border-b border-gray-200 dark:border-gray-700 pb-2">
-                    <span className="text-jk-text-muted dark:text-gray-400">Retouches express</span>
-                    <span className="font-semibold text-jk-imperial-green dark:text-jk-cream">Possibles</span>
+                    <span className="text-jk-text-muted dark:text-gray-400">{t('location.alterations')}</span>
+                    <span className="font-semibold text-jk-imperial-green dark:text-jk-cream">{t('location.alterationsValue')}</span>
                   </li>
                 </ul>
                 <div className="mt-6 text-center">
-                  <span className="text-jk-royal-gold text-2xl font-bold">Dès 25 000 FCFA / jour</span>
+                  <span className="text-jk-royal-gold text-2xl font-bold">{t('location.pricing')}</span>
                 </div>
               </div>
 
               <button
-                onClick={() => openForm('rental', 'Location Tenue')}
+                onClick={() => openForm('rental', t('location.title'))}
                 className="bg-black dark:bg-white text-jk-royal-gold dark:text-black font-semibold px-8 py-3 rounded-full hover:shadow-neon-gold transition-all w-full md:w-auto"
               >
-                Réserver une tenue
+                {t('location.cta')}
               </button>
             </div>
 
@@ -427,7 +488,7 @@ export default function ServicesPage() {
         <div className="container mx-auto px-4 max-w-7xl">
           <RevealOnScroll>
             <h2 className="text-4xl font-display text-center text-jk-imperial-green dark:text-jk-cream mb-12">
-              Autres Collections
+              {t('others.title')}
             </h2>
           </RevealOnScroll>
 
@@ -436,17 +497,17 @@ export default function ServicesPage() {
             <RevealOnScroll>
               <div>
                 <h3 className="text-2xl font-display text-jk-imperial-green dark:text-jk-cream mb-4 text-center">
-                  Tenues Traditionnelles
+                  {t('others.traditional')}
                 </h3>
                 <div className="h-[400px]">
                   <ImageSlider images={traditionnelImages} autoPlayMs={4000} />
                 </div>
                 <div className="text-center mt-5">
                   <a
-                    href="/fr/catalogue?category=tenue-traditionnels"
+                    href={`/${locale}/catalogue?category=tenue-traditionnels`}
                     className="text-jk-imperial-green dark:text-jk-royal-gold text-sm font-medium hover:underline"
                   >
-                    Découvrir →
+                    {t('others.cta')}
                   </a>
                 </div>
               </div>
@@ -456,17 +517,17 @@ export default function ServicesPage() {
             <RevealOnScroll delay={0.15}>
               <div>
                 <h3 className="text-2xl font-display text-jk-imperial-green dark:text-jk-cream mb-4 text-center">
-                  Tenues de Ville
+                  {t('others.city')}
                 </h3>
                 <div className="h-[400px]">
                   <ImageSlider images={villeImages} autoPlayMs={3600} />
                 </div>
                 <div className="text-center mt-5">
                   <a
-                    href="/fr/catalogue?category=tenue-ville"
+                    href={`/${locale}/catalogue?category=tenue-ville`}
                     className="text-jk-imperial-green dark:text-jk-royal-gold text-sm font-medium hover:underline"
                   >
-                    Découvrir →
+                    {t('others.cta')}
                   </a>
                 </div>
               </div>
@@ -487,18 +548,18 @@ export default function ServicesPage() {
 
         <div className="relative z-10">
           <h2 className="text-5xl md:text-6xl font-script text-jk-royal-gold mb-8 text-shadow-gold">
-            Prête à démarrer votre projet ?
+            {t('ctaFinal.title')}
           </h2>
           <a
-            href="https://wa.me/237677463484?text=Bonjour%20Justine,%20je%20souhaite%20prendre%20rendez-vous%20pour%20un%20projet."
+            href={`https://wa.me/237677463484?text=${encodeURIComponent(t('ctaFinal.title'))}`}
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center gap-3 bg-[#25D366] hover:bg-[#20BA5A] text-white px-10 py-5 rounded-full font-bold text-xl shadow-lg hover:shadow-neon-green transition-all hover:scale-105"
           >
             <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
-            </svg>
-            Discutons sur WhatsApp
+          </svg>
+          {t('ctaFinal.whatsapp')}
           </a>
         </div>
       </section>
@@ -509,7 +570,7 @@ export default function ServicesPage() {
         onClose={() => setModalOpen(false)}
         formType={formConfig.type}
         productName={formConfig.title}
-        submitButtonText="Envoyer ma demande"
+        submitButtonText={t('hauteCouture.cta')}
       />
     </div>
   )

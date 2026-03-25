@@ -14,11 +14,11 @@ export default function AboutPage() {
     <div className="bg-jk-cream dark:bg-jk-dark-bg min-h-screen">
       
       {/* Hero À Propos */}
-      <section className="relative min-h-[80vh] flex flex-col md:flex-row items-center bg-jk-imperial-green overflow-hidden">
+      <section className="relative min-h-[80vh] flex flex-col md:flex-row items-center bg-jk-imperial-green overflow-hidden pt-20">
         {/* Photo Portrait */}
         <div className="w-full md:w-[60%] h-[50vh] md:h-screen relative md:absolute md:left-0 md:top-0">
           <Image
-            src="/images/justine-portrait.jpg"
+            src="/images/justine-profil.jpg"
             alt="Portrait Justine Kem créatrice de mode à Yaoundé"
             fill
             className="object-cover object-center"
@@ -48,10 +48,10 @@ export default function AboutPage() {
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[
-              { value: 500, suffix: '+', label: 'Créations' },
-              { value: 10, suffix: ' ans', label: "D'expérience" },
-              { value: 3, suffix: '', label: 'Pays desservis' },
-              { value: 98, suffix: '%', label: 'Clientes satisfaites' },
+              { value: 13, suffix: ' ans', label: "D'expérience" },
+              { value: 500, suffix: '+', label: 'Créations réalisées' },
+              { value: 100, suffix: '+', label: 'Pays desservis' },
+              { value: 100, suffix: '%', label: 'Clientes satisfaites' },
             ].map((stat, i) => (
               <RevealOnScroll key={stat.label} delay={i * 0.1} variant="zoom-in">
                 <div>
@@ -81,8 +81,8 @@ export default function AboutPage() {
             </div>
             <div className="rounded-2xl overflow-hidden shadow-2xl h-[400px] relative group">
               <Image
-                src="/images/about-debut.jpg"
-                alt="Atelier vintage Justine Kem's"
+                src="/modeles/etat%20civil/120.000.jpg"
+                alt="Atelier Justine Kem's"
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-700"
               />
@@ -103,7 +103,7 @@ export default function AboutPage() {
             </div>
             <div className="rounded-2xl overflow-hidden shadow-2xl h-[400px] relative group md:order-1">
               <Image
-                src="/images/about-vision.jpg"
+                src="/modeles/Tenue%20traditionnels/150.000c.jpg"
                 alt="Tissus colorés et matières précieuses"
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-700"
@@ -132,7 +132,7 @@ export default function AboutPage() {
             </div>
             <div className="rounded-2xl overflow-hidden shadow-2xl h-[400px] relative group">
               <Image
-                src="/images/about-engagement.jpg"
+                src="/modeles/Robes%20de%20soirees/250.000f.jpg"
                 alt="Engagement mode éthique Justine Kem's"
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-700"

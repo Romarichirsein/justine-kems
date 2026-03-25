@@ -25,7 +25,7 @@ export default {
       title: 'Niveau',
       type: 'string',
       options: {
-        list: ['Initiation', 'Intermédiaire', 'Avancé', 'Expert']
+        list: ['Débutant', 'Initiation', 'Intermédiaire', 'Avancé', 'Expert']
       }
     },
     {
