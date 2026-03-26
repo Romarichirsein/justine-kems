@@ -1,0 +1,64 @@
+
+> justine-kems@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.14
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+Failed to compile.
+
+./node_modules/.pnpm/@portabletext+editor@6.5.1_@types+react@18.3.28_react@18.3.1/node_modules/@portabletext/editor/lib/index.js
+Module not found: Package path ./compiler-runtime is not exported from package C:\Users\COMPUTER STORES\Downloads\projets ia\Projets des sites\Site cameroun\justine-kems\node_modules\.pnpm\@portabletext+editor@6.5.1_@types+react@18.3.28_react@18.3.1\node_modules\react (see exports field in C:\Users\COMPUTER STORES\Downloads\projets ia\Projets des sites\Site cameroun\justine-kems\node_modules\.pnpm\@portabletext+editor@6.5.1_@types+react@18.3.28_react@18.3.1\node_modules\react\package.json)
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/.pnpm/sanity@5.17.1_@emotion+is-p_b1c232c3793e9775947402914931aa7a/node_modules/sanity/lib/index.js
+./node_modules/.pnpm/next-sanity@9.12.3_bd408d927822e1fa68921641ff355056/node_modules/next-sanity/dist/_chunks-es/NextStudio.js
+./node_modules/.pnpm/next-sanity@9.12.3_bd408d927822e1fa68921641ff355056/node_modules/next-sanity/dist/studio/client-component.js
+
+./node_modules/.pnpm/@portabletext+editor@6.5.1_@types+react@18.3.28_react@18.3.1/node_modules/@portabletext/editor/lib/plugins/index.js
+Module not found: Package path ./compiler-runtime is not exported from package C:\Users\COMPUTER STORES\Downloads\projets ia\Projets des sites\Site cameroun\justine-kems\node_modules\.pnpm\@portabletext+editor@6.5.1_@types+react@18.3.28_react@18.3.1\node_modules\react (see exports field in C:\Users\COMPUTER STORES\Downloads\projets ia\Projets des sites\Site cameroun\justine-kems\node_modules\.pnpm\@portabletext+editor@6.5.1_@types+react@18.3.28_react@18.3.1\node_modules\react\package.json)
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/.pnpm/sanity@5.17.1_@emotion+is-p_b1c232c3793e9775947402914931aa7a/node_modules/sanity/lib/index.js
+./node_modules/.pnpm/next-sanity@9.12.3_bd408d927822e1fa68921641ff355056/node_modules/next-sanity/dist/_chunks-es/NextStudio.js
+./node_modules/.pnpm/next-sanity@9.12.3_bd408d927822e1fa68921641ff355056/node_modules/next-sanity/dist/studio/client-component.js
+
+./node_modules/.pnpm/@portabletext+plugin-charac_fc71ea7ef585762a87d1a97b9855d7d5/node_modules/@portabletext/plugin-character-pair-decorator/dist/index.js
+Module not found: Package path ./compiler-runtime is not exported from package C:\Users\COMPUTER STORES\Downloads\projets ia\Projets des sites\Site cameroun\justine-kems\node_modules\.pnpm\@portabletext+plugin-charac_fc71ea7ef585762a87d1a97b9855d7d5\node_modules\react (see exports field in C:\Users\COMPUTER STORES\Downloads\projets ia\Projets des sites\Site cameroun\justine-kems\node_modules\.pnpm\@portabletext+plugin-charac_fc71ea7ef585762a87d1a97b9855d7d5\node_modules\react\package.json)
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/.pnpm/@portabletext+plugin-markdo_d03d5b85b0d287eccd2f389b04a3e599/node_modules/@portabletext/plugin-markdown-shortcuts/dist/index.js
+./node_modules/.pnpm/sanity@5.17.1_@emotion+is-p_b1c232c3793e9775947402914931aa7a/node_modules/sanity/lib/index.js
+./node_modules/.pnpm/next-sanity@9.12.3_bd408d927822e1fa68921641ff355056/node_modules/next-sanity/dist/_chunks-es/NextStudio.js
+./node_modules/.pnpm/next-sanity@9.12.3_bd408d927822e1fa68921641ff355056/node_modules/next-sanity/dist/studio/client-component.js
+
+./node_modules/.pnpm/@portabletext+plugin-input-_d03050772a02479989f556277f55335b/node_modules/@portabletext/plugin-input-rule/dist/index.js
+Module not found: Package path ./compiler-runtime is not exported from package C:\Users\COMPUTER STORES\Downloads\projets ia\Projets des sites\Site cameroun\justine-kems\node_modules\.pnpm\@portabletext+plugin-input-_d03050772a02479989f556277f55335b\node_modules\react (see exports field in C:\Users\COMPUTER STORES\Downloads\projets ia\Projets des sites\Site cameroun\justine-kems\node_modules\.pnpm\@portabletext+plugin-input-_d03050772a02479989f556277f55335b\node_modules\react\package.json)
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/.pnpm/@portabletext+plugin-markdo_d03d5b85b0d287eccd2f389b04a3e599/node_modules/@portabletext/plugin-markdown-shortcuts/dist/index.js
+./node_modules/.pnpm/sanity@5.17.1_@emotion+is-p_b1c232c3793e9775947402914931aa7a/node_modules/sanity/lib/index.js
+./node_modules/.pnpm/next-sanity@9.12.3_bd408d927822e1fa68921641ff355056/node_modules/next-sanity/dist/_chunks-es/NextStudio.js
+./node_modules/.pnpm/next-sanity@9.12.3_bd408d927822e1fa68921641ff355056/node_modules/next-sanity/dist/studio/client-component.js
+
+./node_modules/.pnpm/@portabletext+plugin-markdo_d03d5b85b0d287eccd2f389b04a3e599/node_modules/@portabletext/plugin-markdown-shortcuts/dist/index.js
+Module not found: Package path ./compiler-runtime is not exported from package C:\Users\COMPUTER STORES\Downloads\projets ia\Projets des sites\Site cameroun\justine-kems\node_modules\.pnpm\@portabletext+plugin-markdo_d03d5b85b0d287eccd2f389b04a3e599\node_modules\react (see exports field in C:\Users\COMPUTER STORES\Downloads\projets ia\Projets des sites\Site cameroun\justine-kems\node_modules\.pnpm\@portabletext+plugin-markdo_d03d5b85b0d287eccd2f389b04a3e599\node_modules\react\package.json)
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/.pnpm/sanity@5.17.1_@emotion+is-p_b1c232c3793e9775947402914931aa7a/node_modules/sanity/lib/index.js
+./node_modules/.pnpm/next-sanity@9.12.3_bd408d927822e1fa68921641ff355056/node_modules/next-sanity/dist/_chunks-es/NextStudio.js
+./node_modules/.pnpm/next-sanity@9.12.3_bd408d927822e1fa68921641ff355056/node_modules/next-sanity/dist/studio/client-component.js
+
+
+> Build failed because of webpack errors
