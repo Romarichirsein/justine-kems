@@ -51,9 +51,9 @@ export function RevealOnScroll({
   const { initial, animate } = getVariants(variant)
   return (
     <motion.div
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line
       initial={initial as any}
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line
       whileInView={animate as any}
       viewport={{ once: true, margin: '-80px' }}
       transition={{

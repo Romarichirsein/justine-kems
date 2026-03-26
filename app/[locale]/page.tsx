@@ -229,7 +229,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                       ))}
                     </div>
                     <p className="text-gray-300 italic mb-8 leading-relaxed flex-1">
-                      "{testimonial.content}"
+                      &quot;{testimonial.content}&quot;
                     </p>
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 rounded-full overflow-hidden bg-jk-royal-gold/20 flex-shrink-0 relative">
@@ -272,7 +272,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                         ))}
                       </div>
                       <p className="text-gray-300 italic mb-8 leading-relaxed flex-1">
-                        "{item.content}"
+                        &quot;{item.content}&quot;
                       </p>
                       <div>
                         <h4 className="font-display font-bold text-jk-royal-gold">{item.name}</h4>

@@ -119,7 +119,7 @@ export default async function BlogPostPage({ params }: Props) {
             
             {/* Share */}
             <div className="bg-white dark:bg-jk-dark-surface p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 text-center">
-              <h4 className="text-sm font-bold uppercase tracking-widest text-jk-text-muted dark:text-gray-400 mb-6">Partager l'article</h4>
+              <h4 className="text-sm font-bold uppercase tracking-widest text-jk-text-muted dark:text-gray-400 mb-6">Partager l&apos;article</h4>
               <div className="flex justify-center gap-4">
                  <button className="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-[#3b5998] hover:text-white transition-colors flex items-center justify-center text-jk-text-dark dark:text-gray-300">
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
@@ -136,7 +136,7 @@ export default async function BlogPostPage({ params }: Props) {
             {/* CTA Produit */}
             <div className="bg-jk-imperial-green text-jk-cream p-8 rounded-2xl shadow-xl text-center relative overflow-hidden group">
                <div className="absolute inset-0 bg-[url('/pattern-baroque.svg')] opacity-10 bg-repeat" />
-               <h3 className="text-2xl font-display mb-4 relative z-10 text-shadow-gold text-jk-royal-gold">Envie d'une création personnalisée ?</h3>
+               <h3 className="text-2xl font-display mb-4 relative z-10 text-shadow-gold text-jk-royal-gold">Envie d&apos;une création personnalisée ?</h3>
                <p className="mb-8 text-sm text-gray-300 relative z-10">Laissez-vous inspirer par nos articles pour imaginer votre prochaine tenue sur mesure.</p>
                <a href={`/${params.locale}/contact`} className="inline-block bg-jk-royal-gold hover:bg-jk-royal-gold-dark text-black font-bold px-6 py-3 rounded-full shadow-neon-gold transition-all hover:scale-105 relative z-10">
                  Prendre rendez-vous

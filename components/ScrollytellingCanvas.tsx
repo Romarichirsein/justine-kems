@@ -100,7 +100,7 @@ export default function ScrollytellingCanvas({
 
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
-  }, [images, imagesLoaded, frameCount])
+  }, [images, imagesLoaded, frameCount, containerRef])
 
   return (
     <canvas

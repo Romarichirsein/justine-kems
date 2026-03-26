@@ -234,7 +234,7 @@ export function WhatsAppFormHandler({
 
               {/* Upload Zone */}
               <div>
-                <label className="block text-sm font-medium mb-1">Photo d'inspiration (Optionnel)</label>
+                <label className="block text-sm font-medium mb-1">Photo d&apos;inspiration (Optionnel)</label>
                 <div 
                   {...getRootProps()} 
                   className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-colors ${isDragActive ? 'border-jk-royal-gold bg-jk-royal-gold/5' : 'border-gray-300 dark:border-gray-700 hover:border-jk-royal-gold'}`}

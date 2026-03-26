@@ -136,10 +136,10 @@ export default function ScrollSequence({ frameCount = 16, baseUrl = '/motion/ezg
           >
             <div className="max-w-2xl bg-black/40 backdrop-blur-md border border-white/10 p-8 md:p-12 rounded-2xl text-center">
               <h2 className="text-3xl md:text-5xl font-script text-jk-royal-gold mb-4">
-                L'Art de la Perfection
+                L&apos;Art de la Perfection
               </h2>
               <p className="text-jk-cream text-lg md:text-xl font-light">
-                Chaque point, chaque pli, chaque détail est une quête d'excellence.
+                Chaque point, chaque pli, chaque détail est une quête d&apos;excellence.
               </p>
             </div>
           </motion.div>
@@ -151,7 +151,7 @@ export default function ScrollSequence({ frameCount = 16, baseUrl = '/motion/ezg
           >
             <div className="max-w-2xl bg-black/40 backdrop-blur-md border border-white/10 p-8 md:p-12 rounded-2xl text-center">
               <h2 className="text-3xl md:text-5xl font-display text-jk-royal-gold mb-4 uppercase tracking-tighter">
-                Matériaux d'Élite
+                Matériaux d&apos;Élite
               </h2>
               <p className="text-jk-cream text-lg md:text-xl font-light">
                 Nous sélectionnons les tissus les plus nobles pour sublimer votre allure.

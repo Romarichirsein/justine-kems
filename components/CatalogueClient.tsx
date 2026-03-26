@@ -95,9 +95,9 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
     return () => { document.body.style.overflow = '' }
   }, [selectedProduct])
 
-  const formatPrice = (n: number) => {
+  const formatPrice = useCallback((n: number) => {
     return n.toLocaleString(locale === 'fr' ? 'fr-FR' : 'en-US') + ' FCFA'
-  }
+  }, [locale])
 
   const handleOrder = useCallback((product: CatalogueProduct) => {
     const genderText = product.gender === 'femme' ? t('card.femme') :
@@ -117,7 +117,7 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
       `${t('whatsapp.thanks')}`
     )
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank')
-  }, [t, locale])
+  }, [t, locale, formatPrice])
 
   const handleImgError = useCallback((id: string) => {
     setImgErrors(prev => new Set(prev).add(id))

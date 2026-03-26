@@ -59,14 +59,14 @@ function TestimonialCard({ t, index }: { t: { name: string, role: string, text: 
   return (
     <RevealOnScroll delay={index * 0.12}>
       <div className="bg-white dark:bg-jk-dark-surface rounded-2xl p-8 shadow-xl border border-gray-100 dark:border-gray-700 flex flex-col h-full relative overflow-hidden group hover:-translate-y-1 hover:shadow-neon-gold transition-all duration-300">
-        <div className="absolute top-4 right-6 text-jk-royal-gold/20 text-7xl font-serif leading-none select-none">"</div>
+        <div className="absolute top-4 right-6 text-jk-royal-gold/20 text-7xl font-serif leading-none select-none">&quot;</div>
         <div className="flex gap-1 mb-4">
           {Array.from({ length: t.stars }).map((_, i) => (
             <span key={i} className="text-jk-royal-gold text-lg">★</span>
           ))}
         </div>
         <p className="text-jk-text-muted dark:text-gray-300 leading-relaxed italic flex-1 mb-6 relative z-10">
-          "{t.text}"
+          &quot;{t.text}&quot;
         </p>
         <div className="flex items-center gap-4 border-t border-gray-100 dark:border-gray-700 pt-5">
           <div className="w-12 h-12 rounded-full bg-jk-royal-gold/20 border-2 border-jk-royal-gold/40 flex items-center justify-center text-jk-royal-gold font-bold text-lg shrink-0 overflow-hidden">
