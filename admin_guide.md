@@ -4,8 +4,8 @@ Ce site est équipé d'un système de gestion de contenu (CMS) appelé **Sanity*
 
 ## 1. Accéder à l'interface de gestion (Studio) 💻
 
-L'administration est intégrée directement à votre site.
-- **Lien d'accès** : [https://justinekems.com/studio](https://justinekems.com/studio)
+L'administration se fait via le **Sanity Studio** externe (car l'intégrer au site provoquait des erreurs techniques).
+- **Lien d'accès** : [https://justine-kems.sanity.studio/](https://justine-kems.sanity.studio/)
 - **Connexion** : Connectez-vous avec l'adresse email associée au projet Sanity.
 
 ---
