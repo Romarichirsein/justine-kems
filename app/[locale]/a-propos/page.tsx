@@ -90,7 +90,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
             </div>
             <div className="rounded-2xl overflow-hidden shadow-2xl h-[400px] relative group">
               <Image
-                src="/modeles/etat%20civil/120.000.jpg"
+                src="/modeles/etat-civil/120.000.jpg"
                 alt="Atelier Justine Kem's"
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-700"
@@ -112,7 +112,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
             </div>
             <div className="rounded-2xl overflow-hidden shadow-2xl h-[400px] relative group md:order-1">
               <Image
-                src="/modeles/Tenue%20traditionnels/150.000c.jpg"
+                src="/modeles/tenue-traditionnels/150.000c.jpg"
                 alt="Tissus colorés et matières précieuses"
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-700"
@@ -141,7 +141,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
             </div>
             <div className="rounded-2xl overflow-hidden shadow-2xl h-[400px] relative group">
               <Image
-                src="/modeles/Robes%20de%20soirees/250.000f.jpg"
+                src="/modeles/robes-soirees/250.000f.jpg"
                 alt="Engagement mode éthique Justine Kem's"
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-700"

@@ -23,7 +23,6 @@
     "next-sitemap": "^4.2.3",
     "next-themes": "^0.3.0",
     "react": "^18",
-    "react-compiler-runtime": "^1.0.0",
     "react-dom": "^18",
     "react-dropzone": "^15.0.0",
     "react-hook-form": "^7.52.1",
@@ -44,5 +43,11 @@
     "schema-dts": "^1.1.2",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
+  },
+  "pnpm": {
+    "overrides": {
+      "react": "^18.3.1",
+      "react-dom": "^18.3.1"
+    }
   }
 }

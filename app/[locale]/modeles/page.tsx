@@ -36,7 +36,7 @@ function parsePrice(filename: string): { price: number | null; priceH: number | 
 function buildModels(): Model[] {
   const catalog: { folder: string; category: string; files: string[] }[] = [
     {
-      folder: 'Robes de mariages',
+      folder: 'robes-mariage',
       category: 'mariages',
       files: [
         '150.000.jpeg','150.000cc.jpg','200.000dd.jpg','200.000e.jpg','220.000 VC.jpg',
@@ -53,7 +53,7 @@ function buildModels(): Model[] {
       ],
     },
     {
-      folder: 'Robes de soirées',
+      folder: 'robes-soirees',
       category: 'soirees',
       files: [
         '100.000.jpg','1000162800.jpg','120.000.jpg','120.000XXC.jpg','120.000a.jpg',
@@ -72,7 +72,7 @@ function buildModels(): Model[] {
       ],
     },
     {
-      folder: 'Tenu de couple',
+      folder: 'tenu-couple',
       category: 'couple',
       files: [
         '2025083116271664.png','75000; f160.000.jpg','f300.000; h160.000.jpg',
@@ -87,7 +87,7 @@ function buildModels(): Model[] {
       ],
     },
     {
-      folder: 'Tenue traditionnels',
+      folder: 'tenue-traditionnels',
       category: 'traditionnels',
       files: [
         '120.000aw.jpg','150.000 X.jpg','150.000.jpeg','150.000b.jpg','150.000c.jpg',
@@ -96,7 +96,7 @@ function buildModels(): Model[] {
       ],
     },
     {
-      folder: 'etat civil',
+      folder: 'etat-civil',
       category: 'etat-civil',
       files: [
         '100.000.jpg','100.000XXX.jpg','100.000a.jpg','100.000aa.jpg','100.000ff.jpg',
@@ -108,7 +108,7 @@ function buildModels(): Model[] {
       ],
     },
     {
-      folder: 'tenue de ville',
+      folder: 'tenue-ville',
       category: 'ville',
       files: [
         '120.000 i.jpg','120.000.jpg','120.000b.jpg','120.000c.jpg','120.000f.jpg',

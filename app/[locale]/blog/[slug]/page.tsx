@@ -87,7 +87,7 @@ export default async function BlogPostPage({ params }: Props) {
           />
         ) : (
           <Image
-            src="/modeles/Robes%20de%20soirees/120.000d.jpg"
+            src="/modeles/robes-soirees/120.000d.jpg"
             alt={post.title}
             fill
             className="object-cover opacity-80"

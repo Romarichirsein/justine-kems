@@ -143,12 +143,12 @@ export default function ServicesPage() {
   // ─── Slider couple ────────────────────────────────────────────────────────
   const coupleLabel = locale === 'en' ? 'Couple Outfit' : 'Tenue Couple'
   const coupleImages = [
-    { src: '/modeles/Tenu%20de%20couple/h120.000%20;%20f250.000.jpg', label: coupleLabel },
-    { src: '/modeles/Tenu%20de%20couple/h130.000%20;%20f150.000.jpg', label: coupleLabel },
-    { src: '/modeles/Tenu%20de%20couple/h140.000%20;%20f250.000.jpg', label: coupleLabel },
-    { src: '/modeles/Tenu%20de%20couple/h150.000%20;%20f350.000.jpg', label: coupleLabel },
-    { src: '/modeles/Tenu%20de%20couple/h160.000%20;%20f%20380.000.jpg', label: coupleLabel },
-    { src: '/modeles/Tenu%20de%20couple/h80.000%20;%20f%20200.000.jpg', label: coupleLabel },
+    { src: '/modeles/tenu-couple/h120.000%20;%20f250.000.jpg', label: coupleLabel },
+    { src: '/modeles/tenu-couple/h130.000%20;%20f150.000.jpg', label: coupleLabel },
+    { src: '/modeles/tenu-couple/h140.000%20;%20f250.000.jpg', label: coupleLabel },
+    { src: '/modeles/tenu-couple/h150.000%20;%20f350.000.jpg', label: coupleLabel },
+    { src: '/modeles/tenu-couple/h160.000%20;%20f%20380.000.jpg', label: coupleLabel },
+    { src: '/modeles/tenu-couple/h80.000%20;%20f%20200.000.jpg', label: coupleLabel },
   ]
 
   const openForm = (type: 'order' | 'rental' | 'training', title: string) => {
