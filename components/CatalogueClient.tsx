@@ -280,7 +280,6 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
               className="relative bg-white dark:bg-jk-dark-surface rounded-3xl overflow-hidden shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col md:flex-row"
             >
               <button onClick={() => setSelectedProduct(null)} className="absolute top-4 right-4 z-10 w-10 h-10 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center text-white transition-colors">
-              <button onClick={() => setSelectedProduct(null)} className="absolute top-4 right-4 z-10 w-10 h-10 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center text-white transition-colors">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -325,7 +324,7 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
                     <p className="text-jk-text-dark dark:text-gray-200 leading-relaxed">
                       {selectedProduct.gender === 'couple'
                         ? t('modal.descCouple')
-                        : t('modal.descGeneric', { cat: selectedProduct.categoryLabel.toLowerCase() })
+                        : t('modal.descGeneric', { cat: getCategoryLabel(selectedProduct.category).toLowerCase() })
                       }
                     </p>
                   </div>
