@@ -4,18 +4,18 @@ import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
+import { client, urlForImage } from '@/sanity/client'
 
 interface CatalogueProduct {
-  id: string
-  filename: string
-  imagePath: string
+  _id: string
+  name: string
+  mainImage?: any
   category: string
-  categoryLabel: string
-  price: number
+  price?: number
+  priceType?: 'fixed' | 'quote'
   priceH?: number
   priceF?: number
   gender?: 'femme' | 'homme' | 'couple' | null
-  priceLabel: string
 }
 
 interface CatalogueClientProps {
@@ -107,11 +107,11 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
     // Use price label if available or format it
     const priceLabel = product.gender === 'couple' 
       ? `${t('card.femme')}: ${formatPrice(product.priceF || 0)} | ${t('card.homme')}: ${formatPrice(product.priceH || 0)}`
-      : formatPrice(product.price)
+      : formatPrice(product.price || 0)
 
     const msg = encodeURIComponent(
       `${t('whatsapp.greeting')}\n\n${t('whatsapp.interest')}\n` +
-      `${t('whatsapp.category', { cat: product.categoryLabel })}\n` +
+      `${t('whatsapp.category', { cat: getCategoryLabel(product.category) })}\n` +
       `${genderText ? `${t('whatsapp.for', { gender: genderText })}\n` : ''}` +
       `${t('whatsapp.price', { price: priceLabel })}\n\n` +
       `${t('whatsapp.thanks')}`
@@ -192,7 +192,7 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
           <AnimatePresence mode="popLayout">
             {filtered.map((product) => (
               <motion.div
-                key={product.id}
+                key={product._id}
                 layout
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -202,20 +202,19 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
                 className="group cursor-pointer bg-white dark:bg-jk-dark-surface rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:shadow-jk-royal-gold/20 transition-all duration-300 hover:-translate-y-1"
               >
                 <div className="relative aspect-[3/4] overflow-hidden bg-gray-100 dark:bg-gray-800">
-                  {imgErrors.has(product.id) ? (
+                  {imgErrors.has(product._id) || !product.mainImage ? (
                     <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
                       <span className="text-4xl mb-2">{getCategoryEmoji(product.category)}</span>
-                      <span className="text-xs text-center px-2">{product.categoryLabel}</span>
+                      <span className="text-xs text-center px-2">{getCategoryLabel(product.category)}</span>
                     </div>
                   ) : (
                     <Image
-                      src={product.imagePath}
-                      alt={`${product.categoryLabel} - ${product.priceLabel}`}
+                      src={urlForImage(product.mainImage).width(400).height(533).url()}
+                      alt={product.name}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                      onError={() => handleImgError(product.id)}
-                      unoptimized
+                      onError={() => handleImgError(product._id)}
                     />
                   )}
 
@@ -237,12 +236,14 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
 
                 <div className="p-3">
                   <p className="text-[11px] text-jk-text-muted dark:text-gray-400 truncate">
-                    {getCategoryEmoji(product.category)} {product.categoryLabel}
+                    {getCategoryEmoji(product.category)} {getCategoryLabel(product.category)}
                   </p>
                   <p className="text-sm font-bold text-jk-royal-gold mt-0.5 leading-tight">
                     {product.gender === 'couple' ? (
                         <span className="text-[11px]">{formatPrice(product.priceF || 0)} / {formatPrice(product.priceH || 0)}</span>
-                    ) : formatPrice(product.price)}
+                    ) : (
+                      product.priceType === 'quote' ? t('modal.onQuote' as any) || 'Sur devis' : formatPrice(product.price || 0)
+                    )}
                   </p>
                 </div>
               </motion.div>
@@ -279,19 +280,20 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
               className="relative bg-white dark:bg-jk-dark-surface rounded-3xl overflow-hidden shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col md:flex-row"
             >
               <button onClick={() => setSelectedProduct(null)} className="absolute top-4 right-4 z-10 w-10 h-10 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center text-white transition-colors">
+              <button onClick={() => setSelectedProduct(null)} className="absolute top-4 right-4 z-10 w-10 h-10 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center text-white transition-colors">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
 
               <div className="relative md:w-1/2 h-72 md:h-auto md:min-h-[400px] bg-gray-100 dark:bg-gray-800 shrink-0">
-                {imgErrors.has(selectedProduct.id) ? (
+                {imgErrors.has(selectedProduct._id) || !selectedProduct.mainImage ? (
                    <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
                      <span className="text-6xl mb-3">{getCategoryEmoji(selectedProduct.category)}</span>
-                     <span className="text-sm">{selectedProduct.categoryLabel}</span>
+                     <span className="text-sm">{getCategoryLabel(selectedProduct.category)}</span>
                    </div>
                 ) : (
-                  <Image src={selectedProduct.imagePath} alt={selectedProduct.categoryLabel} fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" priority unoptimized />
+                  <Image src={urlForImage(selectedProduct.mainImage).url()} alt={selectedProduct.name} fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" priority />
                 )}
                 {selectedProduct.gender && (
                    <span className={`absolute top-4 left-4 ${
@@ -307,7 +309,7 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
                 <div>
                   <p className="text-sm text-jk-text-muted dark:text-gray-400 mb-2 flex items-center gap-2">
                     <span className="text-xl">{getCategoryEmoji(selectedProduct.category)}</span>
-                    {selectedProduct.categoryLabel}
+                    {getCategoryLabel(selectedProduct.category)}
                   </p>
                   <h2 className="text-3xl font-display text-jk-imperial-green dark:text-jk-royal-gold mb-6">
                     {selectedProduct.gender === 'femme' ? t('modal.modelFemme') :

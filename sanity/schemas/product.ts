@@ -106,6 +106,30 @@ export default {
       initialValue: false
     },
     {
+      name: 'gender',
+      title: 'Genre / Type',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Femme', value: 'femme' },
+          { title: 'Homme', value: 'homme' },
+          { title: 'Couple', value: 'couple' }
+        ]
+      }
+    },
+    {
+      name: 'priceH',
+      title: 'Prix Homme (pour Couple)',
+      type: 'number',
+      hidden: ({ document }: any) => document?.gender !== 'couple'
+    },
+    {
+      name: 'priceF',
+      title: 'Prix Femme (pour Couple)',
+      type: 'number',
+      hidden: ({ document }: any) => document?.gender !== 'couple'
+    },
+    {
       name: 'guideImages',
       title: 'Images Guides',
       type: 'array',

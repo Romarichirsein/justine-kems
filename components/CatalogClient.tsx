@@ -3,16 +3,18 @@
 import { useState, useMemo, useEffect } from 'react'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
+import { client, urlForImage } from '@/sanity/client'
 
 // ── Types ──────────────────────────────────────────────────────────────────
 interface Model {
-  id: string
-  filename: string
-  src: string
+  _id: string
+  name: string
+  mainImage?: any
   category: string
-  priceH: number | null
-  priceF: number | null
-  price: number | null
+  price?: number
+  priceType?: 'fixed' | 'quote'
+  priceH?: number | null
+  priceF?: number | null
 }
 
 interface CartItem extends Model {
@@ -63,9 +65,8 @@ export function CatalogClient({ initialModels, locale }: CatalogClientProps) {
 
   function addToCart(model: Model, gender?: 'h' | 'f') {
     setCart(prev => {
-      const key = `${model.id}-${gender ?? ''}`
-      const exist = prev.find(c => c.id === model.id && c.gender === gender)
-      if (exist) return prev.map(c => c.id === model.id && c.gender === gender ? { ...c, quantity: c.quantity + 1 } : c)
+      const exist = prev.find(c => c._id === model._id && c.gender === gender)
+      if (exist) return prev.map(c => c._id === model._id && c.gender === gender ? { ...c, quantity: c.quantity + 1 } : c)
       return [...prev, { ...model, quantity: 1, gender }]
     })
     setSelectedModel(null)
@@ -73,7 +74,7 @@ export function CatalogClient({ initialModels, locale }: CatalogClientProps) {
   }
 
   function removeFromCart(id: string, gender?: 'h' | 'f') {
-    setCart(prev => prev.filter(c => !(c.id === id && c.gender === gender)))
+    setCart(prev => prev.filter(c => !(c._id === id && c.gender === gender)))
   }
 
   function getWhatsAppOrderMessage() {
@@ -82,12 +83,12 @@ export function CatalogClient({ initialModels, locale }: CatalogClientProps) {
     cart.forEach(item => {
       const catLabel = CATEGORIES.find(c => c.key === item.category)?.label ?? item.category
       let priceInfo = ''
-      if (item.priceH !== null && item.priceF !== null) {
+      if (item.priceH !== null && item.priceF !== null && item.category === 'couple') {
         priceInfo = item.gender === 'h' ? `${t('modal.man')}: ${formatPrice(item.priceH)}` : `${t('modal.woman')}: ${formatPrice(item.priceF)}`
       } else {
         priceInfo = formatPrice(item.price ?? 0)
       }
-      msg += `• *${catLabel}* - ${item.filename.replace(/\.[^.]+$/, '')} (${priceInfo}) x${item.quantity}\n`
+      msg += `• *${catLabel}* - ${item.name || item._id} (${priceInfo}) x${item.quantity}\n`
     })
     msg += `\n` + t('whatsapp.orderTotal', { total: formatPrice(cartTotal) }) + `\n\n` + t('whatsapp.orderThanks')
     return encodeURIComponent(msg)
@@ -212,20 +213,19 @@ function ModelCard({ model, onSelect, hasError, onError, formatPrice, viewDetail
       className="break-inside-avoid mb-3 group relative cursor-pointer rounded-lg overflow-hidden bg-[#111]"
       onClick={onSelect}
     >
-      {hasError ? (
+      {hasError || !model.mainImage ? (
         <div className="aspect-[3/4] flex items-center justify-center text-white/20 text-xs p-4 text-center bg-[#111]">
           {notAvailableLabel}
         </div>
       ) : (
         <div className="relative">
           <Image
-            src={model.src}
-            alt={label}
+            src={urlForImage(model.mainImage).width(400).url()}
+            alt={model.name || label}
             width={400}
             height={600}
             className="w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             onError={onError}
-            unoptimized
           />
           <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-end p-3">
             <span className="text-white text-xs font-medium text-center">{viewDetailLabel}</span>
@@ -242,10 +242,10 @@ function ModelCard({ model, onSelect, hasError, onError, formatPrice, viewDetail
 }
 
 function ModelModal({ model, onClose, onAddToCart, genderChoice, setGenderChoice, waNumber, getWhatsAppMessage, formatPrice, categories, t }: any) {
-  const isCouple = model.priceH !== null && model.priceF !== null
+  const isCouple = model.priceH !== null && model.priceF !== null && model.category === 'couple'
   const displayPrice = isCouple
     ? (genderChoice === 'h' ? formatPrice(model.priceH!) : formatPrice(model.priceF!))
-    : formatPrice(model.price ?? 0)
+    : (model.priceType === 'quote' ? t('modal.onQuote' as any) || 'Sur devis' : formatPrice(model.price ?? 0))
   const catLabel = categories.find((c: any) => c.key === model.category)?.label ?? model.category
 
   useEffect(() => {
@@ -265,7 +265,9 @@ function ModelModal({ model, onClose, onAddToCart, genderChoice, setGenderChoice
         </div>
 
         <div className="relative aspect-[3/4] bg-[#0a0a0a]">
-          <Image src={model.src} alt={catLabel} fill className="object-contain" unoptimized />
+          {model.mainImage && (
+            <Image src={urlForImage(model.mainImage).url()} alt={model.name || catLabel} fill className="object-contain" />
+          )}
         </div>
 
         <div className="p-5 space-y-4">
@@ -345,13 +347,15 @@ function CartPanel({ items, total, waNumber, whatsAppMsg, onRemove, onClose, for
             <p className="text-white/40 text-center py-10">{t('cart.empty')}</p>
           ) : items.map((item: any) => {
             const catLabel = categories.find((c: any) => c.key === item.category)?.label ?? item.category
-            const itemPrice = item.priceH !== null && item.priceF !== null
+            const itemPrice = item.priceH !== null && item.priceF !== null && item.category === 'couple'
               ? (item.gender === 'h' ? item.priceH : item.priceF)
               : (item.price ?? 0)
             return (
-              <div key={`${item.id}-${item.gender}`} className="flex gap-3 bg-white/5 rounded-xl p-3">
+              <div key={`${item._id}-${item.gender}`} className="flex gap-3 bg-white/5 rounded-xl p-3">
                 <div className="relative w-16 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-[#0a0a0a]">
-                  <Image src={item.src} alt={catLabel} fill className="object-cover" unoptimized />
+                  {item.mainImage && (
+                    <Image src={urlForImage(item.mainImage).width(100).url()} alt={item.name || catLabel} fill className="object-cover" />
+                  )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-white/80 text-xs font-medium truncate">{catLabel}</p>

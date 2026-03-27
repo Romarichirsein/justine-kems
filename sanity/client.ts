@@ -36,6 +36,9 @@ export const queries = {
     mainImage,
     price,
     priceType,
+    gender,
+    priceH,
+    priceF,
     isFeatured,
     isNew
   }`,
@@ -46,7 +49,10 @@ export const queries = {
     slug,
     mainImage,
     price,
-    priceType
+    priceType,
+    gender,
+    priceH,
+    priceF
   }`,
   
   productBySlug: `*[_type == "product" && slug.current == $slug][0] {
@@ -58,6 +64,9 @@ export const queries = {
     gallery,
     price,
     priceType,
+    gender,
+    priceH,
+    priceF,
     category,
     occasion
   }`,
