@@ -2,6 +2,8 @@ import { Metadata } from 'next'
 import { client, queries } from '@/sanity/client'
 import { CatalogClient } from '@/components/CatalogClient'
 
+export const dynamic = 'force-dynamic'
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'modeles.metadata' })
