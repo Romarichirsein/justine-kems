@@ -9,6 +9,14 @@ type Props = {
   params: { locale: string; slug: string }
 }
 
+export async function generateStaticParams() {
+  const posts = await client.fetch(`*[_type == "post"]{ "slug": slug.current }`).catch(() => [])
+  
+  return posts.filter((p: any) => p?.slug).map((p: any) => ({
+    slug: p.slug
+  }))
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await client.fetch(queries.postBySlug, { slug: params.slug }).catch(() => null)
   

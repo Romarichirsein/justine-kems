@@ -7,6 +7,14 @@ type Props = {
   params: { locale: string; id: string }
 }
 
+export async function generateStaticParams() {
+  const products = await client.fetch(`*[_type == "product"]{ "slug": slug.current }`).catch(() => [])
+  
+  return products.filter((p: any) => p?.slug).map((p: any) => ({
+    id: p.slug
+  }))
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await client.fetch(queries.productBySlug, { slug: params.id }).catch(() => null)
   
