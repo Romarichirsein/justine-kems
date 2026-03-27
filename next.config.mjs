@@ -4,7 +4,9 @@ const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -13,7 +15,13 @@ const nextConfig = {
       },
     ],
   },
-
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'react/compiler-runtime': 'react',
+    }
+    return config
+  },
 }
 
 export default withNextIntl(nextConfig)
