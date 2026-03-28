@@ -53,8 +53,8 @@ export function CatalogClient({ initialModels, locale }: CatalogClientProps) {
 
   const cartCount = cart.reduce((s, i) => s + i.quantity, 0)
   const cartTotal = cart.reduce((s, i) => {
-    if (i.priceH !== null && i.priceF !== null) {
-      return s + (i.gender === 'h' ? i.priceH : i.priceF) * i.quantity
+    if (i.priceH != null && i.priceF != null) {
+      return s + (i.gender === 'h' ? (i.priceH ?? 0) : (i.priceF ?? 0)) * i.quantity
     }
     return s + (i.price ?? 0) * i.quantity
   }, 0)
@@ -83,8 +83,8 @@ export function CatalogClient({ initialModels, locale }: CatalogClientProps) {
     cart.forEach(item => {
       const catLabel = CATEGORIES.find(c => c.key === item.category)?.label ?? item.category
       let priceInfo = ''
-      if (item.priceH !== null && item.priceF !== null && item.category === 'couple') {
-        priceInfo = item.gender === 'h' ? `${t('modal.man')}: ${formatPrice(item.priceH)}` : `${t('modal.woman')}: ${formatPrice(item.priceF)}`
+      if (item.priceH != null && item.priceF != null && item.category === 'couple') {
+        priceInfo = item.gender === 'h' ? `${t('modal.man')}: ${formatPrice(item.priceH ?? 0)}` : `${t('modal.woman')}: ${formatPrice(item.priceF ?? 0)}`
       } else {
         priceInfo = formatPrice(item.price ?? 0)
       }
@@ -97,8 +97,8 @@ export function CatalogClient({ initialModels, locale }: CatalogClientProps) {
   function getWhatsAppModelMessage(model: Model) {
     const catLabel = CATEGORIES.find(c => c.key === model.category)?.label ?? model.category
     let priceInfo = ''
-    if (model.priceH !== null && model.priceF !== null) {
-      priceInfo = `${t('modal.man')}: ${formatPrice(model.priceH)} / ${t('modal.woman')}: ${formatPrice(model.priceF)}`
+    if (model.priceH != null && model.priceF != null) {
+      priceInfo = `${t('modal.man')}: ${formatPrice(model.priceH ?? 0)} / ${t('modal.woman')}: ${formatPrice(model.priceF ?? 0)}`
     } else {
       priceInfo = formatPrice(model.price ?? 0)
     }
@@ -135,13 +135,13 @@ export function CatalogClient({ initialModels, locale }: CatalogClientProps) {
         <div className="columns-2 sm:columns-3 md:columns-4 gap-3 space-y-3">
           {filtered.map(model => (
             <ModelCard
-              key={model.id}
+              key={model._id}
               model={model}
               onSelect={() => setSelectedModel(model)}
-              hasError={imgErrors.has(model.id)}
+              hasError={imgErrors.has(model._id)}
               onError={() => setImgErrors(prev => {
                 const next = new Set(prev)
-                next.add(model.id)
+                next.add(model._id)
                 return next
               })}
               formatPrice={formatPrice}
@@ -366,7 +366,7 @@ function CartPanel({ items, total, waNumber, whatsAppMsg, onRemove, onClose, for
                   <p className="text-white/30 text-xs">{t('cart.items', { count: item.quantity })}</p>
                 </div>
                 <button
-                  onClick={() => onRemove(item.id, item.gender)}
+                  onClick={() => onRemove(item._id, item.gender)}
                   className="text-white/30 hover:text-red-400 transition-colors self-start"
                 >
                   ×

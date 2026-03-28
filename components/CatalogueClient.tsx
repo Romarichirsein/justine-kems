@@ -352,7 +352,7 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
                       </div>
                     ) : (
                       <p className="text-4xl font-bold text-jk-imperial-green dark:text-jk-royal-gold">
-                        {formatPrice(selectedProduct.price)}
+                        {formatPrice(selectedProduct.price || 0)}
                       </p>
                     )}
                     <p className="text-xs text-jk-text-muted dark:text-gray-500 mt-2">{t('modal.indicative')}</p>

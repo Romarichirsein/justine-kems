@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { client, queries } from '@/sanity/client'
 import { CatalogClient } from '@/components/CatalogClient'
 

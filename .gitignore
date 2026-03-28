@@ -35,3 +35,28 @@ Thumbs.db
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
+
+# Sanity seed / debug scripts (temp)
+seed-sanity.js
+seed-content.js
+verify-seed.js
+audit-sanity.js
+audit-drafts.js
+check-duplicates.js
+check-raw.js
+debug-sanity-exec.js
+migrate-*.js
+migrate-*.mjs
+purge-drafts.js
+migrate-shell.js
+migrate-final.js
+
+# Temp output files
+sanity_out.txt
+sanity_error.log
+git_log.txt
+query_result.json
+build_log.txt
+build_output.txt
+build.log
+build_error.log
