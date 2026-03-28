@@ -8,11 +8,20 @@ type Props = {
 }
 
 export async function generateStaticParams() {
-  const products = await client.fetch(`*[_type == "product"]{ "slug": slug.current }`).catch(() => [])
+  const products = await client.fetch(`*[_type == "product"]{ "slug": slug.current }`).catch(() => []);
+  const locales = ['fr', 'en'];
   
-  return products.filter((p: any) => p?.slug).map((p: any) => ({
-    id: p.slug
-  }))
+  const params = [];
+  for (const locale of locales) {
+    if (!products || products.length === 0) {
+      params.push({ locale, id: 'empty-fallback' });
+    } else {
+      products.filter((p: any) => p?.slug).forEach((p: any) => {
+        params.push({ locale, id: p.slug });
+      });
+    }
+  }
+  return params;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
