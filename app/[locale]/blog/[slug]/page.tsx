@@ -12,6 +12,10 @@ type Props = {
 export async function generateStaticParams() {
   const posts = await client.fetch(`*[_type == "post"]{ "slug": slug.current }`).catch(() => [])
   
+  if (!posts || posts.length === 0) {
+    return [{ slug: 'empty-fallback' }]
+  }
+
   return posts.filter((p: any) => p?.slug).map((p: any) => ({
     slug: p.slug
   }))
