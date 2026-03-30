@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useMemo, useEffect } from 'react'
-import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { client, urlForImage } from '@/sanity/client'
+import { SanityImage } from '@/components/SanityImage'
 
 // ── Types ──────────────────────────────────────────────────────────────────
 interface Model {
@@ -38,12 +38,12 @@ export function CatalogClient({ initialModels, locale }: CatalogClientProps) {
 
   const CATEGORIES = [
     { key: 'all', label: t('filters.all') },
-    { key: 'mariages', label: t('filters.mariages') },
-    { key: 'soirees', label: t('filters.soirees') },
-    { key: 'couple', label: t('filters.couple') },
-    { key: 'traditionnels', label: t('filters.traditionnels') },
-    { key: 'etat-civil', label: t('filters.etat-civil') },
-    { key: 'ville', label: t('filters.ville') },
+    { key: 'robes-mariage', label: t('categories.robes-mariage') },
+    { key: 'robes-soirees', label: t('categories.robes-soirees') },
+    { key: 'tenu-couple', label: t('categories.tenu-couple') },
+    { key: 'tenue-traditionnels', label: t('categories.tenue-traditionnels') },
+    { key: 'etat-civil', label: t('categories.etat-civil') },
+    { key: 'tenue-ville', label: t('categories.tenue-ville') },
   ]
 
   const filtered = useMemo(() =>
@@ -219,13 +219,12 @@ function ModelCard({ model, onSelect, hasError, onError, formatPrice, viewDetail
         </div>
       ) : (
         <div className="relative">
-          <Image
-            src={urlForImage(model.mainImage).width(400).url()}
+          <SanityImage
+            asset={model.mainImage}
             alt={model.name || label}
             width={400}
             height={600}
-            className="w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-            onError={onError}
+            className="w-full h-full group-hover:scale-[1.03] transition-transform duration-500"
           />
           <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-end p-3">
             <span className="text-white text-xs font-medium text-center">{viewDetailLabel}</span>
@@ -266,7 +265,7 @@ function ModelModal({ model, onClose, onAddToCart, genderChoice, setGenderChoice
 
         <div className="relative aspect-[3/4] bg-[#0a0a0a]">
           {model.mainImage && (
-            <Image src={urlForImage(model.mainImage).url()} alt={model.name || catLabel} fill className="object-contain" />
+            <SanityImage asset={model.mainImage} alt={model.name || catLabel} fill className="object-contain" />
           )}
         </div>
 
@@ -354,7 +353,7 @@ function CartPanel({ items, total, waNumber, whatsAppMsg, onRemove, onClose, for
               <div key={`${item._id}-${item.gender}`} className="flex gap-3 bg-white/5 rounded-xl p-3">
                 <div className="relative w-16 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-[#0a0a0a]">
                   {item.mainImage && (
-                    <Image src={urlForImage(item.mainImage).width(100).url()} alt={item.name || catLabel} fill className="object-cover" />
+                    <SanityImage asset={item.mainImage} alt={item.name || catLabel} fill className="object-cover" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">

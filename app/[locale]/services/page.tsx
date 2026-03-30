@@ -1,13 +1,13 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { RevealOnScroll } from '@/components/RevealOnScroll'
 import { WhatsAppFormHandler } from '@/components/WhatsAppFormHandler'
 import { useTranslations, useLocale } from 'next-intl'
-
-
+import { client, queries } from '@/sanity/client'
+import { SanityImage } from '@/components/SanityImage'
+import { Link } from '@/navigation'
 
 // ─── ImageSlider composant interne ─────────────────────────────────────────
 function ImageSlider({
@@ -16,7 +16,7 @@ function ImageSlider({
   prevAriaLabel,
   nextAriaLabel,
 }: {
-  images: { src: string; label: string }[]
+  images: { asset?: any; src?: string; label: string }[]
   autoPlayMs?: number
   prevAriaLabel: string
   nextAriaLabel: string
@@ -24,6 +24,7 @@ function ImageSlider({
   const [current, setCurrent] = useState(0)
 
   useEffect(() => {
+    if (images.length === 0) return
     const timer = setInterval(() => {
       setCurrent(prev => (prev + 1) % images.length)
     }, autoPlayMs)
@@ -33,11 +34,12 @@ function ImageSlider({
   const prev = () => setCurrent(i => (i - 1 + images.length) % images.length)
   const next = () => setCurrent(i => (i + 1) % images.length)
 
+  if (images.length === 0) return <div className="w-full h-full bg-gray-100 rounded-2xl animate-pulse" />
+
   return (
     <div className="relative w-full h-full rounded-2xl overflow-hidden group">
       <AnimatePresence mode="wait">
         <motion.div
-// ... existing code ...
           key={current}
           initial={{ opacity: 0, scale: 1.04 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -45,19 +47,27 @@ function ImageSlider({
           transition={{ duration: 0.65, ease: 'easeInOut' }}
           className="absolute inset-0"
         >
-          <Image
-            src={images[current].src}
-            alt={images[current].label}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 50vw"
-          />
+          {images[current].asset ? (
+            <SanityImage
+              asset={images[current].asset}
+              alt={images[current].label}
+              fill
+              className="w-full h-full"
+            />
+          ) : (
+            <img
+              src={images[current].src}
+              alt={images[current].label}
+              className="w-full h-full object-cover"
+            />
+          )}
           {/* Gradient label */}
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-6 py-5">
             <p className="text-white text-sm font-medium">{images[current].label}</p>
           </div>
         </motion.div>
       </AnimatePresence>
+      {/* ... (arrows and dots keep same logic) */}
 
       {/* Arrows */}
       <button
@@ -96,6 +106,12 @@ export default function ServicesPage() {
   const t = useTranslations('services')
   const locale = useLocale()
 
+  const [sanityImages, setSanityImages] = useState<any[]>([])
+  
+  useEffect(() => {
+    client.fetch(queries.productImages).then(setSanityImages)
+  }, [])
+
   const prevLabel = t('prev')
   const nextLabel = t('next')
 
@@ -105,51 +121,19 @@ export default function ServicesPage() {
     title: '',
   })
 
-  // ─── Slider soirée ─────────────────────────────────────────────────────────
-  const soireeImages = [
-    { src: '/catalogue/robes-soirees/120.000as.jpg', label: t('soiree.label', { price: '120 000' }) },
-    { src: '/catalogue/robes-soirees/150.000.jpeg', label: t('soiree.label', { price: '150 000' }) },
-    { src: '/catalogue/robes-soirees/200.000 C.jpg', label: t('soiree.label', { price: '200 000' }) },
-    { src: '/catalogue/robes-soirees/250.000yy.jpg', label: t('soiree.label', { price: '250 000' }) },
-    { src: '/catalogue/robes-soirees/300.000 a.jpg', label: t('soiree.label', { price: '300 000' }) },
-    { src: '/catalogue/robes-soirees/350.000e.jpg', label: t('soiree.label', { price: '350 000' }) },
-  ]
+  // Helper to get images from Sanity
+  const getImages = (categoryKeywords: string[]) => {
+    return sanityImages
+      .filter(img => categoryKeywords.some(k => img.title?.toLowerCase().includes(k.toLowerCase())))
+      .map(img => ({ asset: img.image, label: img.title || t('soiree.label', { price: '—' }), src: '' }))
+  }
 
-  // ─── Slider mariage ─────────────────────────────────────────────────────────
-  const mariageImages = [
-    { src: '/catalogue/robes-mariage/250.000 C.jpg', label: t('mariage.label', { price: '250 000' }) },
-    { src: '/catalogue/robes-mariage/300.000 Q.jpg', label: t('mariage.label', { price: '300 000' }) },
-    { src: '/catalogue/robes-mariage/350.000 SA.jpg', label: t('mariage.label', { price: '350 000' }) },
-    { src: '/catalogue/robes-mariage/400.000.jpg',   label: t('mariage.label', { price: '400 000' }) },
-    { src: '/catalogue/robes-mariage/500.000.jpg',   label: t('mariage.label', { price: '500 000' }) },
-  ]
-
-  // ─── Slider tenue de ville ────────────────────────────────────────────────
-  const villeImages = [
-    { src: '/catalogue/tenue-ville/45.000.jpg',    label: t('others.cityLabel', { price: '45 000' }) },
-    { src: '/catalogue/tenue-ville/70.000 F.jpg', label: t('others.cityLabel', { price: '70 000' }) },
-    { src: '/catalogue/tenue-ville/80.000D.jpg',   label: t('others.cityLabel', { price: '80 000' }) },
-    { src: '/catalogue/tenue-ville/120.000.jpg',   label: t('others.cityLabel', { price: '120 000' }) },
-  ]
-
-  // ─── Slider traditionnel ──────────────────────────────────────────────────
-  const traditionnelImages = [
-    { src: '/catalogue/tenue-traditionnels/150.000 X.jpg', label: t('others.traditionalLabel', { price: '150 000' }) },
-    { src: '/catalogue/tenue-traditionnels/200.000A.jpg',   label: t('others.traditionalLabel', { price: '200 000' }) },
-    { src: '/catalogue/tenue-traditionnels/250.000c.jpg',   label: t('others.traditionalLabel', { price: '250 000' }) },
-    { src: '/catalogue/tenue-traditionnels/350.000c.jpg',   label: t('others.traditionalLabel', { price: '350 000' }) },
-  ]
-
-  // ─── Slider couple ────────────────────────────────────────────────────────
-  const coupleLabel = locale === 'en' ? 'Couple Outfit' : 'Tenue Couple'
-  const coupleImages = [
-    { src: '/modeles/tenu-couple/h120.000%20;%20f250.000.jpg', label: coupleLabel },
-    { src: '/modeles/tenu-couple/h130.000%20;%20f150.000.jpg', label: coupleLabel },
-    { src: '/modeles/tenu-couple/h140.000%20;%20f250.000.jpg', label: coupleLabel },
-    { src: '/modeles/tenu-couple/h150.000%20;%20f350.000.jpg', label: coupleLabel },
-    { src: '/modeles/tenu-couple/h160.000%20;%20f%20380.000.jpg', label: coupleLabel },
-    { src: '/modeles/tenu-couple/h80.000%20;%20f%20200.000.jpg', label: coupleLabel },
-  ]
+  // ─── Sliders ──────────────────────────────────────────────────────────────
+  const soireeImages = getImages(['soiree', 'soirée'])
+  const mariageImages = getImages(['mariage', 'wedding'])
+  const villeImages = getImages(['ville', 'city'])
+  const traditionnelImages = getImages(['tradition', 'traditionnel'])
+  const coupleImages = getImages(['couple'])
 
   const openForm = (type: 'order' | 'rental' | 'training', title: string) => {
     setFormConfig({ type, title })
@@ -162,13 +146,17 @@ export default function ServicesPage() {
       {/* ── Hero ── */}
       <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden pt-28">
         <div className="absolute inset-0 z-0">
-          <Image
-            src="/catalogue/robes-mariage/300.000 Q.jpg"
-            alt="Atelier couture Justine Kem's"
-            fill
-            className="object-cover"
-            priority
-          />
+          {sanityImages.length > 0 ? (
+            <SanityImage
+              asset={sanityImages[0].image}
+              alt="Atelier couture Justine Kem's"
+              fill
+              className="w-full h-full"
+              priority
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-jk-imperial-green to-[#061614]" />
+          )}
           <div className="absolute inset-0 bg-jk-imperial-green/60" />
         </div>
         <div className="relative z-10 text-center px-4 animate-fade-in-up">
@@ -228,24 +216,20 @@ export default function ServicesPage() {
             <div className="order-1 lg:order-2 grid grid-cols-2 gap-4 h-[600px]">
               {/* Grande image gauche — tenues de ville */}
               <div className="relative rounded-2xl h-full col-span-1 shadow-lg overflow-hidden group">
-                <Image
-                  src="/catalogue/tenue-ville/80.000D.jpg"
-                  alt="Tenue haute couture"
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-700"
-                  sizes="25vw"
-                />
+                {villeImages[0]?.asset ? (
+                  <SanityImage asset={villeImages[0].asset} alt="Tenue" fill className="w-full h-full group-hover:scale-110 transition-transform duration-700" />
+                ) : (
+                  <img src={villeImages[0]?.src} alt="Tenue" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                )}
               </div>
               {/* Colonne droite : image + bandeau */}
               <div className="grid grid-rows-2 gap-4 h-full col-span-1">
                 <div className="relative rounded-2xl shadow-lg overflow-hidden group">
-                  <Image
-                    src="/catalogue/tenue-ville/120.000.jpg"
-                    alt="Création sur mesure"
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-700"
-                    sizes="25vw"
-                  />
+                  {villeImages[1]?.asset ? (
+                    <SanityImage asset={villeImages[1].asset} alt="Création" fill className="w-full h-full group-hover:scale-110 transition-transform duration-700" />
+                  ) : (
+                    <div className="w-full h-full bg-jk-imperial-green/20" />
+                  )}
                 </div>
                 <div className="bg-jk-imperial-green rounded-2xl shadow-lg flex items-center justify-center p-6 text-center">
                   <h3 className="text-2xl font-script text-jk-royal-gold">{t('hauteCouture.artisanat')}</h3>
@@ -281,13 +265,11 @@ export default function ServicesPage() {
               <div className="grid grid-cols-3 gap-3 h-[520px]">
                 {soireeImages.slice(0, 6).map((img, i) => (
                   <div key={i} className="relative rounded-xl overflow-hidden shadow-md group">
-                    <Image
-                      src={img.src}
-                      alt={img.label}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-500"
-                      sizes="15vw"
-                    />
+                    {img.asset ? (
+                      <SanityImage asset={img.asset} alt={img.label} fill className="w-full h-full group-hover:scale-110 transition-transform duration-500" />
+                    ) : (
+                      <img src={img.src} alt={img.label} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                    )}
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
                   </div>
                 ))}
@@ -296,12 +278,12 @@ export default function ServicesPage() {
           </div>
 
           <div className="text-center mt-10">
-            <a
-              href={`/${locale}/catalogue?category=robes-soirees`}
+            <Link
+              href="/catalogue?category=robes-soirees"
               className="inline-block border border-jk-imperial-green dark:border-jk-royal-gold text-jk-imperial-green dark:text-jk-royal-gold px-8 py-3 rounded-full font-semibold hover:bg-jk-imperial-green hover:text-white dark:hover:bg-jk-royal-gold dark:hover:text-black transition-all"
             >
               {t('soiree.cta')}
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -323,13 +305,11 @@ export default function ServicesPage() {
             <div className="grid grid-cols-3 gap-3 h-[520px]">
               {mariageImages.slice(0, 6).map((img, i) => (
                 <div key={i} className="relative rounded-xl overflow-hidden shadow-md group">
-                  <Image
-                    src={img.src}
-                    alt={img.label}
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    sizes="15vw"
-                  />
+                  {img.asset ? (
+                    <SanityImage asset={img.asset} alt={img.label} fill className="w-full h-full group-hover:scale-110 transition-transform duration-500" />
+                  ) : (
+                    <img src={img.src} alt={img.label} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  )}
                 </div>
               ))}
             </div>
@@ -344,12 +324,12 @@ export default function ServicesPage() {
         </div>
 
         <div className="text-center mt-10">
-          <a
-            href={`/${locale}/catalogue?category=robes-mariage`}
+          <Link
+            href="/catalogue?category=robes-mariage"
             className="inline-block border border-jk-imperial-green dark:border-jk-royal-gold text-jk-imperial-green dark:text-jk-royal-gold px-8 py-3 rounded-full font-semibold hover:bg-jk-imperial-green hover:text-white dark:hover:bg-jk-royal-gold dark:hover:text-black transition-all"
           >
             {t('mariage.cta')}
-          </a>
+          </Link>
         </div>
       </section>
 
@@ -378,13 +358,11 @@ export default function ServicesPage() {
               <div className="grid grid-cols-3 gap-3 h-[520px]">
                 {coupleImages.slice(0, 6).map((img, i) => (
                   <div key={i} className="relative rounded-xl overflow-hidden shadow-md group">
-                    <Image
-                      src={img.src}
-                      alt={img.label}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-500"
-                      sizes="15vw"
-                    />
+                    {img.asset ? (
+                      <SanityImage asset={img.asset} alt={img.label} fill className="w-full h-full group-hover:scale-110 transition-transform duration-500" />
+                    ) : (
+                      <img src={img.src} alt={img.label} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                    )}
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
                   </div>
                 ))}
@@ -393,12 +371,12 @@ export default function ServicesPage() {
           </div>
 
           <div className="text-center mt-10">
-            <a
-              href={`/${locale}/catalogue?category=tenues-couple`}
+            <Link
+              href="/catalogue?category=tenues-couple"
               className="inline-block border border-jk-imperial-green dark:border-jk-royal-gold text-jk-imperial-green dark:text-jk-royal-gold px-8 py-3 rounded-full font-semibold hover:bg-jk-imperial-green hover:text-white dark:hover:bg-jk-royal-gold dark:hover:text-black transition-all"
             >
               {t('couple.cta')}
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -515,12 +493,12 @@ export default function ServicesPage() {
                   <ImageSlider images={traditionnelImages} autoPlayMs={4000} prevAriaLabel={prevLabel} nextAriaLabel={nextLabel} />
                 </div>
                 <div className="text-center mt-5">
-                  <a
-                    href={`/${locale}/catalogue?category=tenue-traditionnels`}
+                  <Link
+                    href="/catalogue?category=tenue-traditionnels"
                     className="text-jk-imperial-green dark:text-jk-royal-gold text-sm font-medium hover:underline"
                   >
                     {t('others.cta')}
-                  </a>
+                  </Link>
                 </div>
               </div>
             </RevealOnScroll>
@@ -535,12 +513,12 @@ export default function ServicesPage() {
                   <ImageSlider images={villeImages} autoPlayMs={3600} prevAriaLabel={prevLabel} nextAriaLabel={nextLabel} />
                 </div>
                 <div className="text-center mt-5">
-                  <a
-                    href={`/${locale}/catalogue?category=tenue-ville`}
+                  <Link
+                    href="/catalogue?category=tenue-ville"
                     className="text-jk-imperial-green dark:text-jk-royal-gold text-sm font-medium hover:underline"
                   >
                     {t('others.cta')}
-                  </a>
+                  </Link>
                 </div>
               </div>
             </RevealOnScroll>

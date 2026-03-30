@@ -32,12 +32,12 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
 
   const CATEGORIES = [
     { id: 'all', label: t('filters.all') },
-    { id: 'robes-mariage', label: t('modeles.filters.mariages' as any) || 'Robes de Mariages' },
-    { id: 'robes-soirees', label: t('modeles.filters.soirees' as any) || 'Robes de Soirées' },
-    { id: 'tenu-couple', label: t('modeles.filters.couple' as any) || 'Tenues de Couple' },
-    { id: 'tenue-traditionnels', label: t('modeles.filters.traditionnels' as any) || 'Tenues Traditionnelles' },
-    { id: 'etat-civil', label: t('modeles.filters.etat-civil' as any) || 'État Civil' },
-    { id: 'tenue-ville', label: t('modeles.filters.ville' as any) || 'Tenues de Ville' },
+    { id: 'robes-mariage', label: t('categories.robes-mariage') },
+    { id: 'robes-soirees', label: t('categories.robes-soirees') },
+    { id: 'tenu-couple', label: t('categories.tenu-couple') },
+    { id: 'tenue-traditionnels', label: t('categories.tenue-traditionnels') },
+    { id: 'etat-civil', label: t('categories.etat-civil') },
+    { id: 'tenue-ville', label: t('categories.tenue-ville') },
   ]
 
   // Note: Since I don't have direct access to 'modeles' namespace easily here without nested hooks, 
@@ -54,18 +54,13 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
   const WHATSAPP_NUMBER = '237677463484'
 
   function getCategoryLabel(catId: string) {
-    const map: Record<string, string> = {
-      'robes-mariage': 'mariages',
-      'robes-soirees': 'soirees',
-      'tenu-couple': 'couple',
-      'tenue-traditionnels': 'traditionnels',
-      'etat-civil': 'etat-civil',
-      'tenue-ville': 'ville',
+    if (catId === 'all') return t('filters.all')
+    // Directly use the key from categories namespace
+    try {
+      return t(`categories.${catId}` as any)
+    } catch {
+      return catId
     }
-    const key = map[catId]
-    if (!key) return catId
-    // We can try to use a fallback or another t call if we have multiple namespaces
-    return key
   }
 
   const filtered = products.filter((p) => {

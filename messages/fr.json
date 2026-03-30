@@ -39,10 +39,12 @@
     "filterOccasion": "Occasions",
     "categories": {
       "all": "Toutes",
-      "haute-couture": "Haute Couture",
-      "pret-a-porter": "Prêt-à-porter",
-      "location": "Location",
-      "accessoires": "Accessoires"
+      "robes-mariage": "Robes de Mariages",
+      "robes-soirees": "Robes de Soirées",
+      "tenu-couple": "Tenues de Couple",
+      "tenue-traditionnels": "Tenues Traditionnelles",
+      "etat-civil": "État Civil",
+      "tenue-ville": "Tenues de Ville"
     },
     "occasions": {
       "all": "Toutes",
@@ -567,12 +569,12 @@
     },
     "filters": {
       "all": "Tout voir",
-      "mariages": "Robes de Mariages",
-      "soirees": "Robes de Soirées",
-      "couple": "Tenues de Couple",
-      "traditionnels": "Tenues Traditionnelles",
+      "robes-mariage": "Robes de Mariages",
+      "robes-soirees": "Robes de Soirées",
+      "tenu-couple": "Tenues de Couple",
+      "tenue-traditionnels": "Tenues Traditionnelles",
       "etat-civil": "État Civil",
-      "ville": "Tenues de Ville"
+      "tenue-ville": "Tenues de Ville"
     },
     "controls": {
       "results": "{count} modèles",

@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { InscriptionClient } from '@/components/InscriptionClient'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -14,6 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function InscriptionPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
+  setRequestLocale(locale)
   
   return (
     <div className="bg-jk-cream dark:bg-jk-dark-bg min-h-screen py-32">

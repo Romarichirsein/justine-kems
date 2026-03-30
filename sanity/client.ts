@@ -27,7 +27,7 @@ export function urlForImage(source: any) {
 
 // Requêtes GROQ réutilisables
 export const queries = {
-  allProducts: `*[_type == "product"] | order(_createdAt desc) {
+  allProducts: `*[_type == "product"][0...1000] | order(_createdAt desc) {
     _id,
     name,
     slug,
@@ -110,5 +110,32 @@ export const queries = {
     rating,
     avatar,
     type
+  }`,
+  
+  heroImages: `*[_type == "heroImage"] | order(_createdAt desc) {
+    _id,
+    title,
+    image,
+    alt,
+    caption
+  }`,
+  
+  productImages: `*[_type == "productImage"] | order(_createdAt desc) {
+    _id,
+    title,
+    image,
+    alt,
+    caption
+  }`,
+  
+  galleries: `*[_type == "gallery"] {
+    _id,
+    title,
+    images[] {
+      title,
+      image,
+      alt,
+      caption
+    }
   }`
 }

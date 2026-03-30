@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import { Link } from '@/navigation'
 import Image from 'next/image'
 import { useLocale, useTranslations } from 'next-intl'
 import { useState, useEffect, useRef } from 'react'
@@ -36,14 +36,14 @@ export default function Navbar() {
   }, [])
 
   const navLinks = [
-    { href: `/${locale}`, label: t('home') },
-    { href: `/${locale}/a-propos`, label: t('about') },
-    { href: `/${locale}/services`, label: t('services') },
-    { href: `/${locale}/modeles`, label: t('models') },
-    { href: `/${locale}/catalogue`, label: t('catalogue') },
-    { href: `/${locale}/formations`, label: t('formations') },
-    { href: `/${locale}/blog`, label: t('blog') },
-    { href: `/${locale}/contact`, label: t('contact') },
+    { href: `/`, label: t('home') },
+    { href: `/a-propos`, label: t('about') },
+    { href: `/services`, label: t('services') },
+    { href: `/modeles`, label: t('models') },
+    { href: `/catalogue`, label: t('catalogue') },
+    { href: `/formations`, label: t('formations') },
+    { href: `/blog`, label: t('blog') },
+    { href: `/contact`, label: t('contact') },
   ]
 
   return (
@@ -83,7 +83,7 @@ export default function Navbar() {
         <div className="relative container mx-auto px-4 flex justify-between items-center h-20 py-2">
 
           {/* Logo */}
-          <Link href={`/${locale}`} className="flex items-center group z-50 flex-shrink-0">
+          <Link href="/" className="flex items-center group z-50 flex-shrink-0">
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.97 }}
@@ -196,7 +196,7 @@ export default function Navbar() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1, duration: 0.4 }}
               >
-                <Link href={`/${locale}`} onClick={() => setMenuOpen(false)} className="block mb-2">
+                <Link href="/" onClick={() => setMenuOpen(false)} className="block mb-2">
                   <Image
                     src="/logo-justine-kems.png"
                     alt="Justine Kem's"
@@ -245,7 +245,7 @@ export default function Navbar() {
               >
                 <LocaleSwitcher />
                 <Link
-                  href={`/${locale}/contact`}
+                  href="/contact"
                   onClick={() => setMenuOpen(false)}
                   className="bg-gradient-to-r from-[#D4AF37] to-[#c9a96e] text-black font-bold px-10 py-3.5 rounded-full hover:shadow-[0_4px_24px_rgba(212,175,55,0.5)] transition-all text-base"
                 >

@@ -1,0 +1,10 @@
+﻿
+=== UPLOAD PROGRESS ===
+etat civil: 30/30 done (0 remaining)
+Robes de mariages: 49/53 done (4 remaining)
+Robes de soir├®es: 0/65 done (65 remaining)
+Tenu de couple: 0/27 done (27 remaining)
+tenue de ville: 0/40 done (40 remaining)
+Tenue traditionnels: 0/16 done (16 remaining)
+
+TOTAL: 79/231 done (152 remaining)

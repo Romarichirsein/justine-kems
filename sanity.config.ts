@@ -7,6 +7,9 @@ import product from './sanity/schemas/product'
 import post from './sanity/schemas/post'
 import formation from './sanity/schemas/formation'
 import testimonial from './sanity/schemas/testimonial'
+import heroImage from './sanity/schemas/heroImage'
+import productImage from './sanity/schemas/productImage'
+import gallery from './sanity/schemas/gallery'
 
 export default defineConfig({
   name: 'justine-kems',
@@ -21,6 +24,6 @@ export default defineConfig({
   ],
 
   schema: {
-    types: [product, post, formation, testimonial],
+    types: [product, post, formation, testimonial, heroImage, productImage, gallery],
   },
 })

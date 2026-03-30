@@ -1,5 +1,7 @@
 import { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
+import { queries, safeFetch } from '@/sanity/client'
+import { SanityImage } from '@/components/SanityImage'
 import { ContactForm } from '@/components/ContactForm'
 import { Toaster } from 'react-hot-toast'
 
@@ -13,15 +15,32 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
+import { SanityImageInfo } from '@/types/sanity'
+
 export default async function ContactPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
+  setRequestLocale(locale)
   const t = await getTranslations({ locale, namespace: 'contact' })
+  
+  const heroImages = await safeFetch<SanityImageInfo[]>(queries.heroImages) ?? []
+  const contactHero = heroImages.find(img => img.title?.toLowerCase().includes('contact')) || heroImages[1] || heroImages[0]
 
   return (
     <div className="bg-jk-cream dark:bg-jk-dark-bg min-h-screen pb-24">
       {/* Hero */}
       <section className="relative min-h-[40vh] md:min-h-[50vh] flex items-center justify-center bg-jk-imperial-green overflow-hidden pt-32 pb-24 md:pb-32">
-        <div className="absolute inset-0 bg-[url('/images/atelier-bg.jpg')] bg-cover bg-center opacity-20 dark:opacity-10 mix-blend-luminosity" />
+        <div className="absolute inset-0 z-0">
+          {contactHero ? (
+            <SanityImage
+              asset={contactHero.image}
+              alt="Atelier Justine Kem's"
+              fill
+              className="w-full h-full opacity-20 dark:opacity-10 mix-blend-luminosity"
+            />
+          ) : (
+            <div className="absolute inset-0 bg-[url('/images/atelier-bg.jpg')] bg-cover bg-center opacity-20 dark:opacity-10 mix-blend-luminosity" />
+          )}
+        </div>
         <h1 className="relative z-10 text-4xl sm:text-5xl md:text-8xl font-script text-jk-royal-gold text-shadow-gold text-center px-4">
           {t('heroTitle')}
         </h1>

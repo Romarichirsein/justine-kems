@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "regions": ["cdg1"],
+  "framework": "nextjs",
+  "installCommand": "npm install",
+  "buildCommand": "npm run build",
+  "env": {
+    "NEXT_PUBLIC_SANITY_PROJECT_ID": "@sanity-project-id",
+    "NEXT_PUBLIC_SANITY_DATASET": "production",
+    "NEXT_PUBLIC_SANITY_API_VERSION": "2024-01-01",
+    "SANITY_API_TOKEN": "@sanity-api-token",
+    "NEXT_PUBLIC_BASE_URL": "@base-url"
+  }
+}

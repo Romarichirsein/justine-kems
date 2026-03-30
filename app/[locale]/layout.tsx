@@ -101,11 +101,9 @@ export default async function RootLayout({
   const messages = await getMessages({ locale })
 
   return (
-    <html lang={locale} suppressHydrationWarning>
-      <head>
-        <OrganizationSchema />
-      </head>
-      <body className="font-sans antialiased text-jk-text-dark bg-jk-cream dark:bg-jk-dark-bg dark:text-jk-dark-text min-h-screen flex flex-col">
+    <>
+      <OrganizationSchema />
+      <div className="font-sans antialiased text-jk-text-dark bg-jk-cream dark:bg-jk-dark-bg dark:text-jk-dark-text min-h-screen flex flex-col">
         <Providers locale={locale} messages={messages}>
           <Navbar />
           <main className="flex-grow">
@@ -114,7 +112,7 @@ export default async function RootLayout({
           <WhatsAppFloating />
           <Footer />
         </Providers>
-      </body>
-    </html>
+      </div>
+    </>
   )
 }

@@ -39,10 +39,12 @@
     "filterOccasion": "Occasions",
     "categories": {
       "all": "All",
-      "haute-couture": "Haute Couture",
-      "pret-a-porter": "Ready-to-wear",
-      "location": "Rental",
-      "accessoires": "Accessories"
+      "robes-mariage": "Wedding Dresses",
+      "robes-soirees": "Evening Gowns",
+      "tenu-couple": "Couple Outfits",
+      "tenue-traditionnels": "Traditional Wear",
+      "etat-civil": "Civil Ceremonies",
+      "tenue-ville": "City Wear"
     },
     "occasions": {
       "all": "All",
@@ -567,12 +569,12 @@
     },
     "filters": {
       "all": "See all",
-      "mariages": "Wedding Dresses",
-      "soirees": "Evening Gowns",
-      "couple": "Couple Outfits",
-      "traditionnels": "Traditional Wear",
+      "robes-mariage": "Wedding Dresses",
+      "robes-soirees": "Evening Gowns",
+      "tenu-couple": "Couple Outfits",
+      "tenue-traditionnels": "Traditional Wear",
       "etat-civil": "Civil Wedding",
-      "ville": "City Wear"
+      "tenue-ville": "City Wear"
     },
     "controls": {
       "results": "{count} models",

@@ -1,18 +1,23 @@
 'use client'
 
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter, usePathname } from '@/navigation'
 import { useLocale } from 'next-intl'
 import { motion } from 'framer-motion'
+import { useParams } from 'next/navigation'
 
 export default function LocaleSwitcher() {
   const router = useRouter()
   const pathname = usePathname()
   const locale = useLocale()
+  const params = useParams()
 
   const switchLocale = (newLocale: string) => {
     if (newLocale === locale) return
-    const newPath = pathname.replace(`/${locale}`, `/${newLocale}`)
-    router.push(newPath)
+    router.replace(
+      // @ts-ignore
+      { pathname, params },
+      { locale: newLocale }
+    )
   }
 
   return (

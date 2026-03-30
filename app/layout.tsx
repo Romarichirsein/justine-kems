@@ -1,15 +1,11 @@
-import { ReactNode } from 'react';
+import React from 'react'
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html>
-      <head>
-        <meta httpEquiv="refresh" content="0; url=/fr" />
-      </head>
+    <html suppressHydrationWarning>
       <body>
-        <script dangerouslySetInnerHTML={{ __html: `window.location.replace('/fr');` }} />
         {children}
       </body>
     </html>
-  );
+  )
 }

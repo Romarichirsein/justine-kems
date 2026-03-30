@@ -1,9 +1,9 @@
+import { setRequestLocale, getTranslations } from 'next-intl/server'
+import { Link } from '@/navigation'
+import Image from 'next/image'
+import { Metadata } from 'next'
 import { safeFetch, queries } from '@/sanity/client'
 import { RevealOnScroll } from '@/components/RevealOnScroll'
-import { setRequestLocale, getTranslations } from 'next-intl/server'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Metadata } from 'next'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
@@ -185,7 +185,7 @@ export default async function TemoignagesPage({ params }: { params: Promise<{ lo
                 {t('cta.btnOrder')}
               </a>
               <Link
-                href={`/${locale}`}
+                href="/"
                 className="inline-flex items-center gap-2 border border-jk-royal-gold/40 text-jk-cream hover:border-jk-royal-gold px-8 py-4 rounded-full font-semibold text-base transition-all hover:scale-105"
               >
                 {t('cta.btnHome')}

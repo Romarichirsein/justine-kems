@@ -1,0 +1,18 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Redirection HTTP vers HTTPS (Optionnel mais recommandé)
+  # RewriteCond %{HTTPS} off
+  # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Pour gérer les erreurs 404 générées par Next.js
+  ErrorDocument 404 /404.html
+
+  # Ne pas réécrire si le fichier ou dossier existe déjà
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+
+  # S'il manque le .html et qu'il n'a pas de slash final, essaie de rajouter .html en interne
+  RewriteCond %{REQUEST_URI} !\/$
+  RewriteRule ^(.*)$ $1.html [L]
+</IfModule>

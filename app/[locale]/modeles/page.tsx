@@ -1,8 +1,7 @@
 import { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { client, queries } from '@/sanity/client'
 import { CatalogClient } from '@/components/CatalogClient'
-
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
@@ -16,6 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function ModelesPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
+  setRequestLocale(locale)
   const t = await getTranslations({ locale, namespace: 'modeles' })
   const products = await client.fetch(queries.allProducts).catch(() => [])
 

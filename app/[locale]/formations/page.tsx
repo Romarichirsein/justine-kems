@@ -1,9 +1,10 @@
 import { Metadata } from 'next'
-import Image from 'next/image'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { WhatsAppFormHandler } from '@/components/WhatsAppFormHandler'
 import { RevealOnScroll } from '@/components/RevealOnScroll'
 import { FormationsClient } from '@/components/FormationsClient'
+import { queries, safeFetch } from '@/sanity/client'
+import { SanityImage } from '@/components/SanityImage'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
@@ -15,9 +16,18 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
+import { SanityImageInfo } from '@/types/sanity'
+
+export const revalidate = 0
+
 export default async function FormationsPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
+  setRequestLocale(locale)
   const t = await getTranslations({ locale, namespace: 'formations' })
+  
+  const heroImages = await safeFetch<SanityImageInfo[]>(queries.heroImages) ?? []
+  console.log('Hero Images for Formations fetched:', heroImages.length)
+  const profilImage = heroImages.find(img => img.title?.toLowerCase().includes('formation') || img.title?.toLowerCase().includes('atelier')) || heroImages[2] || heroImages[0]
 
   return (
     <div className="bg-jk-cream dark:bg-jk-dark-bg min-h-screen">
@@ -58,7 +68,12 @@ export default async function FormationsPage({ params }: { params: Promise<{ loc
             <div className="absolute top-0 right-0 w-96 h-96 bg-jk-royal-gold/5 rounded-full blur-3xl -z-[1]" />
 
             <div className="relative w-48 h-48 md:w-56 md:h-56 shrink-0 rounded-full overflow-hidden border-4 border-jk-royal-gold shadow-neon-gold">
-              <Image src="/images/justine-profil.jpg" alt={t('profil.name')} fill className="object-cover" />
+              <SanityImage
+                asset={profilImage?.image}
+                alt={t('profil.name')}
+                fill
+                className="w-full h-full"
+              />
               <div className="absolute inset-0 bg-gradient-to-b from-transparent to-jk-imperial-green/40" />
             </div>
 

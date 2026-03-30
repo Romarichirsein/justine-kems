@@ -1,9 +1,10 @@
 import { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
-import Image from 'next/image'
-import Link from 'next/link'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
+import { Link } from '@/navigation'
 import { RevealOnScroll } from '@/components/RevealOnScroll'
 import { AnimatedCounter } from '@/components/AnimatedCounter'
+import { queries, safeFetch } from '@/sanity/client'
+import { SanityImage } from '@/components/SanityImage'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
@@ -15,9 +16,24 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
+import { SanityImageInfo } from '@/types/sanity'
+
+export const revalidate = 0
+
 export default async function AboutPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
+  setRequestLocale(locale)
   const t = await getTranslations({ locale, namespace: 'aboutExt' })
+  
+  const heroImages = await safeFetch<SanityImageInfo[]>(queries.heroImages) ?? []
+  console.log('Hero Images fetched:', heroImages.length);
+  const productImages = await safeFetch<SanityImageInfo[]>(queries.productImages) ?? []
+  
+  const profilImage = heroImages.find(img => img.title?.toLowerCase().includes('portrait') || img.title?.toLowerCase().includes('justine') || img.title?.toLowerCase().includes('profil')) || heroImages[0]
+  const shopImage = heroImages.find(img => img.title?.toLowerCase().includes('atelier') || img.title?.toLowerCase().includes('shop')) || heroImages[1] || heroImages[0]
+  const storyImage1 = productImages[0]
+  const storyImage2 = productImages[1]
+  const storyImage3 = productImages[2]
 
   return (
     <div className="bg-jk-cream dark:bg-jk-dark-bg min-h-screen">
@@ -26,11 +42,11 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       <section className="relative min-h-[80vh] flex flex-col md:flex-row items-center bg-jk-imperial-green overflow-hidden pt-20">
         {/* Photo Portrait */}
         <div className="w-full md:w-[60%] h-[50vh] md:h-screen relative md:absolute md:left-0 md:top-0">
-          <Image
-            src="/images/justine-profil.jpg"
+          <SanityImage
+            asset={profilImage?.image}
             alt="Portrait Justine Kem créatrice de mode à Yaoundé"
             fill
-            className="object-cover object-center"
+            className="w-full h-full"
             priority
           />
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-jk-imperial-green/50 to-jk-imperial-green hidden md:block" />
@@ -89,11 +105,11 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
               </p>
             </div>
             <div className="rounded-2xl overflow-hidden shadow-2xl h-[400px] relative group">
-              <Image
-                src="/modeles/etat-civil/120.000.jpg"
+              <SanityImage
+                asset={storyImage1?.image}
                 alt="Atelier Justine Kem's"
                 fill
-                className="object-cover group-hover:scale-105 transition-transform duration-700"
+                className="w-full h-full group-hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-jk-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
@@ -111,11 +127,11 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
               </p>
             </div>
             <div className="rounded-2xl overflow-hidden shadow-2xl h-[400px] relative group md:order-1">
-              <Image
-                src="/modeles/tenue-traditionnels/150.000c.jpg"
+              <SanityImage
+                asset={storyImage2?.image}
                 alt="Tissus colorés et matières précieuses"
                 fill
-                className="object-cover group-hover:scale-105 transition-transform duration-700"
+                className="w-full h-full group-hover:scale-105 transition-transform duration-700"
               />
             </div>
           </div>
@@ -140,11 +156,11 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
               </ul>
             </div>
             <div className="rounded-2xl overflow-hidden shadow-2xl h-[400px] relative group">
-              <Image
-                src="/modeles/robes-soirees/250.000f.jpg"
+              <SanityImage
+                asset={storyImage3?.image}
                 alt="Engagement mode éthique Justine Kem's"
                 fill
-                className="object-cover group-hover:scale-105 transition-transform duration-700"
+                className="w-full h-full group-hover:scale-105 transition-transform duration-700"
               />
             </div>
           </div>
@@ -230,7 +246,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
               {t('cta.desc')}
             </p>
             <Link
-              href={`/${locale}/contact`}
+              href="/contact"
               className="inline-flex items-center gap-2 bg-jk-black text-white hover:bg-jk-imperial-green px-8 py-4 rounded-full font-semibold text-lg transition-all hover:scale-105 shadow-xl"
             >
               {t('cta.btn')}

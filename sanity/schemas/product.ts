@@ -21,12 +21,15 @@ export default {
       type: 'string',
       options: {
         list: [
-          { title: 'Haute Couture', value: 'haute-couture' },
-          { title: 'Prêt-à-porter', value: 'pret-a-porter' },
-          { title: 'Location', value: 'location' },
-          { title: 'Accessoires', value: 'accessoires' }
+          { title: 'Robes de Mariages', value: 'robes-mariage' },
+          { title: 'Robes de Soirées', value: 'robes-soirees' },
+          { title: 'Tenues de Couple', value: 'tenu-couple' },
+          { title: 'Tenues Traditionnelles', value: 'tenue-traditionnels' },
+          { title: 'État Civil', value: 'etat-civil' },
+          { title: 'Tenues de Ville', value: 'tenue-ville' }
         ]
-      }
+      },
+      validation: (Rule: any) => Rule.required()
     },
     {
       name: 'occasion',
@@ -36,8 +39,10 @@ export default {
       options: {
         list: [
           { title: 'Mariage', value: 'mariage' },
-          { title: 'Gala', value: 'gala' },
-          { title: 'Quotidien', value: 'quotidien' },
+          { title: 'Soirée / Gala', value: 'gala' },
+          { title: 'Cérémonie civile', value: 'civil' },
+          { title: 'Traditionnel', value: 'traditionnel' },
+          { title: 'Quotidien / Ville', value: 'quotidien' },
           { title: 'Professionnel', value: 'professionnel' }
         ]
       }

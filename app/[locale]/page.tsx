@@ -1,4 +1,5 @@
 import ScrollSequence from '@/components/ScrollSequence'
+import { SanityImage } from '@/components/SanityImage'
 import { safeFetch, queries } from '@/sanity/client'
 import { OrganizationSchema } from '@/components/StructuredData'
 import { CustomCursor } from '@/components/CustomCursor'
@@ -7,7 +8,8 @@ import { AnimatedCounter } from '@/components/AnimatedCounter'
 
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import Image from 'next/image'
-import Link from 'next/link'
+import { Link } from '@/navigation'
+import { SanityImageInfo } from '@/types/sanity'
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
@@ -15,6 +17,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   
   const featuredProducts = await safeFetch(queries.featuredProducts) ?? []
   const testimonials = await safeFetch(queries.testimonials) ?? []
+  const heroImages = await safeFetch<SanityImageInfo[]>(queries.heroImages) ?? []
+  const mainHero = heroImages[0]
   
   const tTrust = await getTranslations({ locale, namespace: 'trustBar' })
   const tHome = await getTranslations({ locale, namespace: 'homeExt' })
@@ -24,8 +28,28 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <OrganizationSchema />
       <CustomCursor />
       
-      {/* Hero Experience Scrollytelling 3D */}
-      <ScrollSequence frameCount={16} baseUrl="/motion/ezgif-frame-" />
+      {/* Hero Experience - Prioritize Sanity Hero if set, else keep ScrollSequence */}
+      {mainHero ? (
+        <section className="relative h-[80vh] w-full overflow-hidden">
+          <SanityImage 
+            asset={mainHero.image} 
+            alt={mainHero.alt || mainHero.title} 
+            fill 
+            priority 
+            className="w-full h-full"
+          />
+          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+            <div className="text-center text-white px-4">
+              <RevealOnScroll variant="blur-in">
+                <h1 className="text-5xl md:text-7xl font-serif mb-4">{mainHero.title}</h1>
+                {mainHero.caption && <p className="text-xl md:text-2xl font-light">{mainHero.caption}</p>}
+              </RevealOnScroll>
+            </div>
+          </div>
+        </section>
+      ) : (
+        <ScrollSequence frameCount={16} baseUrl="/motion/ezgif-frame-" />
+      )}
 
       {/* Trust Bar */}
       <section className="bg-jk-imperial-green text-jk-cream py-4 relative z-20 shadow-xl overflow-hidden">
@@ -105,7 +129,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                   {tHome('savoirFaire.hcDesc')}
                 </p>
                 <Link
-                  href={`/${locale}/services#haute-couture`}
+                  href="/services#haute-couture"
                   className="block text-center text-jk-royal-gold hover:text-jk-royal-gold-dark font-medium transition-colors"
                 >
                   {tHome('savoirFaire.learnMore')}
@@ -128,7 +152,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                   {tHome('savoirFaire.locDesc')}
                 </p>
                 <Link
-                  href={`/${locale}/services#location`}
+                  href="/services#location"
                   className="block text-center text-jk-royal-gold hover:text-jk-royal-gold-dark font-medium transition-colors"
                 >
                   {tHome('savoirFaire.learnMore')}
@@ -151,7 +175,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                   {tHome('savoirFaire.formDesc')}
                 </p>
                 <Link
-                  href={`/${locale}/formations`}
+                  href="/formations"
                   className="block text-center text-jk-royal-gold hover:text-jk-royal-gold-dark font-medium transition-colors"
                 >
                   {tHome('savoirFaire.learnMore')}
@@ -289,7 +313,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           <RevealOnScroll variant="fade-up" delay={0.3}>
             <div className="text-center mt-12">
               <Link
-                href={`/${locale}/temoignages`}
+                href="/temoignages"
                 className="inline-flex items-center gap-3 border border-jk-royal-gold text-jk-royal-gold hover:bg-jk-royal-gold hover:text-jk-black px-8 py-4 rounded-full font-semibold text-base transition-all hover:scale-105 group"
               >
                 <span>{tHome('testimonials.seeMore')}</span>
@@ -319,7 +343,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href={`/${locale}/contact`}
+                href="/contact"
                 className="inline-flex items-center gap-2 bg-jk-royal-gold text-jk-black hover:bg-jk-royal-gold-dark px-8 py-4 rounded-full font-semibold text-lg transition-all hover:scale-105 shadow-xl"
               >
                 {tHome('cta.btnAppointment')}
