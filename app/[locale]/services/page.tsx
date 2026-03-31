@@ -22,14 +22,15 @@ function ImageSlider({
   nextAriaLabel: string
 }) {
   const [current, setCurrent] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
 
   useEffect(() => {
-    if (images.length === 0) return
+    if (images.length <= 1 || isPaused) return
     const timer = setInterval(() => {
       setCurrent(prev => (prev + 1) % images.length)
     }, autoPlayMs)
     return () => clearInterval(timer)
-  }, [images.length, autoPlayMs])
+  }, [images.length, autoPlayMs, isPaused])
 
   const prev = () => setCurrent(i => (i - 1 + images.length) % images.length)
   const next = () => setCurrent(i => (i + 1) % images.length)
@@ -37,15 +38,25 @@ function ImageSlider({
   if (images.length === 0) return <div className="w-full h-full bg-gray-100 rounded-2xl animate-pulse" />
 
   return (
-    <div className="relative w-full h-full rounded-2xl overflow-hidden group">
+    <div 
+      className="relative w-full h-full rounded-2xl overflow-hidden group touch-pan-y"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
       <AnimatePresence mode="wait">
         <motion.div
           key={current}
-          initial={{ opacity: 0, scale: 1.04 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.96 }}
-          transition={{ duration: 0.65, ease: 'easeInOut' }}
-          className="absolute inset-0"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          onDragEnd={(_, info) => {
+            if (info.offset.x > 50) prev()
+            else if (info.offset.x < -50) next()
+          }}
+          className="absolute inset-0 cursor-grab active:cursor-grabbing"
         >
           {images[current].asset ? (
             <SanityImage
@@ -62,38 +73,38 @@ function ImageSlider({
             />
           )}
           {/* Gradient label */}
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-6 py-5">
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-6 py-8">
             <p className="text-white text-sm font-medium">{images[current].label}</p>
           </div>
         </motion.div>
       </AnimatePresence>
-      {/* ... (arrows and dots keep same logic) */}
 
-      {/* Arrows */}
+      {/* Arrows (Desktop only via hover) */}
       <button
         onClick={prev}
         aria-label={prevAriaLabel}
-        className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-jk-royal-gold hover:text-black"
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/30 backdrop-blur-sm text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-jk-royal-gold hover:text-black focus:opacity-100"
       >
-        ‹
+        <span className="text-2xl">‹</span>
       </button>
       <button
         onClick={next}
         aria-label={nextAriaLabel}
-        className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-jk-royal-gold hover:text-black"
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/30 backdrop-blur-sm text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-jk-royal-gold hover:text-black focus:opacity-100"
       >
-        ›
+        <span className="text-2xl">›</span>
       </button>
 
-      {/* Dots */}
-      <div className="absolute bottom-12 inset-x-0 flex justify-center gap-1.5 z-20">
+      {/* Indicators (Dots) */}
+      <div className="absolute bottom-4 inset-x-0 flex justify-center gap-2 z-20">
         {images.map((_, i) => (
           <button
             key={i}
             onClick={() => setCurrent(i)}
-            className={`w-2 h-2 rounded-full transition-all ${
-              i === current ? 'bg-jk-royal-gold w-5' : 'bg-white/50'
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              i === current ? 'bg-jk-royal-gold w-8' : 'bg-white/40 w-2 hover:bg-white/60'
             }`}
+            aria-label={`Slide ${i + 1}`}
           />
         ))}
       </div>
@@ -144,6 +155,7 @@ export default function ServicesPage() {
   }
 
   // ─── Sliders ──────────────────────────────────────────────────────────────
+  const hauteCoutureImages = getImages(['haute', 'couture', 'mesure', 'creation'], 'mariage')
   const soireeImages = getImages(['soiree', 'soirée'], 'soiree')
   const mariageImages = getImages(['mariage', 'wedding'], 'mariage')
   const villeImages = getImages(['ville', 'city'], 'ville')
@@ -233,28 +245,19 @@ export default function ServicesPage() {
               </button>
             </div>
 
-            {/* Images Haute Couture — grille 2 colonnes */}
-            <div className="order-1 lg:order-2 grid grid-cols-2 gap-4 h-[600px]">
-              {/* Grande image gauche — tenues de ville */}
-              <div className="relative rounded-2xl h-full col-span-1 shadow-lg overflow-hidden group">
-                {villeImages[0]?.asset ? (
-                  <SanityImage asset={villeImages[0].asset} alt="Tenue" fill className="w-full h-full group-hover:scale-110 transition-transform duration-700" />
-                ) : (
-                  <img src={villeImages[0]?.src} alt="Tenue" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                )}
-              </div>
-              {/* Colonne droite : image + bandeau */}
-              <div className="grid grid-rows-2 gap-4 h-full col-span-1">
-                <div className="relative rounded-2xl shadow-lg overflow-hidden group">
-                  {villeImages[1]?.asset ? (
-                    <SanityImage asset={villeImages[1].asset} alt="Création" fill className="w-full h-full group-hover:scale-110 transition-transform duration-700" />
-                  ) : (
-                    <div className="w-full h-full bg-jk-imperial-green/20" />
-                  )}
-                </div>
-                <div className="bg-jk-imperial-green rounded-2xl shadow-lg flex items-center justify-center p-6 text-center">
-                  <h3 className="text-2xl font-script text-jk-royal-gold">{t('hauteCouture.artisanat')}</h3>
-                </div>
+            {/* Slider Haute Couture */}
+            <div className="order-1 lg:order-2 h-[600px] relative">
+              <ImageSlider 
+                images={hauteCoutureImages} 
+                autoPlayMs={4000} 
+                prevAriaLabel={t('prev')} 
+                nextAriaLabel={t('next')} 
+              />
+              {/* Badge flottant */}
+              <div className="absolute top-6 right-6 bg-jk-imperial-green/90 backdrop-blur-md px-4 py-2 rounded-full border border-jk-royal-gold/30 z-30 hidden md:block">
+                <p className="text-jk-royal-gold font-script text-lg">
+                  {t('hauteCouture.artisanat')}
+                </p>
               </div>
             </div>
           </div>
