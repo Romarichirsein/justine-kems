@@ -27,48 +27,37 @@ const FOLDER_MAP = {
 };
 
 async function parsePriceAndGender(filename, defaultGender) {
-  // Remove extension
-  const name = path.parse(filename).name;
+  const name = path.parse(filename).name.toLowerCase().trim();
   
-  // Format Price: 150.000 -> 150000
   const findPrice = (str) => {
-    const match = str.match(/\d+(\.\d+)*/);
-    return match ? parseInt(match[0].replace(/\./g, ''), 10) : undefined;
+    const match = str.match(/[\d.]+/);
+    return match ? parseInt(match[0].replace(/\./g, ''), 10) : 0;
   };
 
-  // Rule: ignore a, c, v. Keep F or H.
-  const hasF = /[F]/i.test(name);
-  const hasH = /[H]/i.test(name);
+  // 1. Couple Regex
+  const coupleMatch = name.match(/([hf])?\s*([\d.]+)\s*[;!',\s]+\s*([hf])\s*([\d.]+)/);
+  if (coupleMatch) {
+    const t1 = coupleMatch[1] || 'h';
+    const p1 = findPrice(coupleMatch[2]);
+    const t2 = coupleMatch[3];
+    const p2 = findPrice(coupleMatch[4]);
 
-  // If "Tenu de couple", might have two prices
-  if (defaultGender === 'couple') {
-    // Look for patterns like f150.000 and h100.000
-    const parts = name.split(/[;!]/);
-    let priceF, priceH;
-    parts.forEach(p => {
-      const clean = p.trim().toLowerCase();
-      if (clean.includes('f')) priceF = findPrice(clean);
-      else if (clean.includes('h')) priceH = findPrice(clean);
-      else {
-        // Fallback or second price
-        const pr = findPrice(p);
-        if (pr && !priceF) priceF = pr;
-        else if (pr && !priceH) priceH = pr;
-      }
-    });
+    const priceH = t1 === 'h' ? p1 : p2;
+    const priceF = t1 === 'f' ? p1 : p2;
+    
     return { 
-      price: (priceF || 0) + (priceH || 0), 
+      price: priceH + priceF, 
       priceF, 
       priceH, 
       gender: 'couple' 
     };
   }
 
+  // 2. Single Regex
   const price = findPrice(name);
   let gender = defaultGender;
-  if (hasH && !hasF) gender = 'homme';
-  else if (hasF && !hasH) gender = 'femme';
-  else if (hasF && hasH) gender = 'couple';
+  if (name.includes('h')) gender = 'homme';
+  else if (name.includes('f')) gender = 'femme';
 
   return { price, gender };
 }

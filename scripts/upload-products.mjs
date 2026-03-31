@@ -85,44 +85,33 @@ const CATEGORY_MAP = {
 
 // ── Price Parser ───────────────────────────────────────────────
 function parsePrice(filename) {
-  const name = path.parse(filename).name
+  const name = path.parse(filename).name.toLowerCase().trim()
 
-  // Couple: h<price> ; f<price>
-  const coupleRegex = /h\s*(\d+[\d.]*)\s*[;!',]+\s*f\s*(\d+[\d.]*)/i
-  const coupleMatch = name.match(coupleRegex)
+  // 1. Couple Regex (any order)
+  const coupleMatch = name.match(/([hf])?\s*([\d.]+)\s*[;!',\s]+\s*([hf])\s*([\d.]+)/i)
   if (coupleMatch) {
-    return { isCouple: true, priceH: parsePriceValue(coupleMatch[1]), priceF: parsePriceValue(coupleMatch[2]) }
+    const t1 = coupleMatch[1] || 'h'
+    const p1 = parsePriceValue(coupleMatch[2])
+    const t2 = coupleMatch[3]
+    const p2 = parsePriceValue(coupleMatch[4])
+
+    const priceH = t1 === 'h' ? p1 : p2
+    const priceF = t1 === 'f' ? p1 : p2
+    return { isCouple: true, priceH, priceF }
   }
 
-  // Couple inverted: f<price> ; h<price>
-  const coupleInvRegex = /f\s*(\d+[\d.]*)\s*[;!',]+\s*h\s*(\d+[\d.]*)/i
-  const coupleInvMatch = name.match(coupleInvRegex)
-  if (coupleInvMatch) {
-    return { isCouple: true, priceF: parsePriceValue(coupleInvMatch[1]), priceH: parsePriceValue(coupleInvMatch[2]) }
-  }
-
-  // Couple alt: <price>; f<price>
-  const coupleAltRegex = /^(\d+[\d.]*)\s*[;!',]+\s*f\s*(\d+[\d.]*)/i
-  const coupleAltMatch = name.match(coupleAltRegex)
-  if (coupleAltMatch) {
-    return { isCouple: true, priceH: parsePriceValue(coupleAltMatch[1]), priceF: parsePriceValue(coupleAltMatch[2]) }
-  }
-
-  // Single price
-  const singleRegex = /^(\d+[\d.]*)/
-  const singleMatch = name.match(singleRegex)
-  if (singleMatch) {
-    return { isCouple: false, price: parsePriceValue(singleMatch[1]) }
+  // 2. Single Regex
+  const numberMatch = name.match(/([\d.]+)/)
+  if (numberMatch) {
+    const price = parsePriceValue(numberMatch[0])
+    return { isCouple: false, price }
   }
 
   return { isCouple: false, price: 0 }
 }
 
 function parsePriceValue(str) {
-  const cleaned = str.replace(/\.$/g, '')
-  if (/^\d+\.\d{3}$/.test(cleaned)) return parseInt(cleaned.replace('.', ''), 10)
-  if (/^\d+(\.\d{3})+$/.test(cleaned)) return parseInt(cleaned.replace(/\./g, ''), 10)
-  return parseInt(cleaned, 10) || 0
+  return parseInt(str.replace(/\./g, ''), 10) || 0
 }
 
 // ── Slug Generator ─────────────────────────────────────────────

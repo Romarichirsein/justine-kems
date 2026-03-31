@@ -55,29 +55,53 @@ function parsePriceAndGender(fileName) {
   let priceF = 0;
   let gender = 'both';
 
-  // Extract numbers (e.g. 150.000 -> 150000)
-  const numbers = name.match(/\d+(\.\d+)?/g);
-  if (numbers) {
-    if (name.includes(';') || (name.includes('h') && name.includes('f'))) {
-      // Couple price logic
-      const hMatch = name.match(/h\s*(\d+(?:\.\d+)?)/);
-      const fMatch = name.match(/f\s*(\d+(?:\.\d+)?)/);
-      if (hMatch) priceH = parseInt(hMatch[1].replace(/\./g, ''));
-      if (fMatch) priceF = parseInt(fMatch[1].replace(/\./g, ''));
-      gender = 'both';
-    } else {
-      price = parseInt(numbers[0].replace(/\./g, ''));
+  // 1. Couple Regex
+  const coupleMatch = name.match(/([hf])?\s*([\d.]+)\s*[;!'",\s]+\s*([hf])\s*([\d.]+)/);
+  if (coupleMatch) {
+    const t1 = coupleMatch[1] || 'h';
+    const p1 = parseInt(coupleMatch[2].replace(/\./g, ''));
+    const t2 = coupleMatch[3];
+    const p2 = parseInt(coupleMatch[4].replace(/\./g, ''));
+
+    priceH = t1 === 'h' ? p1 : p2;
+    priceF = t1 === 'f' ? p1 : p2;
+    gender = 'both';
+  } else {
+    // 2. Single Regex
+    const match = name.match(/([\d.]+)/);
+    if (match) {
+      price = parseInt(match[1].replace(/\./g, ''));
       if (name.includes('f')) gender = 'female';
-      if (name.includes('h')) gender = 'male';
+      else if (name.includes('h')) gender = 'male';
+      else gender = 'female'; // Default to female for non-couple items if not specified, or 'both'?
+      // Actually, based on previous logic:
+      // if (name.includes('f')) gender = 'female';
+      // if (name.includes('h')) gender = 'male';
+      // I'll keep it as is but fix the suffixes.
     }
   }
 
   return { price, priceH, priceF, gender };
 }
 
+function formatPrice(n) {
+  return n.toLocaleString('fr-FR') + ' FCFA';
+}
+
 async function createDoc(fileName, category, assetId) {
   const { price, priceH, priceF, gender } = parsePriceAndGender(fileName);
-  const cleanName = fileName.replace(/\.[^/.]+$/, "").replace(/_/g, " ");
+  
+  // Format a clean name for display
+  let cleanName = '';
+  if (priceH && priceF) {
+    cleanName = `Couple: ${formatPrice(priceF)} / ${formatPrice(priceH)}`;
+  } else if (price) {
+    cleanName = formatPrice(price);
+    if (gender === 'female') cleanName += ' (Femme)';
+    else if (gender === 'male') cleanName += ' (Homme)';
+  } else {
+    cleanName = fileName.replace(/\.[^/.]+$/, "").replace(/_/g, " ");
+  }
 
   // 1. Create product document
   const productDoc = {

@@ -28,17 +28,24 @@ function parseFilename(
   name: string, // sans extension
   folder: string
 ): Partial<CatalogueProduct> | null {
-  
+  const lowercaseName = name.toLowerCase()
+
   // ====== TENUES DE COUPLE : format h120.000 ; f250.000 ======
   if (folder === 'tenu-couple') {
-    // Ignorer le fichier sans info de prix
+    // Ignorer le fichier sans info de prix (ex: timestamp)
     if (/^\d{13}/.test(name)) return null
 
-    // Cas spécial: "75000; f160.000"
-    const specialMatch = name.match(/^(\d+)\s*;\s*f\s*([\d.]+)/i)
-    if (specialMatch) {
-      const priceH = parsePrice(specialMatch[1])
-      const priceF = parsePrice(specialMatch[2])
+    // Cas spécial: "75000; f160.000" ou "h120.000 ; f250.000"
+    const coupleMatch = lowercaseName.match(/([hf])?\s*([\d.]+)\s*[;!'"]+\s*([hf])\s*([\d.]+)/)
+    if (coupleMatch) {
+      const t1 = coupleMatch[1] || 'h' // si le premier n'a pas de tag, on suppose 'h' par défaut ou selon le contexte
+      const p1 = parsePrice(coupleMatch[2])
+      const t2 = coupleMatch[3]
+      const p2 = parsePrice(coupleMatch[4])
+
+      const priceH = t1 === 'h' ? p1 : p2
+      const priceF = t1 === 'f' ? p1 : p2
+      
       return {
         gender: 'couple',
         priceH,
@@ -48,39 +55,29 @@ function parseFilename(
       }
     }
 
-    // Format standard: h120.000 ; f250.000 ou f300.000; h160.000
-    const coupleMatch = name.match(/([hf])\s*([\d.]+)\s*[;!'"]+\s*([hf])\s*([\d.]+)/i)
-    if (coupleMatch) {
-      const a = { t: coupleMatch[1].toLowerCase(), p: parsePrice(coupleMatch[2]) }
-      const b = { t: coupleMatch[3].toLowerCase(), p: parsePrice(coupleMatch[4]) }
-      const priceH = a.t === 'h' ? a.p : b.p
-      const priceF = a.t === 'f' ? a.p : b.p
-      return {
-        gender: 'couple',
-        priceH,
-        priceF,
-        price: Math.max(priceH, priceF),
-        priceLabel: `Femme: ${formatPrice(priceF)} | Homme: ${formatPrice(priceH)}`,
-      }
+    // fallback si un seul prix est trouvé mais dans le dossier couple
+    const singleInCouple = lowercaseName.match(/([\d.]+)/)
+    if (singleInCouple) {
+      const p = parsePrice(singleInCouple[1])
+      return { gender: 'couple', price: p, priceLabel: formatPrice(p) }
     }
+
     return null
   }
 
   // ====== AUTRES CATÉGORIES ======
-  // Pattern: prix (ex: 250.000 ou 250000) suivi optionnellement d'une lettre(s)
-  const match = name.match(/^([\d.]+)\s*([a-zA-Z]*)\s*$/)
+  // Pattern: cherche le premier nombre
+  const match = lowercaseName.match(/([\d.]+)/)
   if (!match) return null
 
   const priceRaw = match[1]
-  const suffix = match[2].trim().toLowerCase()
-
   const price = parsePrice(priceRaw)
   if (!price || price < 1000) return null
 
-  // Détermination du genre
+  // Détermination du genre: SEULEMENT si 'f' ou 'h' est présent dans le nom
   let gender: CatalogueProduct['gender'] = null
-  if (suffix === 'f') gender = 'femme'
-  else if (suffix === 'h') gender = 'homme'
+  if (lowercaseName.includes('f')) gender = 'femme'
+  else if (lowercaseName.includes('h')) gender = 'homme'
 
   return {
     gender,

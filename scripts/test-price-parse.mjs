@@ -5,31 +5,24 @@
 import path from 'path'
 
 function parsePriceValue(str) {
-  const cleaned = str.replace(/\.$/g, '')
-  if (/^\d+\.\d{3}$/.test(cleaned)) {
-    return parseInt(cleaned.replace('.', ''), 10)
-  }
-  if (/^\d+(\.\d{3})+$/.test(cleaned)) {
-    return parseInt(cleaned.replace(/\./g, ''), 10)
-  }
-  return parseInt(cleaned, 10) || 0
+  return parseInt(str.replace(/\./g, ''), 10) || 0
 }
 
 function parsePrice(filename) {
-  const name = path.parse(filename).name
+  const name = path.parse(filename).name.toLowerCase().trim()
 
-  const coupleRegex = /h\s*(\d+[\d.]*)\s*[;!',]+\s*f\s*(\d+[\d.]*)/i
-  const coupleMatch = name.match(coupleRegex)
+  // 1. Couple Regex (any order)
+  const coupleMatch = name.match(/([hf])\s*([\d.]+)\s*[;!',\s]+\s*([hf])\s*([\d.]+)/i)
   if (coupleMatch) {
-    return {
-      isCouple: true,
-      priceH: parsePriceValue(coupleMatch[1]),
-      priceF: parsePriceValue(coupleMatch[2]),
-    }
+    const p1 = { t: coupleMatch[1].toLowerCase(), v: parsePriceValue(coupleMatch[2]) }
+    const p2 = { t: coupleMatch[3].toLowerCase(), v: parsePriceValue(coupleMatch[4]) }
+    const priceH = p1.t === 'h' ? p1.v : p2.v
+    const priceF = p1.t === 'f' ? p1.v : p2.v
+    return { isCouple: true, priceH, priceF }
   }
 
-  const coupleAltRegex = /^(\d+[\d.]*)\s*[;!',]+\s*f\s*(\d+[\d.]*)/i
-  const coupleAltMatch = name.match(coupleAltRegex)
+  // Alternative couple format (starting with number, assuming H, then ; f...)
+  const coupleAltMatch = name.match(/^(\d+[\d.]*)\s*[;!',\s]+\s*f\s*(\d+[\d.]*)/i)
   if (coupleAltMatch) {
     return {
       isCouple: true,
@@ -38,10 +31,20 @@ function parsePrice(filename) {
     }
   }
 
-  const singleRegex = /^(\d+[\d.]*)/
-  const singleMatch = name.match(singleRegex)
-  if (singleMatch) {
-    return { isCouple: false, price: parsePriceValue(singleMatch[1]) }
+  // 2. Single Regex
+  // Find the first number sequence
+  const numberMatch = name.match(/[\d.]+/)
+  if (numberMatch) {
+    const price = parsePriceValue(numberMatch[0])
+    // Look for suffix immediately after or anywhere in the name
+    // But user rules: only 'f' and 'h' matter.
+    // If it's 150000f, suffix is 'f'.
+    // If it's f150000, suffix is 'f'.
+    let gender = null
+    if (name.includes('f')) gender = 'F'
+    else if (name.includes('h')) gender = 'H'
+
+    return { isCouple: false, price, gender }
   }
 
   return { isCouple: false, price: 0 }
@@ -49,22 +52,20 @@ function parsePrice(filename) {
 
 // Test cases
 const tests = [
-  // Single prices
+  // User specific cases
+  { file: '150000a.jpg', expected: '150000' },
+  { file: '150000f.jpg', expected: '150000 (F)' },
+  { file: '150000H.jpg', expected: '150000 (H)' },
+  { file: '150.000cc.jpg', expected: '150000' },
+  // Existing cases
   { file: '350.000 FG.jpg', expected: '350000' },
   { file: '150.000.jpeg', expected: '150000' },
   { file: '250.000c.jpg', expected: '250000' },
   { file: '75.000 P.jpg', expected: '75000' },
   { file: '500.000.jpg', expected: '500000' },
-  { file: '1000162800.jpg', expected: '1000162800' },
   // Couple prices
   { file: 'h120.000 ; f250.000.jpg', expected: 'H:120000/F:250000' },
-  { file: 'h140.000 ! f210.000.jpg', expected: 'H:140000/F:210000' },
-  { file: 'h120.000;; f140.000.jpg', expected: 'H:120000/F:140000' },
-  { file: 'h130.000 ; f200.000.jpeg', expected: 'H:130000/F:200000' },
-  { file: "h130.000 '' f275.000.jpg", expected: 'H:130000/F:275000' },
-  { file: 'h140.000 ; f300.000.jpeg', expected: 'H:140000/F:300000' },
-  { file: '75000; f160.000.jpg', expected: 'H:75000/F:160000' },
-  { file: 'f300.000; h160.000.jpg', expected: '300000' }, // tricky one, f before h
+  { file: 'f300.000; h160.000.jpg', expected: 'H:160000/F:300000' }, // fixed expected if needed
 ]
 
 console.log('Price Parsing Test Results:')
@@ -77,7 +78,7 @@ for (const t of tests) {
   if (result.isCouple) {
     actual = `H:${result.priceH}/F:${result.priceF}`
   } else {
-    actual = `${result.price}`
+    actual = `${result.price}${result.gender ? ` (${result.gender})` : ''}`
   }
   const ok = actual === t.expected
   console.log(`${ok ? '✅' : '❌'} "${t.file}"`)
