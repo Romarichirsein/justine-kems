@@ -139,7 +139,7 @@ export default function ServicesPage() {
     
     // Fallback if no images found in Sanity
     return [
-      { asset: null, label: 'Justine Kem\'s Creation', src: `/images/placeholders/${placeholder}.png` }
+      { asset: null, label: 'Justine Kem\'s Creation', src: `/images/placeholders/${placeholder}.jpg` }
     ]
   }
 
@@ -172,7 +172,7 @@ export default function ServicesPage() {
           ) : (
             <div className="relative w-full h-full">
               <img 
-                src="/images/placeholders/mariage.png" 
+                src="/images/placeholders/mariage.jpg" 
                 alt="Justine Kem's Atelier" 
                 className="w-full h-full object-cover"
               />
