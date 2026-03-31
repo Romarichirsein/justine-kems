@@ -122,18 +122,25 @@ export default function ServicesPage() {
   })
 
   // Helper to get images from Sanity
-  const getImages = (categoryKeywords: string[]) => {
-    return sanityImages
+  const getImages = (categoryKeywords: string[], placeholder: string) => {
+    const fromSanity = sanityImages
       .filter(img => categoryKeywords.some(k => img.title?.toLowerCase().includes(k.toLowerCase())))
       .map(img => ({ asset: img.image, label: img.title || t('soiree.label', { price: '—' }), src: '' }))
+    
+    if (fromSanity.length > 0) return fromSanity
+    
+    // Fallback to placeholders if no results from Sanity
+    return [
+      { asset: null, label: 'Justine Kem\'s Creation', src: `/images/placeholders/${placeholder}.png` }
+    ]
   }
 
   // ─── Sliders ──────────────────────────────────────────────────────────────
-  const soireeImages = getImages(['soiree', 'soirée'])
-  const mariageImages = getImages(['mariage', 'wedding'])
-  const villeImages = getImages(['ville', 'city'])
-  const traditionnelImages = getImages(['tradition', 'traditionnel'])
-  const coupleImages = getImages(['couple'])
+  const soireeImages = getImages(['soiree', 'soirée'], 'soiree')
+  const mariageImages = getImages(['mariage', 'wedding'], 'mariage')
+  const villeImages = getImages(['ville', 'city'], 'ville')
+  const traditionnelImages = getImages(['tradition', 'traditionnel'], 'traditionnel')
+  const coupleImages = getImages(['couple'], 'couple')
 
   const openForm = (type: 'order' | 'rental' | 'training', title: string) => {
     setFormConfig({ type, title })
@@ -155,7 +162,13 @@ export default function ServicesPage() {
               priority
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-jk-imperial-green to-[#061614]" />
+            <div className="relative w-full h-full">
+              <img 
+                src="/images/placeholders/mariage.png" 
+                alt="Justine Kem's Atelier" 
+                className="w-full h-full object-cover"
+              />
+            </div>
           )}
           <div className="absolute inset-0 bg-jk-imperial-green/60" />
         </div>
