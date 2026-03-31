@@ -124,12 +124,20 @@ export default function ServicesPage() {
   // Helper to get images from Sanity
   const getImages = (categoryKeywords: string[], placeholder: string) => {
     const fromSanity = sanityImages
-      .filter(img => categoryKeywords.some(k => img.title?.toLowerCase().includes(k.toLowerCase())))
-      .map(img => ({ asset: img.image, label: img.title || t('soiree.label', { price: '—' }), src: '' }))
+      .filter(img => 
+        categoryKeywords.some(k => img.title?.toLowerCase().includes(k.toLowerCase())) &&
+        img.image?.asset // Only include if there is an actual image asset
+      )
+      .map(img => ({ 
+        asset: img.image, 
+        label: img.title || t('soiree.label', { price: '—' }), 
+        src: '' 
+      }))
     
+    // If we have real images from Sanity, use them.
     if (fromSanity.length > 0) return fromSanity
     
-    // Fallback to placeholders if no results from Sanity
+    // Fallback if no images found in Sanity
     return [
       { asset: null, label: 'Justine Kem\'s Creation', src: `/images/placeholders/${placeholder}.png` }
     ]
