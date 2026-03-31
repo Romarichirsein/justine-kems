@@ -32,30 +32,6 @@
     "buttonText": "Discutons sur WhatsApp",
     "defaultMessage": "Bonjour Justine, je souhaite en savoir plus sur vos créations."
   },
-  "catalogue": {
-    "title": "Catalogue de Créations",
-    "subtitle": "Découvrez nos collections exclusives",
-    "filterCategory": "Catégories",
-    "filterOccasion": "Occasions",
-    "categories": {
-      "all": "Toutes",
-      "robes-mariage": "Robes de Mariages",
-      "robes-soirees": "Robes de Soirées",
-      "tenu-couple": "Tenues de Couple",
-      "tenue-traditionnels": "Tenues Traditionnelles",
-      "etat-civil": "État Civil",
-      "tenue-ville": "Tenues de Ville"
-    },
-    "occasions": {
-      "all": "Toutes",
-      "mariage": "Mariage",
-      "gala": "Gala",
-      "quotidien": "Quotidien",
-      "professionnel": "Professionnel"
-    },
-    "onQuote": "Sur devis",
-    "noResults": "Aucun résultat."
-  },
   "about": {
     "heroTitle": "Notre Histoire",
     "heroSubtitle": "Une passion transmise en art de vivre",
@@ -621,6 +597,24 @@
       "title": "Notre Catalogue",
       "subtitle": "{count} créations artisanales — Mode camerounaise d'exception"
     },
+    "categories": {
+      "all": "Toutes",
+      "robes-mariage": "Robes de Mariages",
+      "robes-soirees": "Robes de Soirées",
+      "tenu-couple": "Tenues de Couple",
+      "tenue-traditionnels": "Tenues Traditionnelles",
+      "etat-civil": "État Civil",
+      "tenue-ville": "Tenues de Ville"
+    },
+    "occasions": {
+      "all": "Toutes",
+      "mariage": "Mariage",
+      "gala": "Gala",
+      "quotidien": "Quotidien",
+      "professionnel": "Professionnel"
+    },
+    "onQuote": "Sur devis",
+    "noResults": "Aucun résultat.",
     "filters": {
       "category": "Catégorie",
       "gender": "Pour :",

@@ -32,30 +32,6 @@
     "buttonText": "Chat on WhatsApp",
     "defaultMessage": "Hello Justine, I would like to know more about your creations."
   },
-  "catalogue": {
-    "title": "Creations Catalogue",
-    "subtitle": "Discover our exclusive collections",
-    "filterCategory": "Categories",
-    "filterOccasion": "Occasions",
-    "categories": {
-      "all": "All",
-      "robes-mariage": "Wedding Dresses",
-      "robes-soirees": "Evening Gowns",
-      "tenu-couple": "Couple Outfits",
-      "tenue-traditionnels": "Traditional Wear",
-      "etat-civil": "Civil Ceremonies",
-      "tenue-ville": "City Wear"
-    },
-    "occasions": {
-      "all": "All",
-      "mariage": "Wedding",
-      "gala": "Gala",
-      "quotidien": "Daily",
-      "professionnel": "Professional"
-    },
-    "onQuote": "On quote",
-    "noResults": "No results found."
-  },
   "about": {
     "heroTitle": "Our Story",
     "heroSubtitle": "A passion transformed into an art of living",
@@ -621,6 +597,24 @@
       "title": "Our Catalog",
       "subtitle": "{count} artisanal creations — Exceptional Cameroonian fashion"
     },
+    "categories": {
+      "all": "All",
+      "robes-mariage": "Wedding Dresses",
+      "robes-soirees": "Evening Gowns",
+      "tenu-couple": "Couple Outfits",
+      "tenue-traditionnels": "Traditional Wear",
+      "etat-civil": "Civil Ceremonies",
+      "tenue-ville": "City Wear"
+    },
+    "occasions": {
+      "all": "All",
+      "mariage": "Wedding",
+      "gala": "Gala",
+      "quotidien": "Daily",
+      "professionnel": "Professional"
+    },
+    "onQuote": "On quote",
+    "noResults": "No results found.",
     "filters": {
       "category": "Category",
       "gender": "For:",
