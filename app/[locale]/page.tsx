@@ -6,10 +6,27 @@ import { CustomCursor } from '@/components/CustomCursor'
 import { RevealOnScroll } from '@/components/RevealOnScroll'
 import { AnimatedCounter } from '@/components/AnimatedCounter'
 
+import { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import Image from 'next/image'
 import { Link } from '@/navigation'
 import { SanityImageInfo } from '@/types/sanity'
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'metadata.home' })
+
+  return {
+    title: t('title'),
+    description: t('description'),
+    alternates: {
+      languages: {
+        'fr': '/fr',
+        'en': '/en',
+      },
+    },
+  }
+}
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params

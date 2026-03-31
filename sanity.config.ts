@@ -1,15 +1,15 @@
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { visionTool } from '@sanity/vision'
+import { media } from 'sanity-plugin-media'
 
 // Schemas
-import product from './sanity/schemas/product'
-import post from './sanity/schemas/post'
+import modele from './sanity/schemas/modele'
+import catalogue from './sanity/schemas/catalogue'
+import temoignage from './sanity/schemas/temoignage'
+import article from './sanity/schemas/article'
 import formation from './sanity/schemas/formation'
-import testimonial from './sanity/schemas/testimonial'
-import heroImage from './sanity/schemas/heroImage'
-import productImage from './sanity/schemas/productImage'
-import gallery from './sanity/schemas/gallery'
+import parametres from './sanity/schemas/parametres'
 
 export default defineConfig({
   name: 'justine-kems',
@@ -19,11 +19,50 @@ export default defineConfig({
   dataset: 'production',
 
   plugins: [
-    structureTool(),
+    structureTool({
+      structure: (S) =>
+        S.list()
+          .title('Contenu du site')
+          .items([
+            S.listItem()
+              .title('Modèles')
+              .icon(() => '📸')
+              .child(S.documentTypeList('modele').title('Modèles')),
+            S.listItem()
+              .title('Catalogue')
+              .icon(() => '🛍️')
+              .child(S.documentTypeList('catalogue').title('Catalogue')),
+            S.listItem()
+              .title('Témoignages')
+              .icon(() => '💬')
+              .child(S.documentTypeList('temoignage').title('Témoignages')),
+            S.listItem()
+              .title('Blog')
+              .icon(() => '📝')
+              .child(S.documentTypeList('article').title('Articles du Blog')),
+            S.listItem()
+              .title('Formations')
+              .icon(() => '🎓')
+              .child(S.documentTypeList('formation').title('Formations')),
+            S.divider(),
+            S.listItem()
+              .title('Paramètres du site')
+              .icon(() => '⚙️')
+              .child(
+                S.document()
+                  .schemaType('parametres')
+                  .documentId('parametres')
+              ),
+            ...S.documentTypeListItems().filter(
+              (listItem) => !['modele', 'catalogue', 'temoignage', 'article', 'formation', 'parametres'].includes(listItem.getId() as string)
+            )
+          ])
+    }),
     visionTool(),
+    media(),
   ],
 
   schema: {
-    types: [product, post, formation, testimonial, heroImage, productImage, gallery],
+    types: [modele, catalogue, temoignage, article, formation, parametres],
   },
 })

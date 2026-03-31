@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { Montserrat } from 'next/font/google'
 import { locales } from '@/i18n/request'
 import { Providers } from '../providers'
 import { getMessages, setRequestLocale, getTranslations } from 'next-intl/server'
@@ -6,7 +7,13 @@ import '../globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import WhatsAppFloating from '@/components/WhatsAppFloating'
-import { OrganizationSchema } from '@/components/StructuredData'
+import { OrganizationSchema, WebSiteSchema } from '@/components/StructuredData'
+
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-montserrat',
+})
 
 type Props = {
   params: Promise<{ locale: string }>
@@ -16,6 +23,8 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'metadata' })
+
+  const baseUrl = 'https://justinekems.com'
 
   return {
     title: {
@@ -37,7 +46,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     authors: [{ name: 'Justine Kem\'s' }],
     creator: 'Justine Kem\'s',
     publisher: 'Justine Kem\'s',
-    metadataBase: new URL('https://justinekems.com'),
+    metadataBase: new URL(baseUrl),
     alternates: {
       canonical: '/',
       languages: {
@@ -48,7 +57,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       type: 'website',
       locale: locale === 'fr' ? 'fr_CM' : 'en_US',
-      url: 'https://justinekems.com',
+      url: baseUrl,
       siteName: 'Justine Kem\'s',
       title: t('title'),
       description: t('description'),
@@ -66,6 +75,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: t('title'),
       description: t('description'),
       images: ['/og-image.jpg'],
+      creator: '@justinekems',
     },
     robots: {
       index: true,
@@ -101,9 +111,10 @@ export default async function RootLayout({
   const messages = await getMessages({ locale })
 
   return (
-    <>
-      <OrganizationSchema />
-      <div className="font-sans antialiased text-jk-text-dark bg-jk-cream dark:bg-jk-dark-bg dark:text-jk-dark-text min-h-screen flex flex-col">
+    <html lang={locale} className={montserrat.variable}>
+      <body className="font-sans antialiased text-jk-text-dark bg-jk-cream dark:bg-jk-dark-bg dark:text-jk-dark-text min-h-screen flex flex-col">
+        <WebSiteSchema />
+        <OrganizationSchema />
         <Providers locale={locale} messages={messages}>
           <Navbar />
           <main className="flex-grow">
@@ -112,7 +123,7 @@ export default async function RootLayout({
           <WhatsAppFloating />
           <Footer />
         </Providers>
-      </div>
-    </>
+      </body>
+    </html>
   )
 }

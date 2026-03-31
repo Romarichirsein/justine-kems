@@ -75,7 +75,6 @@ export default function Footer() {
                 <svg className="w-5 h-5 mt-0.5 shrink-0 text-jk-royal-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <div>
                   <p className="text-sm">{tFooter('hoursWeek')}</p>
-                  <p className="text-xs text-jk-royal-gold mt-1 font-semibold">{tFooter('appointmentOnly')}</p>
                 </div>
               </li>
             </ul>
@@ -106,7 +105,7 @@ export default function Footer() {
         {/* Footer Bottom */}
         <div className="pt-8 border-t border-jk-royal-gold/20 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-400">
           <p>{tFooter('copyright', { year: new Date().getFullYear() })}</p>
-          <p className="text-gray-500 italic">{tFooter('poweredBy')} <span className="text-jk-royal-gold font-semibold uppercase tracking-widest px-1">NHR_Ethical_Hackers</span></p>
+          <p className="text-gray-500 italic">{tFooter('poweredBy')} <span className="text-jk-royal-gold font-semibold uppercase tracking-widest px-1">Nhr Digital Agency</span></p>
           <div className="flex gap-4">
             <Link href={`/${locale}/mentions-legales`} className="hover:text-jk-royal-gold transition-colors">{tFooter('legal')}</Link>
           </div>

@@ -25,12 +25,12 @@ export default {
       title: 'Niveau',
       type: 'string',
       options: {
-        list: ['Débutant', 'Initiation', 'Intermédiaire', 'Avancé', 'Expert']
+        list: ['Débutant', 'Intermédiaire', 'Avancé']
       }
     },
     {
       name: 'price',
-      title: 'Tarif (FCFA)',
+      title: 'Prix (FCFA)',
       type: 'number'
     },
     {
@@ -39,24 +39,21 @@ export default {
       type: 'text'
     },
     {
-      name: 'modules',
-      title: 'Modules',
-      type: 'array',
-      of: [
-        {
-          type: 'object',
-          fields: [
-            { name: 'title', type: 'string', title: 'Titre du module' },
-            { name: 'content', type: 'text', title: 'Contenu' }
-          ]
-        }
-      ]
+      name: 'image',
+      title: 'Image',
+      type: 'image',
+      options: { hotspot: true }
     },
     {
-      name: 'objectives',
-      title: 'Objectifs',
-      type: 'array',
-      of: [{ type: 'string' }]
+      name: 'registrationLink',
+      title: "Lien d'inscription",
+      type: 'url'
+    },
+    {
+      name: 'isAvailable',
+      title: 'Disponible',
+      type: 'boolean',
+      initialValue: true
     }
   ]
 }

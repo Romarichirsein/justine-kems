@@ -8,11 +8,17 @@ import { SanityImage } from '@/components/SanityImage'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'aboutExt' })
+  const t = await getTranslations({ locale, namespace: 'metadata.about' })
 
   return {
-    title: t('hero.title').replace('\n', ' '),
-    description: t('hero.subtitle'),
+    title: t('title'),
+    description: t('description'),
+    alternates: {
+      languages: {
+        'fr': '/fr/a-propos',
+        'en': '/en/a-propos',
+      },
+    },
   }
 }
 

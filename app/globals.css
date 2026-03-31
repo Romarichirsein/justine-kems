@@ -37,7 +37,7 @@ html {
 body {
   color: var(--jk-text-dark);
   background: var(--jk-cream);
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--font-montserrat), sans-serif;
   transition: background-color var(--transition-slow), color var(--transition-base);
   overflow-x: hidden;
 }
