@@ -354,8 +354,20 @@
     "legal": "Legal notice"
   },
   "metadata": {
-    "title": "Justine Kem's - Bespoke Haute Couture in Yaoundé",
-    "description": "Haute couture house in Yaoundé, Cameroon. Bespoke creations, luxury garment rentals and professional sewing training."
+    "title": "Justine Kem's - Haute Couture",
+    "description": "Discover Justine Kem's, a haute couture house in Yaoundé. Bespoke creations, luxury rentals, and fashion design training. Refined African elegance.",
+    "home": {
+      "title": "Justine Kem's | Bespoke Haute Couture Atelier in Yaoundé",
+      "description": "Welcome to Justine Kem's in Yaoundé. Elevate your elegance with our bespoke creations, bridal gowns, and prestige outfits. Excellence and craftsmanship."
+    },
+    "services": {
+      "title": "Haute Couture, Rental & Training Services | Justine Kem's",
+      "description": "Explore our exceptional services in Yaoundé: bespoke tailoring, evening gown rentals, and certifying sewing training. Book your consultation today."
+    },
+    "about": {
+      "title": "Our Story & Vision | Justine Kem's Haute Couture Yaoundé",
+      "description": "Discover the journey of Justine Kem, a passionate designer in Yaoundé. A fusion of African tradition and contemporary luxury for exceptional creations."
+    }
   },
   "homeExt": {
     "stats": {

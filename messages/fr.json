@@ -354,8 +354,20 @@
     "legal": "Mentions légales"
   },
   "metadata": {
-    "title": "Justine Kem's - Haute Couture sur Mesure à Yaoundé",
-    "description": "Maison de haute couture à Yaoundé, Cameroun. Créations sur mesure, location de tenues de prestige et formations professionnelles en couture."
+    "title": "Justine Kem's - Haute Couture",
+    "description": "Découvrez Justine Kem's, maison de haute couture à Yaoundé. Créations sur mesure, location de prestige et formations en stylisme. L'élégance africaine raffinée.",
+    "home": {
+      "title": "Justine Kem's | Atelier de Haute Couture à Yaoundé",
+      "description": "Bienvenue chez Justine Kem's à Yaoundé. Sublimez votre élégance avec nos créations sur mesure, robes de mariée et tenues de prestige. Excellence et savoir-faire."
+    },
+    "services": {
+      "title": "Services Haute Couture, Location & Formation | Justine Kem's",
+      "description": "Explorez nos services d'exception à Yaoundé : confection sur mesure, location de robes de soirée et formations certifiantes en couture. Réservez votre atelier."
+    },
+    "about": {
+      "title": "Notre Histoire & Vision | Justine Kem's Haute Couture Yaoundé",
+      "description": "Découvrez le parcours de Justine Kem, créatrice passionnée à Yaoundé. Une fusion entre tradition africaine et luxe contemporain pour des créations d'exception."
+    }
   },
   "homeExt": {
     "stats": {
