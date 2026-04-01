@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import { Link } from '@/navigation'
 import Image from 'next/image'
 import { useLocale, useTranslations } from 'next-intl'
 
@@ -36,13 +36,13 @@ export default function Footer() {
             <h4 className="text-lg font-bold mb-6 uppercase tracking-wider text-jk-royal-gold">{tFooter('navigation')}</h4>
             <ul className="space-y-3">
               {[
-                { href: `/${locale}/a-propos`, label: tNav('about') },
-                { href: `/${locale}/services`, label: tNav('services') },
-                { href: `/${locale}/catalogue`, label: tNav('catalogue') },
-                { href: `/${locale}/formations`, label: tNav('formations') },
-                { href: `/${locale}/modeles`, label: tNav('models') },
-                { href: `/${locale}/blog`, label: tNav('blog') },
-                { href: `/${locale}/contact`, label: tNav('contact') },
+                { href: `/a-propos`, label: tNav('about') },
+                { href: `/services`, label: tNav('services') },
+                { href: `/catalogue`, label: tNav('catalogue') },
+                { href: `/formations`, label: tNav('formations') },
+                { href: `/modeles`, label: tNav('models') },
+                { href: `/blog`, label: tNav('blog') },
+                { href: `/contact`, label: tNav('contact') },
               ].map(link => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-gray-300 hover:text-jk-royal-gold transition-colors">
@@ -107,7 +107,7 @@ export default function Footer() {
           <p>{tFooter('copyright', { year: new Date().getFullYear() })}</p>
           <p className="text-gray-500 italic">{tFooter('poweredBy')} <span className="text-jk-royal-gold font-semibold uppercase tracking-widest px-1">Nhr Digital Agency</span></p>
           <div className="flex gap-4">
-            <Link href={`/${locale}/mentions-legales`} className="hover:text-jk-royal-gold transition-colors">{tFooter('legal')}</Link>
+            <Link href="/mentions-legales" className="hover:text-jk-royal-gold transition-colors">{tFooter('legal')}</Link>
           </div>
         </div>
       </div>

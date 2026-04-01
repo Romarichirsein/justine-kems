@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { urlForImage } from '@/sanity/client'
 import Image from 'next/image'
-import Link from 'next/link'
+import { Link } from '@/navigation'
 import { useTranslations } from 'next-intl'
 
 interface BlogClientProps {
@@ -210,7 +210,7 @@ function BlogCard({ post, locale, t }: any) {
       layout
       className="bg-white dark:bg-jk-dark-surface rounded-2xl overflow-hidden shadow-lg hover:-translate-y-2 hover:shadow-neon-gold transition-all duration-300 group flex flex-col"
     >
-      <Link href={`/${locale}/blog/${post.slug?.current}`} className="flex flex-col h-full">
+      <Link href={`/blog/${post.slug?.current}`} className="flex flex-col h-full">
         <div className="relative aspect-[16/9] w-full overflow-hidden shrink-0">
           {post.mainImage ? (
             <Image
@@ -256,7 +256,7 @@ function BlogCard({ post, locale, t }: any) {
 
 function FeaturedBlogCard({ post, locale, t }: any) {
   return (
-    <Link href={`/${locale}/blog/${post.slug?.current}`} className="block">
+    <Link href={`/blog/${post.slug?.current}`} className="block">
       <div className="group relative rounded-3xl overflow-hidden shadow-2xl mb-12 aspect-[21/9] cursor-pointer">
         {post.mainImage && (
           <Image

@@ -134,7 +134,7 @@ export default function Navbar() {
             <LocaleSwitcher />
             <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}>
               <Link
-                href={`/${locale}/contact`}
+                href="/contact"
                 className="relative overflow-hidden bg-gradient-to-r from-[#D4AF37] to-[#c9a96e] hover:from-[#c9a96e] hover:to-[#D4AF37] text-black font-bold px-5 py-2 rounded-full transition-all text-sm shadow-lg hover:shadow-[0_4px_20px_rgba(212,175,55,0.5)]"
               >
                 <span className="relative z-10">{t('cta')}</span>
