@@ -4,15 +4,23 @@ export default {
   type: 'document',
   fields: [
     {
-      name: 'title',
-      title: 'Titre de la formation',
-      type: 'string'
+      name: 'title_fr',
+      title: 'Titre (Français)',
+      type: 'string',
+      validation: (Rule: any) => Rule.required()
+    },
+    {
+      name: 'title_en',
+      title: 'Titre (Anglais)',
+      type: 'string',
+      validation: (Rule: any) => Rule.required()
     },
     {
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: { source: 'title' }
+      options: { source: 'title_fr' },
+      validation: (Rule: any) => Rule.required()
     },
     {
       name: 'duration',
@@ -25,7 +33,11 @@ export default {
       title: 'Niveau',
       type: 'string',
       options: {
-        list: ['Débutant', 'Intermédiaire', 'Avancé']
+        list: [
+          { title: 'Débutant', value: 'debutant' },
+          { title: 'Intermédiaire', value: 'intermediaire' },
+          { title: 'Avancé', value: 'avance' }
+        ]
       }
     },
     {
@@ -34,8 +46,13 @@ export default {
       type: 'number'
     },
     {
-      name: 'description',
-      title: 'Description',
+      name: 'description_fr',
+      title: 'Description (Français)',
+      type: 'text'
+    },
+    {
+      name: 'description_en',
+      title: 'Description (Anglais)',
       type: 'text'
     },
     {

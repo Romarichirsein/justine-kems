@@ -32,10 +32,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const { locale } = await params
   setRequestLocale(locale)
   
-  const featuredProducts = await safeFetch(queries.featuredProducts) ?? []
-  const testimonials = await safeFetch(queries.testimonials) ?? []
-  const heroImages = await safeFetch<SanityImageInfo[]>(queries.heroImages) ?? []
-  const mainHero = heroImages[0]
+  const featuredProducts = await safeFetch(queries.featuredProducts, { locale }) ?? []
+  const testimonials = await safeFetch(queries.allTestimonials, { locale }) ?? []
+  const siteSettings = await safeFetch(queries.siteSettings, { locale })
   
   const tTrust = await getTranslations({ locale, namespace: 'trustBar' })
   const tHome = await getTranslations({ locale, namespace: 'homeExt' })
@@ -45,28 +44,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <OrganizationSchema />
       <CustomCursor />
       
-      {/* Hero Experience - Prioritize Sanity Hero if set, else keep ScrollSequence */}
-      {mainHero ? (
-        <section className="relative h-[80vh] w-full overflow-hidden">
-          <SanityImage 
-            asset={mainHero.image} 
-            alt={mainHero.alt || mainHero.title} 
-            fill 
-            priority 
-            className="w-full h-full"
-          />
-          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-            <div className="text-center text-white px-4">
-              <RevealOnScroll variant="blur-in">
-                <h1 className="text-5xl md:text-7xl font-serif mb-4">{mainHero.title}</h1>
-                {mainHero.caption && <p className="text-xl md:text-2xl font-light">{mainHero.caption}</p>}
-              </RevealOnScroll>
-            </div>
-          </div>
-        </section>
-      ) : (
-        <ScrollSequence frameCount={16} baseUrl="/motion/ezgif-frame-" />
-      )}
+      {/* Hero Experience - Using ScrollSequence as default or a custom hero if needed */}
+      <ScrollSequence frameCount={16} baseUrl="/motion/ezgif-frame-" />
 
       {/* Trust Bar */}
       <section className="bg-jk-imperial-green text-jk-cream py-4 relative z-20 shadow-xl overflow-hidden">
@@ -89,14 +68,19 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </div>
       </section>
 
-      {/* ── Stats Counter Section ── */}
+      {/* Stats - Use siteSettings slogan if available as a subtile or stats can remain static/from i18n */}
       <section className="py-20 bg-white dark:bg-jk-dark-surface relative overflow-hidden">
         <div className="absolute inset-0 opacity-5 bg-[url('/luxury-pattern.png')] bg-repeat pointer-events-none" />
         <div className="container mx-auto px-4">
           <RevealOnScroll variant="blur-in">
-            <p className="text-center text-sm uppercase tracking-[0.3em] text-jk-royal-gold mb-12 font-medium">
+            <p className="text-center text-sm uppercase tracking-[0.3em] text-jk-royal-gold mb-4 font-medium">
               {tHome('stats.title')}
             </p>
+            {siteSettings && siteSettings.slogan && (
+              <h2 className="text-center text-2xl font-serif text-jk-imperial-green dark:text-jk-cream mb-12">
+                {siteSettings.slogan}
+              </h2>
+            )}
           </RevealOnScroll>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4 max-w-2xl mx-auto">
             {[
@@ -239,7 +223,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
       {/* Section Témoignages */}
       <section className="py-24 bg-jk-dark-bg text-jk-cream relative overflow-hidden">
-        {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-jk-royal-gold/5 rounded-full blur-3xl -mr-32 -mt-32" />
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-jk-royal-gold/5 rounded-full blur-3xl -ml-32 -mb-32" />
         
@@ -274,9 +257,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                     </p>
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 rounded-full overflow-hidden bg-jk-royal-gold/20 flex-shrink-0 relative">
-                        {testimonial.avatar ? (
-                          <Image 
-                            src={testimonial.avatar} 
+                        {testimonial.photo ? (
+                          <SanityImage 
+                            asset={testimonial.photo} 
                             alt={testimonial.name} 
                             fill
                             className="object-cover"
@@ -289,7 +272,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                       </div>
                       <div>
                         <h4 className="font-display font-bold text-jk-royal-gold">{testimonial.name}</h4>
-                        <p className="text-xs text-gray-500 uppercase tracking-widest">{testimonial.city || "Cameroun"}</p>
+                        <p className="text-xs text-gray-500 uppercase tracking-widest">{testimonial.city || "Client"}</p>
                       </div>
                     </div>
                   </div>

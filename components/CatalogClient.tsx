@@ -4,22 +4,22 @@ import { useState, useMemo, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { client, urlForImage } from '@/sanity/client'
 import { SanityImage } from '@/components/SanityImage'
+import { PortableText } from '@portabletext/react'
 
 // ── Types ──────────────────────────────────────────────────────────────────
 interface Model {
   _id: string
   name: string
   mainImage?: any
+  gallery?: any[]
+  description?: any // Portable Text
   category: string
   price?: number
-  priceType?: 'fixed' | 'quote'
-  priceH?: number | null
-  priceF?: number | null
+  isAvailable?: boolean
 }
 
 interface CartItem extends Model {
   quantity: number
-  gender?: 'h' | 'f'
 }
 
 interface CatalogClientProps {
@@ -52,29 +52,24 @@ export function CatalogClient({ initialModels, locale }: CatalogClientProps) {
   )
 
   const cartCount = cart.reduce((s, i) => s + i.quantity, 0)
-  const cartTotal = cart.reduce((s, i) => {
-    if (i.priceH != null && i.priceF != null) {
-      return s + (i.gender === 'h' ? (i.priceH ?? 0) : (i.priceF ?? 0)) * i.quantity
-    }
-    return s + (i.price ?? 0) * i.quantity
-  }, 0)
+  const cartTotal = cart.reduce((s, i) => s + (i.price ?? 0) * i.quantity, 0)
 
   function formatPrice(price: number): string {
     return price.toLocaleString(locale === 'fr' ? 'fr-FR' : 'en-US') + ' FCFA'
   }
 
-  function addToCart(model: Model, gender?: 'h' | 'f') {
+  function addToCart(model: Model) {
     setCart(prev => {
-      const exist = prev.find(c => c._id === model._id && c.gender === gender)
-      if (exist) return prev.map(c => c._id === model._id && c.gender === gender ? { ...c, quantity: c.quantity + 1 } : c)
-      return [...prev, { ...model, quantity: 1, gender }]
+      const exist = prev.find(c => c._id === model._id)
+      if (exist) return prev.map(c => c._id === model._id ? { ...c, quantity: c.quantity + 1 } : c)
+      return [...prev, { ...model, quantity: 1 }]
     })
     setSelectedModel(null)
     setShowCart(true)
   }
 
-  function removeFromCart(id: string, gender?: 'h' | 'f') {
-    setCart(prev => prev.filter(c => !(c._id === id && c.gender === gender)))
+  function removeFromCart(id: string) {
+    setCart(prev => prev.filter(c => c._id !== id))
   }
 
   function getWhatsAppOrderMessage() {
@@ -96,12 +91,7 @@ export function CatalogClient({ initialModels, locale }: CatalogClientProps) {
 
   function getWhatsAppModelMessage(model: Model) {
     const catLabel = CATEGORIES.find(c => c.key === model.category)?.label ?? model.category
-    let priceInfo = ''
-    if (model.priceH != null && model.priceF != null) {
-      priceInfo = `${t('modal.man')}: ${formatPrice(model.priceH ?? 0)} / ${t('modal.woman')}: ${formatPrice(model.priceF ?? 0)}`
-    } else {
-      priceInfo = formatPrice(model.price ?? 0)
-    }
+    const priceInfo = formatPrice(model.price ?? 0)
     const msg = t('whatsapp.singleInterest', { cat: catLabel, price: priceInfo })
     return encodeURIComponent(msg)
   }
@@ -240,11 +230,8 @@ function ModelCard({ model, onSelect, hasError, onError, formatPrice, viewDetail
   )
 }
 
-function ModelModal({ model, onClose, onAddToCart, genderChoice, setGenderChoice, waNumber, getWhatsAppMessage, formatPrice, categories, t }: any) {
-  const isCouple = model.priceH !== null && model.priceF !== null && model.category === 'couple'
-  const displayPrice = isCouple
-    ? (genderChoice === 'h' ? formatPrice(model.priceH!) : formatPrice(model.priceF!))
-    : (model.priceType === 'quote' ? t('modal.onQuote' as any) || 'Sur devis' : formatPrice(model.price ?? 0))
+function ModelModal({ model, onClose, onAddToCart, waNumber, getWhatsAppMessage, formatPrice, categories, t }: any) {
+  const displayPrice = model.price ? formatPrice(model.price) : (t('modal.onQuote' as any) || 'Sur devis')
   const catLabel = categories.find((c: any) => c.key === model.category)?.label ?? model.category
 
   useEffect(() => {
@@ -270,35 +257,19 @@ function ModelModal({ model, onClose, onAddToCart, genderChoice, setGenderChoice
         </div>
 
         <div className="p-5 space-y-4">
-          {isCouple && (
-            <div>
-              <p className="text-white/50 text-xs mb-2">{t('modal.selectOutfit')}</p>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setGenderChoice('h')}
-                  className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${genderChoice === 'h' ? 'bg-[#c9a96e] text-black' : 'bg-white/10 text-white'}`}
-                >
-                  {t('modal.man')} — {formatPrice(model.priceH!)}
-                </button>
-                <button
-                  onClick={() => setGenderChoice('f')}
-                  className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${genderChoice === 'f' ? 'bg-[#c9a96e] text-black' : 'bg-white/10 text-white'}`}
-                >
-                  {t('modal.woman')} — {formatPrice(model.priceF!)}
-                </button>
-              </div>
-            </div>
-          )}
-
+          <h2 className="text-2xl font-serif text-white">{model.name}</h2>
+          
           <div className="flex items-baseline gap-2">
             <span className="text-3xl font-bold text-[#c9a96e]">{displayPrice}</span>
             <span className="text-white/30 text-sm">{t('modal.bespoke')}</span>
           </div>
 
           <div className="bg-white/5 rounded-xl p-4 space-y-2">
-            <p className="text-white/70 text-sm leading-relaxed">
-              {t('modal.desc')}
-            </p>
+            {model.description && (
+              <div className="text-white/70 text-sm leading-relaxed mb-4">
+                <PortableText value={model.description} />
+              </div>
+            )}
             <ul className="text-white/50 text-xs space-y-1">
               {features.map((f: string, i: number) => (
                 <li key={i}>✓ {f}</li>
@@ -308,7 +279,7 @@ function ModelModal({ model, onClose, onAddToCart, genderChoice, setGenderChoice
 
           <div className="flex flex-col gap-3">
             <button
-              onClick={() => onAddToCart(model, isCouple ? genderChoice : undefined)}
+              onClick={() => onAddToCart(model)}
               className="w-full bg-[#c9a96e] text-black font-semibold py-3 rounded-xl hover:bg-[#b8944f] transition-all"
             >
               {t('modal.addToCart')}
@@ -346,9 +317,7 @@ function CartPanel({ items, total, waNumber, whatsAppMsg, onRemove, onClose, for
             <p className="text-white/40 text-center py-10">{t('cart.empty')}</p>
           ) : items.map((item: any) => {
             const catLabel = categories.find((c: any) => c.key === item.category)?.label ?? item.category
-            const itemPrice = item.priceH !== null && item.priceF !== null && item.category === 'couple'
-              ? (item.gender === 'h' ? item.priceH : item.priceF)
-              : (item.price ?? 0)
+            const itemPrice = item.price ?? 0
             return (
               <div key={`${item._id}-${item.gender}`} className="flex gap-3 bg-white/5 rounded-xl p-3">
                 <div className="relative w-16 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-[#0a0a0a]">

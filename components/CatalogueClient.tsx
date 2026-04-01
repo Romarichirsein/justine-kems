@@ -9,13 +9,13 @@ import { client, urlForImage } from '@/sanity/client'
 interface CatalogueProduct {
   _id: string
   name: string
-  mainImage?: any
+  images?: any[]
   category: string
-  price?: number
-  priceType?: 'fixed' | 'quote'
-  priceH?: number
-  priceF?: number
-  gender?: 'femme' | 'homme' | 'couple' | null
+  price: number
+  promoPrice?: number
+  shortDescription?: string
+  longDescription?: any
+  stock?: number
 }
 
 interface CatalogueClientProps {
@@ -26,51 +26,27 @@ interface CatalogueClientProps {
 export function CatalogueClient({ products, locale }: CatalogueClientProps) {
   const t = useTranslations('catalogue')
   const [activeCategory, setActiveCategory] = useState('all')
-  const [activeGender, setActiveGender] = useState('all')
   const [selectedProduct, setSelectedProduct] = useState<CatalogueProduct | null>(null)
   const [imgErrors, setImgErrors] = useState<Set<string>>(new Set())
 
   const CATEGORIES = [
     { id: 'all', label: t('filters.all') },
-    { id: 'robes-mariage', label: t('categories.robes-mariage') },
-    { id: 'robes-soirees', label: t('categories.robes-soirees') },
-    { id: 'tenu-couple', label: t('categories.tenu-couple') },
-    { id: 'tenue-traditionnels', label: t('categories.tenue-traditionnels') },
-    { id: 'etat-civil', label: t('categories.etat-civil') },
-    { id: 'tenue-ville', label: t('categories.tenue-ville') },
-  ]
-
-  // Note: Since I don't have direct access to 'modeles' namespace easily here without nested hooks, 
-  // I'll just use the labels from 'catalogue' if they exist or fallback.
-  // Actually, I can use t('filters.all') etc.
-  
-  const GENDER_FILTERS = [
-    { id: 'all', label: t('filters.genders.all') },
-    { id: 'femme', label: t('filters.genders.femme') },
-    { id: 'homme', label: t('filters.genders.homme') },
-    { id: 'couple', label: t('filters.genders.couple') },
+    { id: 'pret-a-porter', label: locale === 'fr' ? 'Prêt-à-porter' : 'Ready-to-wear' },
+    { id: 'accessoires', label: locale === 'fr' ? 'Accessoires' : 'Accessories' },
+    { id: 'sur-mesure', label: locale === 'fr' ? 'Sur mesure' : 'Bespoke' },
+    { id: 'homme', label: locale === 'fr' ? 'Homme' : 'Men' },
+    { id: 'femme', label: locale === 'fr' ? 'Femme' : 'Women' },
   ]
 
   const WHATSAPP_NUMBER = '237677463484'
 
   function getCategoryLabel(catId: string) {
-    if (catId === 'all') return t('filters.all')
-    // Directly use the key from categories namespace
-    try {
-      return t(`categories.${catId}` as any)
-    } catch {
-      return catId
-    }
+    const found = CATEGORIES.find(c => c.id === catId)
+    return found ? found.label : catId
   }
 
   const filtered = products.filter((p) => {
-    const catMatch = activeCategory === 'all' || p.category === activeCategory
-    const genMatch =
-      activeGender === 'all' ||
-      (activeGender === 'femme' && (p.gender === 'femme' || p.gender === 'couple')) ||
-      (activeGender === 'homme' && (p.gender === 'homme' || p.gender === 'couple')) ||
-      (activeGender === 'couple' && p.gender === 'couple')
-    return catMatch && genMatch
+    return activeCategory === 'all' || p.category === activeCategory
   })
 
   useEffect(() => {
@@ -95,24 +71,17 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
   }, [locale])
 
   const handleOrder = useCallback((product: CatalogueProduct) => {
-    const genderText = product.gender === 'femme' ? t('card.femme') :
-      product.gender === 'homme' ? t('card.homme') :
-      product.gender === 'couple' ? t('card.couple') : ''
-    
-    // Use price label if available or format it
-    const priceLabel = product.gender === 'couple' 
-      ? `${t('card.femme')}: ${formatPrice(product.priceF || 0)} | ${t('card.homme')}: ${formatPrice(product.priceH || 0)}`
-      : formatPrice(product.price || 0)
+    const priceLabel = product.promoPrice ? formatPrice(product.promoPrice) : formatPrice(product.price)
 
     const msg = encodeURIComponent(
-      `${t('whatsapp.greeting')}\n\n${t('whatsapp.interest')}\n` +
+      `${t('whatsapp.greeting')}\n\n` +
+      `${t('whatsapp.interest')} *${product.name}*\n` +
       `${t('whatsapp.category', { cat: getCategoryLabel(product.category) })}\n` +
-      `${genderText ? `${t('whatsapp.for', { gender: genderText })}\n` : ''}` +
       `${t('whatsapp.price', { price: priceLabel })}\n\n` +
       `${t('whatsapp.thanks')}`
     )
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank')
-  }, [t, locale, formatPrice])
+  }, [locale, formatPrice])
 
   const handleImgError = useCallback((id: string) => {
     setImgErrors(prev => new Set(prev).add(id))
@@ -120,14 +89,13 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
 
   function getCategoryEmoji(cat: string) {
     const map: Record<string, string> = {
-      'robes-mariage': '💍',
-      'robes-soirees': '✨',
-      'tenu-couple': '💑',
-      'tenue-traditionnels': '🌍',
-      'etat-civil': '🎀',
-      'tenue-ville': '🌆',
+      'pret-a-porter': '👗',
+      'accessoires': '👜',
+      'sur-mesure': '✂️',
+      'homme': '👔',
+      'femme': '👠',
     }
-    return map[cat] || '👗'
+    return map[cat] || '✨'
   }
 
   return (
@@ -160,24 +128,8 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <p className="text-xs font-semibold text-jk-text-muted dark:text-gray-400 uppercase tracking-widest mr-2">
-              {t('filters.gender')}
-            </p>
-            {GENDER_FILTERS.map(g => (
-              <button
-                key={g.id}
-                onClick={() => setActiveGender(g.id)}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
-                  activeGender === g.id
-                    ? 'bg-jk-royal-gold text-white shadow-md'
-                    : 'bg-gray-100 dark:bg-jk-dark-bg text-jk-text-dark dark:text-gray-300 hover:bg-gray-200'
-                }`}
-              >
-                {g.label}
-              </button>
-            ))}
-            <span className="ml-auto text-sm text-jk-text-muted dark:text-gray-400">
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-jk-text-muted dark:text-gray-400">
               {t('filters.results', { count: filtered.length, s: filtered.length > 1 ? 's' : '' })}
             </span>
           </div>
@@ -197,14 +149,14 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
                 className="group cursor-pointer bg-white dark:bg-jk-dark-surface rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:shadow-jk-royal-gold/20 transition-all duration-300 hover:-translate-y-1"
               >
                 <div className="relative aspect-[3/4] overflow-hidden bg-gray-100 dark:bg-gray-800">
-                  {imgErrors.has(product._id) || !product.mainImage ? (
+                  {imgErrors.has(product._id) || !product.images?.[0] ? (
                     <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
                       <span className="text-4xl mb-2">{getCategoryEmoji(product.category)}</span>
                       <span className="text-xs text-center px-2">{getCategoryLabel(product.category)}</span>
                     </div>
                   ) : (
                     <Image
-                      src={urlForImage(product.mainImage).width(400).height(533).url()}
+                      src={urlForImage(product.images[0]).width(400).height(533).url()}
                       alt={product.name}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -213,12 +165,9 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
                     />
                   )}
 
-                  {product.gender && (
-                    <span className={`absolute top-2 left-2 ${
-                      product.gender === 'femme' ? 'bg-pink-500' : 
-                      product.gender === 'homme' ? 'bg-blue-600' : 'bg-purple-600'
-                    } text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow`}>
-                      {t(`card.${product.gender}` as any)}
+                  {product.promoPrice && (
+                    <span className="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
+                      PROMO
                     </span>
                   )}
 
@@ -233,11 +182,17 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
                   <p className="text-[11px] text-jk-text-muted dark:text-gray-400 truncate">
                     {getCategoryEmoji(product.category)} {getCategoryLabel(product.category)}
                   </p>
-                  <p className="text-sm font-bold text-jk-royal-gold mt-0.5 leading-tight">
-                    {product.gender === 'couple' ? (
-                        <span className="text-[11px]">{formatPrice(product.priceF || 0)} / {formatPrice(product.priceH || 0)}</span>
+                  <h3 className="text-sm font-bold text-jk-imperial-green dark:text-white truncate mb-1">
+                    {product.name}
+                  </h3>
+                  <p className="text-sm font-bold text-jk-royal-gold leading-tight">
+                    {product.promoPrice ? (
+                      <span className="flex flex-col">
+                        <span className="text-xs line-through text-gray-500 opacity-70">{formatPrice(product.price)}</span>
+                        <span>{formatPrice(product.promoPrice)}</span>
+                      </span>
                     ) : (
-                      product.priceType === 'quote' ? t('modal.onQuote' as any) || 'Sur devis' : formatPrice(product.price || 0)
+                      formatPrice(product.price)
                     )}
                   </p>
                 </div>
@@ -250,7 +205,7 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-24">
             <p className="text-6xl mb-4">👗</p>
             <p className="text-2xl text-jk-text-muted dark:text-gray-400">
-              {t('empty.catTitle')}
+              {t('noResults')}
             </p>
           </motion.div>
         )}
@@ -280,22 +235,30 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
                 </svg>
               </button>
 
-              <div className="relative md:w-1/2 h-72 md:h-auto md:min-h-[400px] bg-gray-100 dark:bg-gray-800 shrink-0">
-                {imgErrors.has(selectedProduct._id) || !selectedProduct.mainImage ? (
+              <div className="relative md:w-1/2 h-72 md:h-auto bg-gray-100 dark:bg-gray-800 shrink-0">
+                {selectedProduct.images && selectedProduct.images.length > 0 ? (
+                  <div className="relative w-full h-full">
+                    <Image 
+                      src={urlForImage(selectedProduct.images[0]).url()} 
+                      alt={selectedProduct.name} 
+                      fill 
+                      className="object-contain md:object-cover" 
+                      sizes="(max-width: 768px) 100vw, 50vw" 
+                      priority 
+                    />
+                    {selectedProduct.images.length > 1 && (
+                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                        {selectedProduct.images.map((_, i) => (
+                          <div key={i} className={`w-2 h-2 rounded-full ${i === 0 ? 'bg-jk-royal-gold' : 'bg-white/50'}`} />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : (
                    <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
                      <span className="text-6xl mb-3">{getCategoryEmoji(selectedProduct.category)}</span>
                      <span className="text-sm">{getCategoryLabel(selectedProduct.category)}</span>
                    </div>
-                ) : (
-                  <Image src={urlForImage(selectedProduct.mainImage).url()} alt={selectedProduct.name} fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" priority />
-                )}
-                {selectedProduct.gender && (
-                   <span className={`absolute top-4 left-4 ${
-                     selectedProduct.gender === 'femme' ? 'bg-pink-500' : 
-                     selectedProduct.gender === 'homme' ? 'bg-blue-600' : 'bg-purple-600'
-                   } text-white text-sm font-bold px-3 py-1 rounded-full shadow-lg`}>
-                     {t(`card.${selectedProduct.gender}` as any)}
-                   </span>
                 )}
               </div>
 
@@ -306,21 +269,15 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
                     {getCategoryLabel(selectedProduct.category)}
                   </p>
                   <h2 className="text-3xl font-display text-jk-imperial-green dark:text-jk-royal-gold mb-6">
-                    {selectedProduct.gender === 'femme' ? t('modal.modelFemme') :
-                     selectedProduct.gender === 'homme' ? t('modal.modelHomme') :
-                     selectedProduct.gender === 'couple' ? t('modal.tenueCouple') :
-                     t('modal.generic')}
+                    {selectedProduct.name}
                   </h2>
 
                   <div className="mb-6">
                     <h3 className="text-xs font-semibold text-jk-text-muted dark:text-gray-400 uppercase tracking-widest mb-2">
                       {t('modal.description')}
                     </h3>
-                    <p className="text-jk-text-dark dark:text-gray-200 leading-relaxed">
-                      {selectedProduct.gender === 'couple'
-                        ? t('modal.descCouple')
-                        : t('modal.descGeneric', { cat: getCategoryLabel(selectedProduct.category).toLowerCase() })
-                      }
+                    <p className="text-jk-text-dark dark:text-gray-200 leading-relaxed mb-4">
+                      {selectedProduct.shortDescription}
                     </p>
                   </div>
 
@@ -328,34 +285,27 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
                     <p className="text-xs font-semibold text-jk-text-muted dark:text-gray-400 uppercase tracking-widest mb-2">
                       {t('modal.price')}
                     </p>
-                    {selectedProduct.gender === 'couple' ? (
-                      <div className="space-y-1">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-jk-text-dark dark:text-gray-300">👗 {t('card.femme')}</span>
-                          <span className="text-xl font-bold text-jk-royal-gold">{formatPrice(selectedProduct.priceF || 0)}</span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-jk-text-dark dark:text-gray-300">👔 {t('card.homme')}</span>
-                          <span className="text-xl font-bold text-jk-royal-gold">{formatPrice(selectedProduct.priceH || 0)}</span>
-                        </div>
-                        <div className="border-t border-jk-royal-gold/30 pt-1 flex items-center justify-between">
-                          <span className="text-sm font-semibold text-jk-text-dark dark:text-gray-300">{t('modal.total')}</span>
-                          <span className="text-2xl font-bold text-jk-imperial-green dark:text-jk-royal-gold">
-                            {formatPrice((selectedProduct.priceF || 0) + (selectedProduct.priceH || 0))}
-                          </span>
-                        </div>
-                      </div>
-                    ) : (
-                      <p className="text-4xl font-bold text-jk-imperial-green dark:text-jk-royal-gold">
-                        {formatPrice(selectedProduct.price || 0)}
-                      </p>
-                    )}
-                    <p className="text-xs text-jk-text-muted dark:text-gray-500 mt-2">{t('modal.indicative')}</p>
+                    <div className="flex items-baseline gap-3">
+                      {selectedProduct.promoPrice ? (
+                        <>
+                          <span className="text-3xl font-bold text-jk-imperial-green dark:text-jk-royal-gold">{formatPrice(selectedProduct.promoPrice)}</span>
+                          <span className="text-lg line-through text-gray-500 opacity-70">{formatPrice(selectedProduct.price)}</span>
+                        </>
+                      ) : (
+                        <p className="text-3xl font-bold text-jk-imperial-green dark:text-jk-royal-gold">
+                          {formatPrice(selectedProduct.price)}
+                        </p>
+                      )}
+                    </div>
                   </div>
 
-                  <div className="space-y-2 mb-6 text-sm text-jk-text-dark dark:text-gray-300">
-                    {(t.raw('modal.features') as string[]).map(item => <div key={item}>{item}</div>)}
-                  </div>
+                  {selectedProduct.stock !== undefined && (
+                    <div className="mb-6">
+                      <p className="text-sm text-jk-text-muted dark:text-gray-400 italic">
+                        {selectedProduct.stock > 0 ? `Stock: ${selectedProduct.stock} disponibles` : "Rupture de stock"}
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 <motion.button

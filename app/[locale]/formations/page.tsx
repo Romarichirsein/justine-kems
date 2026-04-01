@@ -1,9 +1,8 @@
 import { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
-import { WhatsAppFormHandler } from '@/components/WhatsAppFormHandler'
 import { RevealOnScroll } from '@/components/RevealOnScroll'
 import { FormationsClient } from '@/components/FormationsClient'
-import { queries, safeFetch } from '@/sanity/client'
+import { queries, client } from '@/sanity/client'
 import { SanityImage } from '@/components/SanityImage'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -22,8 +21,6 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-import { SanityImageInfo } from '@/types/sanity'
-
 export const revalidate = 0
 
 export default async function FormationsPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -31,9 +28,13 @@ export default async function FormationsPage({ params }: { params: Promise<{ loc
   setRequestLocale(locale)
   const t = await getTranslations({ locale, namespace: 'formations' })
   
-  const heroImages = await safeFetch<SanityImageInfo[]>(queries.heroImages) ?? []
-  console.log('Hero Images for Formations fetched:', heroImages.length)
-  const profilImage = heroImages.find(img => img.title?.toLowerCase().includes('formation') || img.title?.toLowerCase().includes('atelier')) || heroImages[2] || heroImages[0]
+  const [heroImages, formations, testimonials] = await Promise.all([
+    client.fetch(queries.heroImages, { locale }).catch(() => []),
+    client.fetch(queries.allFormations, { locale }).catch(() => []),
+    client.fetch(queries.allTestimonials, { locale }).catch(() => [])
+  ])
+
+  const profilImage = heroImages.find((img: any) => img.title?.toLowerCase().includes('formation') || img.title?.toLowerCase().includes('atelier')) || heroImages[2] || heroImages[0]
 
   return (
     <div className="bg-jk-cream dark:bg-jk-dark-bg min-h-screen">
@@ -100,7 +101,7 @@ export default async function FormationsPage({ params }: { params: Promise<{ loc
       </section>
 
       {/* ── PROGRAMMES, TESTIMONIALS, FAQ, CTA ── */}
-      <FormationsClient locale={locale} />
+      <FormationsClient locale={locale} initialFormations={formations} initialTestimonials={testimonials} />
     </div>
   )
 }

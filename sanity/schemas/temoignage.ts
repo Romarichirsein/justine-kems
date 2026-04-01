@@ -16,8 +16,14 @@ export default {
       options: { hotspot: true }
     },
     {
-      name: 'content',
-      title: 'Texte du témoignage',
+      name: 'content_fr',
+      title: 'Texte du témoignage (Français)',
+      type: 'text',
+      validation: (Rule: any) => Rule.required()
+    },
+    {
+      name: 'content_en',
+      title: 'Texte du témoignage (Anglais)',
       type: 'text',
       validation: (Rule: any) => Rule.required()
     },

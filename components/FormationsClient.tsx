@@ -84,7 +84,14 @@ function TestimonialCard({ t, index }: { t: { name: string, role: string, text: 
 
 /* ─────────────────────── CLIENT MAIN ──────────────────── */
 
-export function FormationsClient({ heroOnly = false, locale = 'fr' }: { heroOnly?: boolean, locale?: string }) {
+interface FormationsClientProps {
+  heroOnly?: boolean
+  locale?: string
+  initialFormations?: any[]
+  initialTestimonials?: any[]
+}
+
+export function FormationsClient({ heroOnly = false, locale = 'fr', initialFormations = [], initialTestimonials = [] }: FormationsClientProps) {
   const t = useTranslations('formations')
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedFormation, setSelectedFormation] = useState('')
@@ -121,36 +128,27 @@ export function FormationsClient({ heroOnly = false, locale = 'fr' }: { heroOnly
     )
   }
 
-  // Data helpers
-  const programKeys = ['f1', 'f2', 'f3'] as const;
-  const processKeys = ['s1', 's2', 's3', 's4'] as const;
-  const testimonialKeys = ['t1', 't2', 't3'] as const;
-  const faqKeys = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6'] as const;
-
-  const programs = programKeys.map((key, i) => ({
-    level: t(`programmes.items.${key}.level`),
-    badge: i === 0 ? '🌱' : i === 1 ? '⭐' : '👑',
-    title: t(`programmes.items.${key}.title`),
-    desc: t(`programmes.items.${key}.desc`),
-    duration: t(`programmes.items.${key}.duration`),
-    price: t(`programmes.items.${key}.price`),
-    color: i === 0 ? 'from-green-400/20 to-emerald-600/10' : i === 1 ? 'from-jk-royal-gold/20 to-amber-600/10' : 'from-purple-500/20 to-indigo-600/10',
-    borderColor: i === 0 ? 'border-green-400/30' : i === 1 ? 'border-jk-royal-gold/40' : 'border-purple-400/30',
+  // Map Sanity formations to UI structure
+  const programs = initialFormations.map((f, i) => ({
+    level: f.level || 'Formation',
+    badge: i === 0 ? '🌱' : i === i-1 ? '👑' : '⭐',
+    title: f.title,
+    desc: f.description,
+    duration: f.duration || 'Flexible',
+    price: f.price ? `${f.price.toLocaleString()} FCFA` : 'Sur devis',
+    color: i % 3 === 0 ? 'from-green-400/20 to-emerald-600/10' : i % 3 === 1 ? 'from-jk-royal-gold/20 to-amber-600/10' : 'from-purple-500/20 to-indigo-600/10',
+    borderColor: i % 3 === 0 ? 'border-green-400/30' : i % 3 === 1 ? 'border-jk-royal-gold/40' : 'border-purple-400/30',
     isBest: i === 1,
-    modules: [0, 1, 2, 3].map(m => t(`programmes.items.${key}.modules.${m}`))
+    registrationLink: f.registrationLink
   }));
+
+  const processKeys = ['s1', 's2', 's3', 's4'] as const;
+  const faqKeys = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6'] as const;
 
   const steps = processKeys.map((key, i) => ({
     num: `0${i + 1}`,
     title: t(`process.steps.${key}.title`),
     desc: t(`process.steps.${key}.desc`)
-  }));
-
-  const testimonials = testimonialKeys.map(key => ({
-    name: t(`testimonials.items.${key}.name`),
-    role: t(`testimonials.items.${key}.role`),
-    text: t(`testimonials.items.${key}.text`),
-    stars: 5
   }));
 
   const faqs = faqKeys.map(key => ({
@@ -170,47 +168,51 @@ export function FormationsClient({ heroOnly = false, locale = 'fr' }: { heroOnly
             </div>
           </RevealOnScroll>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {programs.map((form, i) => (
-              <RevealOnScroll key={i} delay={i * 0.12}>
-                <div className={`relative rounded-2xl border-2 ${form.borderColor} bg-gradient-to-br ${form.color} dark:bg-jk-dark-surface shadow-xl hover:shadow-neon-gold hover:-translate-y-2 transition-all duration-300 flex flex-col h-full overflow-hidden group`}>
-                  {form.isBest && (
-                    <div className="absolute -top-0 -right-0 bg-jk-royal-gold text-black text-xs font-bold px-4 py-2 rounded-bl-2xl uppercase tracking-wider">
-                      {t('programmes.mostPopular')}
-                    </div>
-                  )}
-                  <div className="h-1.5 w-full bg-gradient-gold" />
-                  <div className="p-8 flex-1 flex flex-col">
-                    <div className="text-4xl mb-4">{form.badge}</div>
-                    <span className="inline-block px-3 py-1 bg-white/60 dark:bg-gray-800 text-xs font-bold rounded-full w-max mb-4 uppercase tracking-wider text-jk-imperial-green dark:text-jk-royal-gold">
-                      {form.level}
-                    </span>
-                    <h3 className="text-2xl font-display font-semibold text-jk-imperial-green dark:text-jk-cream mb-3">{form.title}</h3>
-                    <p className="text-jk-text-muted dark:text-gray-400 mb-6 flex-1 leading-relaxed text-sm">{form.desc}</p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {programs.length > 0 ? (
+              programs.map((form, i) => (
+                <RevealOnScroll key={i} delay={i * 0.12}>
+                  <div className={`relative rounded-2xl border-2 ${form.borderColor} bg-gradient-to-br ${form.color} dark:bg-jk-dark-surface shadow-xl hover:shadow-neon-gold hover:-translate-y-2 transition-all duration-300 flex flex-col h-full overflow-hidden group`}>
+                    {form.isBest && (
+                      <div className="absolute -top-0 -right-0 bg-jk-royal-gold text-black text-xs font-bold px-4 py-2 rounded-bl-2xl uppercase tracking-wider">
+                        {t('programmes.mostPopular')}
+                      </div>
+                    )}
+                    <div className="h-1.5 w-full bg-gradient-gold" />
+                    <div className="p-8 flex-1 flex flex-col">
+                      <div className="text-4xl mb-4">{form.badge}</div>
+                      <span className="inline-block px-3 py-1 bg-white/60 dark:bg-gray-800 text-xs font-bold rounded-full w-max mb-4 uppercase tracking-wider text-jk-imperial-green dark:text-jk-royal-gold capitalize">
+                        {form.level}
+                      </span>
+                      <h3 className="text-2xl font-display font-semibold text-jk-imperial-green dark:text-jk-cream mb-3">{form.title}</h3>
+                      <p className="text-jk-text-muted dark:text-gray-400 mb-6 flex-1 leading-relaxed text-sm">{form.desc}</p>
 
-                    <div className="bg-white/50 dark:bg-gray-800/50 rounded-xl p-4 mb-6 space-y-2">
-                      {form.modules.map(mod => (
-                        <div key={mod} className="flex gap-2 items-start text-sm text-jk-text-dark dark:text-gray-300">
-                          <span className="text-jk-royal-gold mt-0.5 shrink-0">✓</span>
-                          <span>{mod}</span>
+                      <div className="pt-4 border-t border-gray-200/50 dark:border-gray-700 mt-auto">
+                        <p className="text-xs text-jk-text-muted dark:text-gray-400 uppercase tracking-widest font-semibold mb-1">{form.duration}</p>
+                        <p className="text-3xl font-bold text-jk-royal-gold mb-5">{form.price}</p>
+                        <div className="flex flex-col gap-2">
+                          <button
+                            onClick={() => openForm(form.title || '')}
+                            className="w-full btn-primary py-4 group-hover:bg-jk-imperial-green group-hover:text-jk-cream transition-colors"
+                          >
+                            {t('programmes.ctaRegister')}
+                          </button>
+                          {form.registrationLink && (
+                            <a href={form.registrationLink} target="_blank" rel="noopener noreferrer" className="text-center text-xs text-jk-royal-gold hover:underline mt-2">
+                              {locale === 'fr' ? "Plus de détails" : "More details"}
+                            </a>
+                          )}
                         </div>
-                      ))}
-                    </div>
-
-                    <div className="pt-4 border-t border-gray-200/50 dark:border-gray-700 mt-auto">
-                      <p className="text-xs text-jk-text-muted dark:text-gray-400 uppercase tracking-widest font-semibold mb-1">{form.duration}</p>
-                      <p className="text-3xl font-bold text-jk-royal-gold mb-5">{form.price}</p>
-                      <button
-                        onClick={() => openForm(form.title)}
-                        className="w-full btn-primary py-4 group-hover:bg-jk-imperial-green group-hover:text-jk-cream transition-colors"
-                      >
-                        {t('programmes.ctaRegister')}
-                      </button>
+                      </div>
                     </div>
                   </div>
+                </RevealOnScroll>
+              ))
+            ) : (
+                <div className="col-span-full text-center py-12 text-jk-text-muted">
+                     {t('programmes.no_results' as any) || (locale === 'fr' ? "Aucun programme disponible pour le moment." : "No programs available at the moment.")}
                 </div>
-              </RevealOnScroll>
-            ))}
+            )}
           </div>
         </div>
       </section>
@@ -250,8 +252,37 @@ export function FormationsClient({ heroOnly = false, locale = 'fr' }: { heroOnly
               <h2 className="text-4xl font-script text-jk-imperial-green dark:text-jk-cream">{t('testimonials.title')}</h2>
             </div>
           </RevealOnScroll>
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testi, i) => <TestimonialCard key={i} t={testi} index={i} />)}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {initialTestimonials.length > 0 ? (
+                initialTestimonials.map((testi, i) => (
+                    <RevealOnScroll key={i} delay={i * 0.12}>
+                        <div className="bg-white dark:bg-jk-dark-surface rounded-2xl p-8 shadow-xl border border-gray-100 dark:border-gray-700 flex flex-col h-full relative overflow-hidden group hover:-translate-y-1 hover:shadow-neon-gold transition-all duration-300">
+                            <div className="absolute top-4 right-6 text-jk-royal-gold/20 text-7xl font-serif leading-none select-none">&quot;</div>
+                            <div className="flex gap-1 mb-4">
+                                {Array.from({ length: testi.stars || 5 }).map((_, st) => (
+                                    <span key={st} className="text-jk-royal-gold text-lg">★</span>
+                                ))}
+                            </div>
+                            <p className="text-jk-text-muted dark:text-gray-300 leading-relaxed italic flex-1 mb-6 relative z-10">
+                                &quot;{testi.content}&quot;
+                            </p>
+                            <div className="flex items-center gap-4 border-t border-gray-100 dark:border-gray-700 pt-5">
+                                <div className="w-12 h-12 rounded-full bg-jk-royal-gold/20 border-2 border-jk-royal-gold/40 flex items-center justify-center text-jk-royal-gold font-bold text-lg shrink-0 overflow-hidden">
+                                    {testi.name[0]}
+                                </div>
+                                <div>
+                                    <p className="font-semibold text-jk-text-dark dark:text-jk-cream">{testi.name}</p>
+                                    <p className="text-xs text-jk-text-muted dark:text-gray-400">{testi.date ? new Date(testi.date).toLocaleDateString() : ''}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </RevealOnScroll>
+                ))
+            ) : (
+                <div className="col-span-full text-center py-8 text-jk-text-muted">
+                     {t('testimonials.no_results' as any) || (locale === 'fr' ? "Aucun témoignage pour le moment." : "No testimonials yet.")}
+                </div>
+            )}
           </div>
         </div>
       </section>

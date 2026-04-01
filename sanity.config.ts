@@ -10,6 +10,8 @@ import temoignage from './sanity/schemas/temoignage'
 import article from './sanity/schemas/article'
 import formation from './sanity/schemas/formation'
 import parametres from './sanity/schemas/parametres'
+import heroImage from './sanity/schemas/heroImage'
+import productImage from './sanity/schemas/productImage'
 
 export default defineConfig({
   name: 'justine-kems',
@@ -63,6 +65,6 @@ export default defineConfig({
   ],
 
   schema: {
-    types: [modele, catalogue, temoignage, article, formation, parametres],
+    types: [modele, catalogue, temoignage, article, formation, parametres, heroImage, productImage],
   },
 })

@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function BlogPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   setRequestLocale(locale)
-  const posts = await client.fetch(queries.allPosts).catch(() => [])
+  const posts = await client.fetch(queries.allPosts, { locale }).catch(() => [])
 
   return (
     <div className="bg-jk-cream dark:bg-jk-dark-bg min-h-screen pb-24">

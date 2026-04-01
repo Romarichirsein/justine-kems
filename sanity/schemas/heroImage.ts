@@ -4,8 +4,13 @@ export default {
   type: 'document',
   fields: [
     {
-      name: 'title',
-      title: 'Titre',
+      name: 'title_fr',
+      title: 'Titre (Français)',
+      type: 'string',
+    },
+    {
+      name: 'title_en',
+      title: 'Titre (Anglais)',
       type: 'string',
     },
     {
@@ -15,13 +20,23 @@ export default {
       options: { hotspot: true },
     },
     {
-      name: 'alt',
-      title: 'Texte alternatif (SEO)',
+      name: 'alt_fr',
+      title: 'Texte alternatif (Français)',
       type: 'string',
     },
     {
-      name: 'caption',
-      title: 'Légende',
+      name: 'alt_en',
+      title: 'Texte alternatif (Anglais)',
+      type: 'string',
+    },
+    {
+      name: 'caption_fr',
+      title: 'Légende (Français)',
+      type: 'string',
+    },
+    {
+      name: 'caption_en',
+      title: 'Légende (Anglais)',
       type: 'string',
     },
   ],

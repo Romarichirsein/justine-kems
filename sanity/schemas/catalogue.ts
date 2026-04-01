@@ -4,8 +4,14 @@ export default {
   type: 'document',
   fields: [
     {
-      name: 'name',
-      title: 'Nom du produit',
+      name: 'name_fr',
+      title: 'Nom du produit (Français)',
+      type: 'string',
+      validation: (Rule: any) => Rule.required()
+    },
+    {
+      name: 'name_en',
+      title: 'Nom du produit (Anglais)',
       type: 'string',
       validation: (Rule: any) => Rule.required()
     },
@@ -29,14 +35,26 @@ export default {
       ]
     },
     {
-      name: 'shortDescription',
-      title: 'Description courte',
+      name: 'shortDescription_fr',
+      title: 'Description courte (Français)',
       type: 'text',
       rows: 3
     },
     {
-      name: 'longDescription',
-      title: 'Description longue',
+      name: 'shortDescription_en',
+      title: 'Description courte (Anglais)',
+      type: 'text',
+      rows: 3
+    },
+    {
+      name: 'longDescription_fr',
+      title: 'Description longue (Français)',
+      type: 'array',
+      of: [{ type: 'block' }]
+    },
+    {
+      name: 'longDescription_en',
+      title: 'Description longue (Anglais)',
       type: 'array',
       of: [{ type: 'block' }]
     },

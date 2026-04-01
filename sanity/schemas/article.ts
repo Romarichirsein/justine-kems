@@ -30,8 +30,14 @@ export default {
       fields: [{ name: 'alt', type: 'string', title: 'Texte alternatif' }]
     },
     {
-      name: 'content',
-      title: 'Contenu (Portable Text)',
+      name: 'content_fr',
+      title: 'Contenu (Français)',
+      type: 'array',
+      of: [{ type: 'block' }]
+    },
+    {
+      name: 'content_en',
+      title: 'Contenu (Anglais)',
       type: 'array',
       of: [{ type: 'block' }]
     },

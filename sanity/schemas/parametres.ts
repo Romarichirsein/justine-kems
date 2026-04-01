@@ -55,8 +55,14 @@ export default {
       ]
     },
     {
-      name: 'footerText',
-      title: 'Texte du footer',
+      name: 'footerText_fr',
+      title: 'Texte du footer (Français)',
+      type: 'text',
+      rows: 3
+    },
+    {
+      name: 'footerText_en',
+      title: 'Texte du footer (Anglais)',
       type: 'text',
       rows: 3
     }

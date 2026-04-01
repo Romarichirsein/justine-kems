@@ -4,8 +4,14 @@ export default {
   type: 'document',
   fields: [
     {
-      name: 'name',
-      title: 'Nom du modèle',
+      name: 'name_fr',
+      title: 'Nom du modèle (Français)',
+      type: 'string',
+      validation: (Rule: any) => Rule.required()
+    },
+    {
+      name: 'name_en',
+      title: 'Nom du modèle (Anglais)',
       type: 'string',
       validation: (Rule: any) => Rule.required()
     },
@@ -13,7 +19,7 @@ export default {
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: { source: 'name', maxLength: 96 },
+      options: { source: 'name_fr', maxLength: 96 },
       validation: (Rule: any) => Rule.required()
     },
     {
@@ -42,8 +48,14 @@ export default {
       ]
     },
     {
-      name: 'description',
-      title: 'Description',
+      name: 'description_fr',
+      title: 'Description (Français)',
+      type: 'array',
+      of: [{ type: 'block' }]
+    },
+    {
+      name: 'description_en',
+      title: 'Description (Anglais)',
       type: 'array',
       of: [{ type: 'block' }]
     },

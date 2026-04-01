@@ -31,9 +31,9 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   setRequestLocale(locale)
   const t = await getTranslations({ locale, namespace: 'aboutExt' })
   
-  const heroImages = await safeFetch<SanityImageInfo[]>(queries.heroImages) ?? []
+  const heroImages = await safeFetch<SanityImageInfo[]>(queries.heroImages, { locale }) ?? []
   console.log('Hero Images fetched:', heroImages.length);
-  const productImages = await safeFetch<SanityImageInfo[]>(queries.productImages) ?? []
+  const productImages = await safeFetch<SanityImageInfo[]>(queries.productImages, { locale }) ?? []
   
   const profilImage = heroImages.find(img => img.title?.toLowerCase().includes('portrait') || img.title?.toLowerCase().includes('justine') || img.title?.toLowerCase().includes('profil')) || heroImages[0]
   const shopImage = heroImages.find(img => img.title?.toLowerCase().includes('atelier') || img.title?.toLowerCase().includes('shop')) || heroImages[1] || heroImages[0]

@@ -420,6 +420,14 @@
       "desc": "Contactez-nous dès aujourd'hui et commençons à créer ensemble la tenue dont vous rêvez.",
       "btnAppointment": "✉️ Prendre rendez-vous",
       "btnWhatsapp": "💬 WhatsApp direct"
+    },
+    "scrollSequence": {
+      "t1Title": "L'Art de la Perfection",
+      "t1Desc": "Chaque point, chaque pli, chaque détail est une quête d'excellence.",
+      "t2Title": "Matériaux d'Élite",
+      "t2Desc": "Nous sélectionnons les tissus les plus nobles pour sublimer votre allure.",
+      "t3Title": "Votre Vision, Notre Réalité",
+      "t3Desc": "Donnez vie à vos rêves les plus audacieux avec Justine Kems."
     }
   },
   "aboutExt": {

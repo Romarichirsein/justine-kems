@@ -17,14 +17,16 @@ export function BlogClient({ initialPosts, locale }: BlogClientProps) {
   const [categoryFilter, setCategoryFilter] = useState('all')
   const [search, setSearch] = useState('')
 
-  const categories = ['all', 'Mode & Tendances', 'Conseils couture', 'Behind the scenes', 'Événements Yaoundé', 'Portraits clientes']
+  const categories = ['all', 'mode', 'conseils', 'evenements', 'nouveautes']
+
+
 
   const filtered = useMemo(() =>
     initialPosts.filter((p: any) => {
       const matchCat = categoryFilter === 'all' || p.category === categoryFilter
+      const title = p.title
       const matchSearch = !search.trim() ||
-        p.title?.toLowerCase().includes(search.toLowerCase()) ||
-        p.excerpt?.toLowerCase().includes(search.toLowerCase())
+        title?.toLowerCase().includes(search.toLowerCase())
       return matchCat && matchSearch
     }),
     [initialPosts, categoryFilter, search]
@@ -175,7 +177,7 @@ export function BlogClient({ initialPosts, locale }: BlogClientProps) {
                             : 'text-jk-text-muted dark:text-gray-300 hover:text-jk-royal-gold hover:bg-jk-royal-gold/5'
                         }`}
                       >
-                        <span>{cat}</span>
+                        <span className="capitalize">{cat}</span>
                         <span className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full">
                           {initialPosts.filter((p: any) => p.category === cat).length}
                         </span>
@@ -205,27 +207,25 @@ export function BlogClient({ initialPosts, locale }: BlogClientProps) {
 }
 
 function BlogCard({ post, locale, t }: any) {
+  const title = post.title
   return (
     <motion.div
       layout
       className="bg-white dark:bg-jk-dark-surface rounded-2xl overflow-hidden shadow-lg hover:-translate-y-2 hover:shadow-neon-gold transition-all duration-300 group flex flex-col"
     >
-      <Link href={`/blog/${post.slug?.current}`} className="flex flex-col h-full">
+      <Link href={`/blog/${post.slug}`} className="flex flex-col h-full">
         <div className="relative aspect-[16/9] w-full overflow-hidden shrink-0">
           {post.mainImage ? (
             <Image
               src={urlForImage(post.mainImage).width(800).height(450).url()}
-              alt={post.title || "Blog Image"}
+              alt={title || "Blog Image"}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-700"
             />
           ) : (
-            <Image
-              src="/modeles/Robes%20de%20soirees/120.000d.jpg"
-              alt="Default Blog Image"
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-700"
-            />
+            <div className="absolute inset-0 bg-jk-imperial-green/10 flex items-center justify-center">
+              <span className="text-4xl text-jk-royal-gold opacity-50">✍️</span>
+            </div>
           )}
           <span className="absolute top-4 left-4 bg-jk-imperial-green/90 backdrop-blur text-jk-cream text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
             {post.category || 'Actualités'}
@@ -234,14 +234,10 @@ function BlogCard({ post, locale, t }: any) {
         <div className="p-6 flex flex-col flex-1">
           <p className="text-xs text-jk-text-muted dark:text-gray-400 mb-3 flex items-center gap-2">
             <span>{post.publishedAt ? new Date(post.publishedAt).toLocaleDateString(locale === 'fr' ? 'fr-FR' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric' }) : '—'}</span>
-            {post.readingTime && <><span>·</span><span>{t('card.readingTime', { time: post.readingTime })}</span></>}
           </p>
           <h3 className="text-xl font-display font-semibold text-jk-imperial-green dark:text-jk-cream mb-3 group-hover:text-jk-royal-gold transition-colors line-clamp-2 leading-snug flex-1">
-            {post.title}
+            {title}
           </h3>
-          <p className="text-sm text-jk-text-muted dark:text-gray-300 line-clamp-3 mb-5">
-            {post.excerpt}
-          </p>
           <span className="inline-flex items-center gap-2 text-sm font-semibold text-jk-royal-gold group-hover:gap-3 transition-all">
             {t('card.read')}
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -255,13 +251,14 @@ function BlogCard({ post, locale, t }: any) {
 }
 
 function FeaturedBlogCard({ post, locale, t }: any) {
+  const title = post.title
   return (
-    <Link href={`/blog/${post.slug?.current}`} className="block">
+    <Link href={`/blog/${post.slug}`} className="block">
       <div className="group relative rounded-3xl overflow-hidden shadow-2xl mb-12 aspect-[21/9] cursor-pointer">
         {post.mainImage && (
           <Image
             src={urlForImage(post.mainImage).width(1400).height(600).url()}
-            alt={post.title}
+            alt={title}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-700"
             unoptimized
@@ -273,9 +270,8 @@ function FeaturedBlogCard({ post, locale, t }: any) {
             {t('card.featured')}
           </span>
           <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-3 group-hover:text-jk-royal-gold transition-colors leading-snug">
-            {post.title}
+            {title}
           </h2>
-          <p className="text-gray-200 line-clamp-2 text-sm mb-5">{post.excerpt}</p>
           <span className="inline-flex items-center gap-2 text-jk-royal-gold font-semibold group-hover:gap-4 transition-all">
             {t('card.readFull')}
           </span>

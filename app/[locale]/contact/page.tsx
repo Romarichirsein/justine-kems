@@ -28,7 +28,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
   setRequestLocale(locale)
   const t = await getTranslations({ locale, namespace: 'contact' })
   
-  const heroImages = await safeFetch<SanityImageInfo[]>(queries.heroImages) ?? []
+  const heroImages = await safeFetch<SanityImageInfo[]>(queries.heroImages, { locale }) ?? []
   const contactHero = heroImages.find(img => img.title?.toLowerCase().includes('contact')) || heroImages[1] || heroImages[0]
 
   return (

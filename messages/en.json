@@ -420,6 +420,14 @@
       "desc": "Contact us today and let's start creating the outfit of your dreams together.",
       "btnAppointment": "✉️ Book an appointment",
       "btnWhatsapp": "💬 WhatsApp direct"
+    },
+    "scrollSequence": {
+      "t1Title": "The Art of Perfection",
+      "t1Desc": "Every stitch, every fold, every detail is a quest for excellence.",
+      "t2Title": "Elite Materials",
+      "t2Desc": "We select the finest fabrics to enhance your appearance.",
+      "t3Title": "Your Vision, Our Reality",
+      "t3Desc": "Bring your most daring dreams to life with Justine Kems."
     }
   },
   "aboutExt": {

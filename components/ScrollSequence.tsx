@@ -10,6 +10,7 @@ interface ScrollSequenceProps {
 }
 
 export default function ScrollSequence({ frameCount = 16, baseUrl = '/motion/ezgif-frame-' }: ScrollSequenceProps) {
+  const t = useTranslations('homeExt')
   const containerRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [images, setImages] = useState<HTMLImageElement[]>([])
@@ -135,11 +136,11 @@ export default function ScrollSequence({ frameCount = 16, baseUrl = '/motion/ezg
             className="absolute inset-0 flex items-center justify-center px-4"
           >
             <div className="max-w-2xl bg-black/40 backdrop-blur-md border border-white/10 p-8 md:p-12 rounded-2xl text-center">
-              <h2 className="text-3xl md:text-5xl font-script text-jk-royal-gold mb-4">
-                L&apos;Art de la Perfection
-              </h2>
+              <h1 className="text-3xl md:text-5xl font-script text-jk-royal-gold mb-4">
+                {t('scrollSequence.t1Title')}
+              </h1>
               <p className="text-jk-cream text-lg md:text-xl font-light">
-                Chaque point, chaque pli, chaque détail est une quête d&apos;excellence.
+                {t('scrollSequence.t1Desc')}
               </p>
             </div>
           </motion.div>
@@ -151,10 +152,10 @@ export default function ScrollSequence({ frameCount = 16, baseUrl = '/motion/ezg
           >
             <div className="max-w-2xl bg-black/40 backdrop-blur-md border border-white/10 p-8 md:p-12 rounded-2xl text-center">
               <h2 className="text-3xl md:text-5xl font-display text-jk-royal-gold mb-4 uppercase tracking-tighter">
-                Matériaux d&apos;Élite
+                {t('scrollSequence.t2Title')}
               </h2>
               <p className="text-jk-cream text-lg md:text-xl font-light">
-                Nous sélectionnons les tissus les plus nobles pour sublimer votre allure.
+                {t('scrollSequence.t2Desc')}
               </p>
             </div>
           </motion.div>
@@ -166,10 +167,10 @@ export default function ScrollSequence({ frameCount = 16, baseUrl = '/motion/ezg
           >
             <div className="max-w-2xl bg-black/40 backdrop-blur-md border border-white/10 p-8 md:p-12 rounded-2xl text-center">
               <h2 className="text-3xl md:text-5xl font-script text-jk-royal-gold mb-4">
-                Votre Vision, Notre Réalité
+                {t('scrollSequence.t3Title')}
               </h2>
               <p className="text-jk-cream text-lg md:text-xl font-light">
-                Donnez vie à vos rêves les plus audacieux avec Justine Kems.
+                {t('scrollSequence.t3Desc')}
               </p>
             </div>
           </motion.div>

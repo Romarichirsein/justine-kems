@@ -1,16 +1,17 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
-import Link from 'next/link'
+import { Link } from '@/navigation'
+import { getTranslations } from 'next-intl/server'
 import { client, queries, urlForImage } from '@/sanity/client'
 import { PortableText } from '@portabletext/react'
 import { ArticleSchema } from '@/components/StructuredData'
 
 type Props = {
-  params: { locale: string; slug: string }
+  params: Promise<{ locale: string; slug: string }>
 }
 
 export async function generateStaticParams() {
-  const posts = await client.fetch(`*[_type == "post"]{ "slug": slug.current }`).catch(() => []);
+  const posts = await client.fetch(`*[_type == "article"]{ "slug": slug.current }`).catch(() => []);
   const locales = ['fr', 'en'];
   
   const params = [];
@@ -27,15 +28,18 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = await client.fetch(queries.postBySlug, { slug: params.slug }).catch(() => null)
+  const { locale, slug } = await params
+  const post = await client.fetch(queries.postBySlug, { locale, slug }).catch(() => null)
   
   if (!post) {
     return { title: 'Article introuvable' }
   }
 
+  const title = post.title
+
   return {
-    title: `${post.title} | Blog Justine Kem's`,
-    description: post.excerpt,
+    title: `${title} | Blog Justine Kem's`,
+    description: title,
     openGraph: {
       type: 'article',
       publishedTime: post.publishedAt,
@@ -43,43 +47,45 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: post.mainImage ? [urlForImage(post.mainImage).width(1200).height(630).url()] : []
     },
     alternates: {
-      canonical: `/${params.locale}/blog/${post.slug?.current}`,
+      canonical: `/${locale}/blog/${post.slug?.current || slug}`,
       languages: {
-        fr: `/fr/blog/${post.slug?.current}`,
-        en: `/en/blog/${post.slug?.current}`
+        fr: `/fr/blog/${post.slug?.current || slug}`,
+        en: `/en/blog/${post.slug?.current || slug}`
       }
     }
   }
 }
 
 export default async function BlogPostPage({ params }: Props) {
+  const { locale, slug } = await params
+  const t = await getTranslations({ locale, namespace: 'blog' })
   const post = await client.fetch(`
-    *[_type == "post" && slug.current == $slug][0] {
-      title,
-      slug,
-      mainImage,
-      body,
-      publishedAt,
-      category,
-      excerpt,
-      readingTime,
-      "relatedPosts": *[_type == "post" && category == ^.category && slug.current != $slug][0...3] {
-        title, slug, mainImage, publishedAt
+    *[_type == "article" && slug.current == $slug][0] {
+      ...,
+      "title": coalesce(select($locale == "en" => title_en, title_fr), title_fr, title_en),
+      "content": coalesce(select($locale == "en" => content_en, content_fr), content_fr, content_en),
+      "relatedPosts": *[_type == "article" && category == ^.category && slug.current != $slug][0...3] {
+        "title": coalesce(select($locale == "en" => title_en, title_fr), title_fr, title_en),
+        slug, 
+        mainImage, 
+        publishedAt
       }
     }
-  `, { slug: params.slug }).catch(() => null)
+  `, { locale, slug }).catch(() => null)
 
   if (!post) {
-    return <div className="min-h-screen flex items-center justify-center"><h1 className="text-4xl">Article introuvable</h1></div>
+    return <div className="min-h-screen flex items-center justify-center"><h1 className="text-4xl text-jk-imperial-green">Article introuvable</h1></div>
   }
+
+  const title = post.title
 
   return (
     <div className="bg-jk-cream dark:bg-jk-dark-bg min-h-screen pb-24">
       {/* Schema org */}
       <ArticleSchema post={{
-        title: post.title,
-        description: post.excerpt,
-        image: post.mainImage,
+        title: title,
+        description: title,
+        mainImage: post.mainImage,
         publishedAt: post.publishedAt,
         authorName: "Justine Kem"
       }} />
@@ -89,36 +95,27 @@ export default async function BlogPostPage({ params }: Props) {
         {post.mainImage ? (
           <Image
             src={urlForImage(post.mainImage).url()}
-            alt={post.title}
+            alt={title}
             fill
             className="object-cover"
             priority
           />
         ) : (
-          <Image
-            src="/modeles/robes-soirees/120.000d.jpg"
-            alt={post.title}
-            fill
-            className="object-cover opacity-80"
-            priority
-          />
+          <div className="absolute inset-0 bg-jk-imperial-green/20" />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
         
         <div className="relative z-10 container mx-auto px-4 max-w-4xl text-center">
           <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-gray-300 font-medium tracking-wider uppercase mb-6">
-            <Link href={`/${params.locale}/blog`} className="hover:text-jk-royal-gold transition-colors">Blog</Link>
+            <Link href="/blog" className="hover:text-jk-royal-gold transition-colors">Blog</Link>
             <span>•</span>
-            <span className="bg-jk-royal-gold text-black px-3 py-1 rounded-full">{post.category}</span>
+            <span className="bg-jk-royal-gold text-black px-3 py-1 rounded-full capitalize">{post.category}</span>
             <span>•</span>
-            <span>{new Date(post.publishedAt).toLocaleDateString(params.locale === 'fr' ? 'fr-FR' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+            <span>{new Date(post.publishedAt).toLocaleDateString(locale === 'fr' ? 'fr-FR' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
           </div>
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-display text-white mb-6 leading-tight text-shadow-gold">
-            {post.title}
+            {title}
           </h1>
-          <p className="text-lg md:text-xl text-gray-200 italic font-script">
-            {post.readingTime} min lecture
-          </p>
         </div>
       </header>
 
@@ -128,7 +125,7 @@ export default async function BlogPostPage({ params }: Props) {
           
           {/* Main Body */}
           <article className="w-full lg:w-[70%] prose prose-lg dark:prose-invert prose-headings:font-display prose-headings:text-jk-imperial-green dark:prose-headings:text-jk-royal-gold prose-p:font-sans prose-p:text-jk-text-dark dark:prose-p:text-gray-300 prose-a:text-jk-royal-gold prose-blockquote:border-jk-royal-gold prose-blockquote:text-jk-imperial-green dark:prose-blockquote:text-jk-cream prose-blockquote:italic max-w-none">
-             <PortableText value={post.body} />
+             <PortableText value={post.content} />
           </article>
 
           {/* Sidebar Partage */}
@@ -153,11 +150,11 @@ export default async function BlogPostPage({ params }: Props) {
             {/* CTA Produit */}
             <div className="bg-jk-imperial-green text-jk-cream p-8 rounded-2xl shadow-xl text-center relative overflow-hidden group">
                <div className="absolute inset-0 bg-[url('/pattern-baroque.svg')] opacity-10 bg-repeat" />
-               <h3 className="text-2xl font-display mb-4 relative z-10 text-shadow-gold text-jk-royal-gold">Envie d&apos;une création personnalisée ?</h3>
-               <p className="mb-8 text-sm text-gray-300 relative z-10">Laissez-vous inspirer par nos articles pour imaginer votre prochaine tenue sur mesure.</p>
-               <a href={`/${params.locale}/contact`} className="inline-block bg-jk-royal-gold hover:bg-jk-royal-gold-dark text-black font-bold px-6 py-3 rounded-full shadow-neon-gold transition-all hover:scale-105 relative z-10">
-                 Prendre rendez-vous
-               </a>
+               <h3 className="text-2xl font-display mb-4 relative z-10 text-shadow-gold text-jk-royal-gold">{t('sidebar.cta.title')}</h3>
+               <p className="mb-8 text-sm text-gray-300 relative z-10">{t('sidebar.cta.desc')}</p>
+               <Link href="/contact" className="inline-block bg-jk-royal-gold hover:bg-jk-royal-gold-dark text-black font-bold px-6 py-3 rounded-full shadow-neon-gold transition-all hover:scale-105 relative z-10">
+                 {t('sidebar.cta.btn')}
+               </Link>
             </div>
 
           </aside>
@@ -168,20 +165,23 @@ export default async function BlogPostPage({ params }: Props) {
       {post.relatedPosts && post.relatedPosts.length > 0 && (
         <section className="container mx-auto px-4 mt-24 max-w-6xl">
            <h2 className="text-4xl font-display text-jk-imperial-green dark:text-jk-cream mb-12 text-center md:text-left">
-             Continuer la lecture
+             {t('card.readFull').replace(' →', '')}
            </h2>
            <div className="grid md:grid-cols-3 gap-8">
-             {post.relatedPosts.map((related: any) => (
-               <Link href={`/${params.locale}/blog/${related.slug?.current}`} key={related.slug?.current} className="group flex flex-col items-start hover:-translate-y-1 transition-transform">
-                 <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-4 shadow-lg">
-                    {related.mainImage && (
-                      <Image src={urlForImage(related.mainImage).width(600).height(338).url()} alt={related.title} fill className="object-cover group-hover:scale-105 transition-transform" />
-                    )}
-                 </div>
-                 <p className="text-sm font-bold text-jk-royal-gold uppercase tracking-wider mb-2">{new Date(related.publishedAt).toLocaleDateString(params.locale === 'fr' ? 'fr-FR' : 'en-US', { day: 'numeric', month: 'short' })}</p>
-                 <h3 className="text-xl font-display text-jk-imperial-green dark:text-gray-200 group-hover:text-jk-royal-gold transition-colors">{related.title}</h3>
-               </Link>
-             ))}
+             {post.relatedPosts.map((related: any) => {
+               const relTitle = related.title
+               return (
+                <Link href={`/blog/${related.slug?.current}`} key={related.slug?.current} className="group flex flex-col items-start hover:-translate-y-1 transition-transform">
+                  <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-4 shadow-lg">
+                     {related.mainImage && (
+                       <Image src={urlForImage(related.mainImage).width(600).height(338).url()} alt={relTitle} fill className="object-cover group-hover:scale-105 transition-transform" />
+                     )}
+                  </div>
+                  <p className="text-sm font-bold text-jk-royal-gold uppercase tracking-wider mb-2">{new Date(related.publishedAt).toLocaleDateString(locale === 'fr' ? 'fr-FR' : 'en-US', { day: 'numeric', month: 'short' })}</p>
+                  <h3 className="text-xl font-display text-jk-imperial-green dark:text-gray-200 group-hover:text-jk-royal-gold transition-colors">{relTitle}</h3>
+                </Link>
+               )
+             })}
            </div>
         </section>
       )}

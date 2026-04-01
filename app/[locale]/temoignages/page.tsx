@@ -21,7 +21,7 @@ export default async function TemoignagesPage({ params }: { params: Promise<{ lo
   setRequestLocale(locale)
   const t = await getTranslations({ locale, namespace: 'temoignages' })
 
-  const testimonials = await safeFetch(queries.testimonials) ?? []
+  const testimonials = await safeFetch(queries.allTestimonials, { locale }) ?? []
 
   // Témoignages statiques de secours si Sanity est vide
   const fallbackKeys = ['f1', 'f2', 'f3', 'f4', 'f5', 'f6'] as const
