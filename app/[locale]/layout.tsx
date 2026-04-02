@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { Montserrat } from 'next/font/google'
+// next/font/google supprimé — utilisation de la variable CSS définie dans globals.css
 import { locales } from '@/i18n/request'
 import { Providers } from '../providers'
 import { getMessages, setRequestLocale, getTranslations } from 'next-intl/server'
@@ -9,11 +9,7 @@ import Footer from '@/components/Footer'
 import WhatsAppFloating from '@/components/WhatsAppFloating'
 import { OrganizationSchema, WebSiteSchema } from '@/components/StructuredData'
 
-const montserrat = Montserrat({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-montserrat',
-})
+// La police Montserrat est chargée directement via globals.css (@import Google Fonts)
 
 type Props = {
   params: Promise<{ locale: string }>
@@ -111,7 +107,7 @@ export default async function RootLayout({
   const messages = await getMessages({ locale })
 
   return (
-    <html lang={locale} className={montserrat.variable}>
+    <html lang={locale}>
       <body className="font-sans antialiased text-jk-text-dark bg-jk-cream dark:bg-jk-dark-bg dark:text-jk-dark-text min-h-screen flex flex-col">
         <WebSiteSchema />
         <OrganizationSchema />

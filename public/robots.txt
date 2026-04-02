@@ -1,0 +1,15 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+
+# Googlebot
+User-agent: Googlebot
+Allow: /
+
+# Host
+Host: https://justinekems.com
+
+# Sitemaps
+Sitemap: https://justinekems.com/sitemap.xml

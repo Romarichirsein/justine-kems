@@ -15,6 +15,9 @@ interface Model {
   description?: any // Portable Text
   category: string
   price?: number
+  priceH?: number   // prix homme (tenues couple)
+  priceF?: number   // prix femme (tenues couple)
+  gender?: 'h' | 'f'
   isAvailable?: boolean
 }
 
