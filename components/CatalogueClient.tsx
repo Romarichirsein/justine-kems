@@ -14,9 +14,46 @@ interface CatalogueProduct {
   category: string
   price: number
   promoPrice?: number
+  priceF?: number
+  priceH?: number
   shortDescription?: string
   longDescription?: any
   stock?: number
+  gender?: string
+}
+
+const parsePrices = (product: CatalogueProduct) => {
+  const prices = {
+    f: product.priceF || 0,
+    h: product.priceH || 0,
+    total: product.price || 0,
+    hasBreakdown: false
+  }
+
+  // Si déjà renseigné dans Sanity
+  if (prices.f > 0 || prices.h > 0) {
+    prices.hasBreakdown = true
+    if (prices.total === 0) prices.total = prices.f + prices.h
+    return prices
+  }
+
+  // Sinon tenter de parser le nom ou la description (ex: 120000f/60000h)
+  const sourceStr = `${product.name} ${product.shortDescription || ''}`
+  const fMatch = sourceStr.match(/(\d+)\s*[fF](?![a-zA-Z])/);
+  const hMatch = sourceStr.match(/(\d+)\s*[hH](?![a-zA-Z])/);
+
+  if (fMatch) prices.f = parseInt(fMatch[1])
+  if (hMatch) prices.h = parseInt(hMatch[1])
+
+  if (fMatch || hMatch) {
+    prices.hasBreakdown = true
+    // Si on a les deux et pas de total, on somme
+    if (fMatch && hMatch && prices.total <= (prices.f + prices.h)) {
+        prices.total = prices.f + prices.h
+    }
+  }
+
+  return prices
 }
 
 interface CatalogueClientProps {
@@ -42,10 +79,42 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
 
   const WHATSAPP_NUMBER = '237677463484'
 
+  function getCategoryEmoji(cat: string) {
+    const map: Record<string, string> = {
+      'robes-mariage': '👰',
+      'robes-soirees': '👗',
+      'tenu-couple': '👩‍❤️‍👨',
+      'tenue-traditionnels': '🌍',
+      'etat-civil': '💍',
+      'tenue-ville': '👠',
+    }
+    return map[cat] || '✨'
+  }
+
   function getCategoryLabel(catId: string) {
     const found = CATEGORIES.find(c => c.id === catId)
     return found ? found.label : catId
   }
+
+  const formatPrice = useCallback((n: number) => {
+    return n.toLocaleString(locale === 'fr' ? 'fr-FR' : 'en-US') + ' FCFA'
+  }, [locale])
+
+  const handleOrder = useCallback((product: CatalogueProduct) => {
+    const prices = parsePrices(product)
+    let priceStr = formatPrice(prices.total)
+    
+    if (prices.hasBreakdown && (prices.f > 0 || prices.h > 0)) {
+        let breakdown = ""
+        if (prices.f > 0) breakdown += `\n- Femme: ${formatPrice(prices.f)}`
+        if (prices.h > 0) breakdown += `\n- Homme: ${formatPrice(prices.h)}`
+        priceStr += breakdown
+    }
+
+    const message = `${t('whatsapp.greeting')}\n\n${t('whatsapp.interest')} *${product.name}*\n${t('whatsapp.category', { cat: getCategoryLabel(product.category) })}\n${t('whatsapp.price', { price: priceStr })}\n\n${t('whatsapp.thanks')}`
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
+    window.open(url, '_blank')
+  }, [locale, formatPrice, t, getCategoryLabel])
 
   const filtered = products.filter((p) => {
     return activeCategory === 'all' || p.category === activeCategory
@@ -65,45 +134,16 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
     } else {
       document.body.style.overflow = ''
     }
-    return () => { document.body.style.overflow = '' }
   }, [selectedProduct])
 
-  const formatPrice = useCallback((n: number) => {
-    return n.toLocaleString(locale === 'fr' ? 'fr-FR' : 'en-US') + ' FCFA'
-  }, [locale])
-
-  const handleOrder = useCallback((product: CatalogueProduct) => {
-    const priceLabel = product.promoPrice ? formatPrice(product.promoPrice) : formatPrice(product.price)
-
-    const msg = encodeURIComponent(
-      `${t('whatsapp.greeting')}\n\n` +
-      `${t('whatsapp.interest')} *${product.name}*\n` +
-      `${t('whatsapp.category', { cat: getCategoryLabel(product.category) })}\n` +
-      `${t('whatsapp.price', { price: priceLabel })}\n\n` +
-      `${t('whatsapp.thanks')}`
-    )
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank')
-  }, [locale, formatPrice])
-
-  const handleImgError = useCallback((id: string) => {
+  const handleImgError = (id: string) => {
     setImgErrors(prev => new Set(prev).add(id))
-  }, [])
-
-  function getCategoryEmoji(cat: string) {
-    const map: Record<string, string> = {
-      'robes-mariage': '👰',
-      'robes-soirees': '👗',
-      'tenu-couple': '👩‍❤️‍👨',
-      'tenue-traditionnels': '🌍',
-      'etat-civil': '💍',
-      'tenue-ville': '👠',
-    }
-    return map[cat] || '✨'
   }
 
   return (
     <>
       <div className="container mx-auto px-4 py-10">
+        {/* Filters */}
         <div className="bg-white dark:bg-jk-dark-surface rounded-2xl shadow-lg p-6 mb-10">
           <div className="mb-5">
             <p className="text-xs font-semibold text-jk-text-muted dark:text-gray-400 uppercase tracking-widest mb-3">
@@ -130,7 +170,6 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
               ))}
             </div>
           </div>
-
           <div className="flex items-center justify-between">
             <span className="text-sm text-jk-text-muted dark:text-gray-400">
               {t('filters.results', { count: filtered.length, s: filtered.length > 1 ? 's' : '' })}
@@ -138,6 +177,7 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
           </div>
         </div>
 
+        {/* Grid */}
         <motion.div layout className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4">
           <AnimatePresence mode="popLayout">
             {filtered.map((product) => (
@@ -214,6 +254,7 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
         )}
       </div>
 
+      {/* Modal */}
       <AnimatePresence>
         {selectedProduct && (
           <motion.div
@@ -238,6 +279,7 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
                 </svg>
               </button>
 
+              {/* Left Column: Image */}
               <div className="relative md:w-1/2 h-72 md:h-auto bg-gray-100 dark:bg-gray-800 shrink-0">
                 {selectedProduct.mainImage || (selectedProduct.images && selectedProduct.images.length > 0) ? (
                   <div className="relative w-full h-full">
@@ -265,57 +307,92 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
                 )}
               </div>
 
+              {/* Right Column: Details */}
               <div className="flex flex-col justify-between p-8 md:w-1/2 overflow-y-auto">
                 <div>
                   <p className="text-sm text-jk-text-muted dark:text-gray-400 mb-2 flex items-center gap-2">
                     <span className="text-xl">{getCategoryEmoji(selectedProduct.category)}</span>
                     {getCategoryLabel(selectedProduct.category)}
                   </p>
-                  <h2 className="text-3xl font-display text-jk-imperial-green dark:text-jk-royal-gold mb-6">
-                    {selectedProduct.name}
+                  <h2 className="text-3xl font-display text-jk-imperial-green dark:text-jk-royal-gold mb-4 leading-tight">
+                    {selectedProduct.category === 'tenu-couple' ? t('modal.tenueCouple') : selectedProduct.name}
                   </h2>
 
                   <div className="mb-6">
                     <h3 className="text-xs font-semibold text-jk-text-muted dark:text-gray-400 uppercase tracking-widest mb-2">
                       {t('modal.description')}
                     </h3>
-                    <p className="text-jk-text-dark dark:text-gray-200 leading-relaxed mb-4">
-                      {selectedProduct.shortDescription}
-                    </p>
-                  </div>
-
-                  <div className="bg-jk-cream dark:bg-jk-dark-bg rounded-2xl p-5 mb-6">
-                    <p className="text-xs font-semibold text-jk-text-muted dark:text-gray-400 uppercase tracking-widest mb-2">
-                      {t('modal.price')}
-                    </p>
-                    <div className="flex items-baseline gap-3">
-                      {selectedProduct.promoPrice ? (
-                        <>
-                          <span className="text-3xl font-bold text-jk-imperial-green dark:text-jk-royal-gold">{formatPrice(selectedProduct.promoPrice)}</span>
-                          <span className="text-lg line-through text-gray-500 opacity-70">{formatPrice(selectedProduct.price)}</span>
-                        </>
+                    <div className="text-jk-text-dark dark:text-gray-200 leading-relaxed text-sm">
+                      {selectedProduct.shortDescription || selectedProduct.longDescription ? (
+                        <p>{selectedProduct.shortDescription || selectedProduct.longDescription}</p>
                       ) : (
-                        <p className="text-3xl font-bold text-jk-imperial-green dark:text-jk-royal-gold">
-                          {formatPrice(selectedProduct.price)}
-                        </p>
+                        <p>{selectedProduct.category === 'tenu-couple' ? t('modal.descCouple') : t('modal.descGeneric', { cat: getCategoryLabel(selectedProduct.category) })}</p>
                       )}
                     </div>
                   </div>
 
-                  {selectedProduct.stock !== undefined && (
-                    <div className="mb-6">
-                      <p className="text-sm text-jk-text-muted dark:text-gray-400 italic">
-                        {selectedProduct.stock > 0 ? `Stock: ${selectedProduct.stock} disponibles` : "Rupture de stock"}
-                      </p>
-                    </div>
-                  )}
+                  <div className="bg-jk-cream/50 dark:bg-jk-dark-bg/50 rounded-2xl p-5 mb-6 border border-jk-royal-gold/10">
+                    <p className="text-xs font-semibold text-jk-text-muted dark:text-gray-400 uppercase tracking-widest mb-3">
+                      {t('modal.price')}
+                    </p>
+                    {(() => {
+                      const prices = parsePrices(selectedProduct)
+                      if (prices.hasBreakdown && (prices.f > 0 || prices.h > 0)) {
+                        return (
+                          <div className="space-y-2">
+                            {prices.f > 0 && (
+                              <div className="flex justify-between items-center text-sm">
+                                <span className="flex items-center gap-2">👗 {t('card.femme')}</span>
+                                <span className="font-semibold text-jk-imperial-green/80 dark:text-jk-royal-gold/80">{formatPrice(prices.f)}</span>
+                              </div>
+                            )}
+                            {prices.h > 0 && (
+                              <div className="flex justify-between items-center text-sm">
+                                <span className="flex items-center gap-2">👔 {t('card.homme')}</span>
+                                <span className="font-semibold text-jk-imperial-green/80 dark:text-jk-royal-gold/80">{formatPrice(prices.h)}</span>
+                              </div>
+                            )}
+                            <div className="pt-2 border-t border-jk-royal-gold/20 flex justify-between items-center">
+                              <span className="font-bold text-jk-imperial-green dark:text-jk-royal-gold">{t('modal.total')}</span>
+                              <span className="text-xl font-bold text-jk-imperial-green dark:text-jk-royal-gold">{formatPrice(prices.total)}</span>
+                            </div>
+                          </div>
+                        )
+                      }
+                      return (
+                        <div className="flex items-baseline gap-3">
+                          {selectedProduct.promoPrice ? (
+                            <>
+                              <span className="text-3xl font-bold text-jk-imperial-green dark:text-jk-royal-gold">{formatPrice(selectedProduct.promoPrice)}</span>
+                              <span className="text-lg line-through text-gray-500 opacity-70">{formatPrice(prices.total)}</span>
+                            </>
+                          ) : (
+                            <p className="text-3xl font-bold text-jk-imperial-green dark:text-jk-royal-gold">
+                              {formatPrice(prices.total)}
+                            </p>
+                          )}
+                        </div>
+                      )
+                    })()}
+                    <p className="text-[10px] text-jk-text-muted mt-3 italic">
+                      {t('modal.indicative')}
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 mb-8">
+                     {t.raw('modal.features') && Array.isArray(t.raw('modal.features')) && t.raw('modal.features').map((f: string, i: number) => (
+                       <div key={i} className="flex items-center gap-2 text-[11px] text-jk-text-dark/70 dark:text-gray-300">
+                         <span>{f}</span>
+                       </div>
+                     ))}
+                  </div>
                 </div>
 
                 <motion.button
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => handleOrder(selectedProduct)}
-                  className="w-full bg-jk-imperial-green text-jk-royal-gold font-bold py-4 rounded-xl flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:bg-jk-imperial-green/90 transition-all text-lg"
+                  className="w-full bg-[#075e54] hover:bg-[#128c7e] text-white font-bold py-4 rounded-xl flex items-center justify-center gap-3 shadow-lg transition-all text-lg"
                 >
                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
