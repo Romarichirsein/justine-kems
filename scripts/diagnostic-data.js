@@ -19,7 +19,7 @@ async function findPatterns() {
 
     console.log(`Found ${matches.length} potential matches.`);
     matches.slice(0, 10).forEach(m => {
-        console.log(`- ID: ${m._id}\n  Name: ${m.name}\n  Category: ${m.category}\n  Price: ${m.price}\n  PriceF: ${m.priceF}\n  PriceH: ${m.priceH}`);
+        console.log(`- ID: ${m._id}\n  Name: ${m.name}\n  Category: ${m.category}\n  Desc: ${m.description || 'N/A'}\n  ShortDesc: ${m.shortDescription || 'N/A'}`);
     });
   } catch (err) {
     console.error('Error:', err.message);

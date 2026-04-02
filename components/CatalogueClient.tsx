@@ -16,6 +16,7 @@ interface CatalogueProduct {
   promoPrice?: number
   priceF?: number
   priceH?: number
+  description?: string
   shortDescription?: string
   longDescription?: any
   stock?: number
@@ -323,8 +324,8 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
                       {t('modal.description')}
                     </h3>
                     <div className="text-jk-text-dark dark:text-gray-200 leading-relaxed text-sm">
-                      {selectedProduct.shortDescription || selectedProduct.longDescription ? (
-                        <p>{selectedProduct.shortDescription || selectedProduct.longDescription}</p>
+                      {selectedProduct.description || selectedProduct.shortDescription || selectedProduct.longDescription ? (
+                        <p>{selectedProduct.description || selectedProduct.shortDescription || selectedProduct.longDescription}</p>
                       ) : (
                         <p>{selectedProduct.category === 'tenu-couple' ? t('modal.descCouple') : t('modal.descGeneric', { cat: getCategoryLabel(selectedProduct.category) })}</p>
                       )}
