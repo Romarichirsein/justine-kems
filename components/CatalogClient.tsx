@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, Suspense } from 'react'
 import { useTranslations } from 'next-intl'
+import { useSearchParams } from 'next/navigation'
 import { client, urlForImage } from '@/sanity/client'
 import { SanityImage } from '@/components/SanityImage'
 import { PortableText } from '@portabletext/react'
@@ -30,9 +31,25 @@ interface CatalogClientProps {
   locale: string
 }
 
-export function CatalogClient({ initialModels, locale }: CatalogClientProps) {
+export function CatalogClient(props: CatalogClientProps) {
+  return (
+    <Suspense fallback={<div className="container mx-auto py-20 text-center opacity-50 text-white">Chargement...</div>}>
+      <CatalogContent {...props} />
+    </Suspense>
+  )
+}
+
+function CatalogContent({ initialModels, locale }: CatalogClientProps) {
   const t = useTranslations('modeles')
-  const [activeCategory, setActiveCategory] = useState('all')
+  const searchParams = useSearchParams()
+  const categoryParam = searchParams.get('category')
+
+  const [activeCategory, setActiveCategory] = useState(categoryParam || 'all')
+  
+  useEffect(() => {
+    if (categoryParam) setActiveCategory(categoryParam)
+  }, [categoryParam])
+
   const [selectedModel, setSelectedModel] = useState<Model | null>(null)
   const [cart, setCart] = useState<CartItem[]>([])
   const [showCart, setShowCart] = useState(false)
