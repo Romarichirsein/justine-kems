@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { client, queries } from '@/sanity/client'
-import { CatalogClient } from '@/components/CatalogClient'
+import { CatalogueClient } from '@/components/CatalogueClient'
 import { SanityImage } from '@/components/SanityImage'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -50,7 +50,7 @@ export default async function CataloguePage({ params }: { params: Promise<{ loca
         </div>
       </div>
 
-      <CatalogClient initialModels={products} locale={locale} />
+      <CatalogueClient products={products} locale={locale} />
     </div>
   )
 }

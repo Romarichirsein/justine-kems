@@ -10,6 +10,7 @@ interface CatalogueProduct {
   _id: string
   name: string
   images?: any[]
+  mainImage?: any
   category: string
   price: number
   promoPrice?: number
@@ -31,11 +32,12 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
 
   const CATEGORIES = [
     { id: 'all', label: t('filters.all') },
-    { id: 'pret-a-porter', label: locale === 'fr' ? 'Prêt-à-porter' : 'Ready-to-wear' },
-    { id: 'accessoires', label: locale === 'fr' ? 'Accessoires' : 'Accessories' },
-    { id: 'sur-mesure', label: locale === 'fr' ? 'Sur mesure' : 'Bespoke' },
-    { id: 'homme', label: locale === 'fr' ? 'Homme' : 'Men' },
-    { id: 'femme', label: locale === 'fr' ? 'Femme' : 'Women' },
+    { id: 'robes-mariage', label: t('categories.robes-mariage') },
+    { id: 'robes-soirees', label: t('categories.robes-soirees') },
+    { id: 'tenu-couple', label: t('categories.tenu-couple') },
+    { id: 'tenue-traditionnels', label: t('categories.tenue-traditionnels') },
+    { id: 'etat-civil', label: t('categories.etat-civil') },
+    { id: 'tenue-ville', label: t('categories.tenue-ville') },
   ]
 
   const WHATSAPP_NUMBER = '237677463484'
@@ -89,11 +91,12 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
 
   function getCategoryEmoji(cat: string) {
     const map: Record<string, string> = {
-      'pret-a-porter': '👗',
-      'accessoires': '👜',
-      'sur-mesure': '✂️',
-      'homme': '👔',
-      'femme': '👠',
+      'robes-mariage': '👰',
+      'robes-soirees': '👗',
+      'tenu-couple': '👩‍❤️‍👨',
+      'tenue-traditionnels': '🌍',
+      'etat-civil': '💍',
+      'tenue-ville': '👠',
     }
     return map[cat] || '✨'
   }
@@ -149,14 +152,14 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
                 className="group cursor-pointer bg-white dark:bg-jk-dark-surface rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:shadow-jk-royal-gold/20 transition-all duration-300 hover:-translate-y-1"
               >
                 <div className="relative aspect-[3/4] overflow-hidden bg-gray-100 dark:bg-gray-800">
-                  {imgErrors.has(product._id) || !product.images?.[0] ? (
+                  {imgErrors.has(product._id) || (!product.images?.[0] && !product.mainImage) ? (
                     <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
                       <span className="text-4xl mb-2">{getCategoryEmoji(product.category)}</span>
                       <span className="text-xs text-center px-2">{getCategoryLabel(product.category)}</span>
                     </div>
                   ) : (
                     <Image
-                      src={urlForImage(product.images[0]).width(400).height(533).url()}
+                      src={urlForImage(product.mainImage || product.images![0]).width(400).height(533).url()}
                       alt={product.name}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -236,19 +239,19 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
               </button>
 
               <div className="relative md:w-1/2 h-72 md:h-auto bg-gray-100 dark:bg-gray-800 shrink-0">
-                {selectedProduct.images && selectedProduct.images.length > 0 ? (
+                {selectedProduct.mainImage || (selectedProduct.images && selectedProduct.images.length > 0) ? (
                   <div className="relative w-full h-full">
                     <Image 
-                      src={urlForImage(selectedProduct.images[0]).url()} 
+                      src={urlForImage(selectedProduct.mainImage || selectedProduct.images![0]).url()} 
                       alt={selectedProduct.name} 
                       fill 
                       className="object-contain md:object-cover" 
                       sizes="(max-width: 768px) 100vw, 50vw" 
                       priority 
                     />
-                    {selectedProduct.images.length > 1 && (
+                    {(selectedProduct.images?.length || 0) > 1 && (
                       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                        {selectedProduct.images.map((_, i) => (
+                        {selectedProduct.images!.map((_, i) => (
                           <div key={i} className={`w-2 h-2 rounded-full ${i === 0 ? 'bg-jk-royal-gold' : 'bg-white/50'}`} />
                         ))}
                       </div>
