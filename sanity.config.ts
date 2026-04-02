@@ -5,7 +5,7 @@ import { media } from 'sanity-plugin-media'
 
 // Schemas
 import modele from './sanity/schemas/modele'
-import catalogue from './sanity/schemas/catalogue'
+import product from './sanity/schemas/product'
 import temoignage from './sanity/schemas/temoignage'
 import article from './sanity/schemas/article'
 import formation from './sanity/schemas/formation'
@@ -32,9 +32,9 @@ export default defineConfig({
               .icon(() => '📸')
               .child(S.documentTypeList('modele').title('Modèles')),
             S.listItem()
-              .title('Catalogue')
+              .title('Produits')
               .icon(() => '🛍️')
-              .child(S.documentTypeList('catalogue').title('Catalogue')),
+              .child(S.documentTypeList('product').title('Produits')),
             S.listItem()
               .title('Témoignages')
               .icon(() => '💬')
@@ -57,7 +57,7 @@ export default defineConfig({
                   .documentId('parametres')
               ),
             ...S.documentTypeListItems().filter(
-              (listItem) => !['modele', 'catalogue', 'temoignage', 'article', 'formation', 'parametres'].includes(listItem.getId() as string)
+              (listItem) => !['modele', 'product', 'temoignage', 'article', 'formation', 'parametres'].includes(listItem.getId() as string)
             )
           ])
     }),
@@ -66,6 +66,6 @@ export default defineConfig({
   ],
 
   schema: {
-    types: [modele, catalogue, temoignage, article, formation, parametres, heroImage, productImage],
+    types: [modele, product, temoignage, article, formation, parametres, heroImage, productImage],
   },
 })

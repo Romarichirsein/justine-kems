@@ -12,75 +12,78 @@ export const client = createClient({
   token: process.env.SANITY_API_TOKEN,
 })
 
-// Safe fetch that returns null when Sanity isn't configured yet
 export async function safeFetch<T = any>(
   query: string, 
   params?: Record<string, unknown>,
   options: any = { next: { revalidate: 0 } }
 ): Promise<T | null> {
   if (!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) return null
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return client.fetch<T>(query, params as any, options).catch(() => null)
 }
 
 const builder = imageUrlBuilder(client)
+export function urlForImage(source: any) { return builder.image(source) }
 
-export function urlForImage(source: any) {
-  return builder.image(source)
-}
-
-// Requêtes GROQ réutilisables
 export const queries = {
-  allProducts: `*[_type == "catalogue"] | order(_createdAt desc) {
+  // Catalogue
+  allProducts: `*[_type == "product"] | order(_createdAt desc) {
     _id,
-    "name": coalesce(name[$locale], name.fr),
+    "name": coalesce(name[$locale], name.fr, name),
     "slug": slug.current,
-    images,
-    "shortDescription": coalesce(shortDescription[$locale], shortDescription.fr),
-    "longDescription": coalesce(longDescription[$locale], longDescription.fr),
+    "mainImage": coalesce(mainImage, images[0]),
+    gallery,
+    "shortDescription": coalesce(shortDescription[$locale], shortDescription.fr, shortDescription),
+    "longDescription": coalesce(longDescription[$locale], longDescription.fr, longDescription),
     price,
     promoPrice,
     category,
-    stock
+    stock,
+    priceH,
+    priceF
   }`,
   
-  featuredProducts: `*[_type == "catalogue" && isFeatured == true][0...4] {
+  featuredProducts: `*[_type == "product" && isFeatured == true][0...4] {
     _id,
-    "name": coalesce(name[$locale], name.fr),
+    "name": coalesce(name[$locale], name.fr, name),
     "slug": slug.current,
-    images,
+    "mainImage": coalesce(mainImage, images[0]),
     price,
-    promoPrice
+    promoPrice,
+    priceH,
+    priceF
   }`,
   
-  productBySlug: `*[_type == "catalogue" && slug.current == $slug][0] {
+  productBySlug: `*[_type == "product" && slug.current == $slug][0] {
     _id,
-    "name": coalesce(name[$locale], name.fr),
+    "name": coalesce(name[$locale], name.fr, name),
     "slug": slug.current,
-    images,
-    "shortDescription": coalesce(shortDescription[$locale], shortDescription.fr),
-    "longDescription": coalesce(longDescription[$locale], longDescription.fr),
+    "mainImage": coalesce(mainImage, images[0]),
+    gallery,
+    "shortDescription": coalesce(shortDescription[$locale], shortDescription.fr, shortDescription),
+    "longDescription": coalesce(longDescription[$locale], longDescription.fr, longDescription),
     price,
     promoPrice,
     category,
-    stock
+    stock,
+    priceH,
+    priceF
   }`,
   
   allPosts: `*[_type == "article" && isPublished == true] | order(publishedAt desc) {
     _id,
-    "title": coalesce(title[$locale], title.fr),
+    "title": coalesce(title[$locale], title.fr, title),
     "slug": slug.current,
     mainImage,
-    "content": coalesce(content[$locale], content.fr),
+    "content": coalesce(content[$locale], content.fr, content),
     author,
     publishedAt,
     category
   }`,
   
   postBySlug: `*[_type == "article" && slug.current == $slug][0] {
-    "title": coalesce(title[$locale], title.fr),
+    "title": coalesce(title[$locale], title.fr, title),
     mainImage,
-    "content": coalesce(content[$locale], content.fr),
+    "content": coalesce(content[$locale], content.fr, content),
     publishedAt,
     category,
     author
@@ -88,9 +91,9 @@ export const queries = {
   
   allFormations: `*[_type == "formation" && isAvailable == true] | order(_createdAt desc) {
     _id,
-    "title": coalesce(title[$locale], title.fr),
+    "title": coalesce(title[$locale], title.fr, title),
     "slug": slug.current,
-    "description": coalesce(description[$locale], description.fr),
+    "description": coalesce(description[$locale], description.fr, description),
     image,
     price,
     duration,
@@ -102,18 +105,18 @@ export const queries = {
     _id,
     name,
     photo,
-    "content": coalesce(content[$locale], content.fr),
+    "content": coalesce(content[$locale], content.fr, content),
     rating,
     date
   }`,
   
   allModeles: `*[_type == "modele"] | order(_createdAt desc) {
     _id,
-    "name": coalesce(name[$locale], name.fr),
+    "name": coalesce(name[$locale], name.fr, name),
     "slug": slug.current,
     mainImage,
     gallery,
-    "description": coalesce(description[$locale], description.fr),
+    "description": coalesce(description[$locale], description.fr, description),
     price,
     category,
     isAvailable
@@ -121,26 +124,26 @@ export const queries = {
 
   siteSettings: `*[_type == "parametres"][0] {
     logo,
-    "slogan": coalesce(slogan[$locale], slogan.fr),
+    "slogan": coalesce(slogan[$locale], slogan.fr, slogan),
     contactEmail,
     whatsappNumber,
     socialLinks,
-    "footerText": coalesce(footerText[$locale], footerText.fr)
+    "footerText": coalesce(footerText[$locale], footerText.fr, footerText)
   }`,
   
   heroImages: `*[_type == "heroImage"] {
     _id,
-    "title": coalesce(title[$locale], title.fr),
+    "title": coalesce(title[$locale], title.fr, title),
     image,
-    "alt": coalesce(alt[$locale], alt.fr),
-    "caption": coalesce(caption[$locale], caption.fr)
+    "alt": coalesce(alt[$locale], alt.fr, alt),
+    "caption": coalesce(caption[$locale], caption.fr, caption)
   }`,
 
   productImages: `*[_type == "productImage"] {
     _id,
-    "title": coalesce(title[$locale], title.fr),
+    "title": coalesce(title[$locale], title.fr, title),
     image,
-    "alt": coalesce(alt[$locale], alt.fr),
-    "caption": coalesce(caption[$locale], caption.fr)
+    "alt": coalesce(alt[$locale], alt.fr, alt),
+    "caption": coalesce(caption[$locale], caption.fr, caption)
   }`
 }
