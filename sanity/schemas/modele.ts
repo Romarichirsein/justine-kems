@@ -4,22 +4,19 @@ export default {
   type: 'document',
   fields: [
     {
-      name: 'name_fr',
-      title: 'Nom du modèle (Français)',
-      type: 'string',
-      validation: (Rule: any) => Rule.required()
-    },
-    {
-      name: 'name_en',
-      title: 'Nom du modèle (Anglais)',
-      type: 'string',
-      validation: (Rule: any) => Rule.required()
+      name: 'name',
+      title: 'Nom du modèle',
+      type: 'object',
+      fields: [
+        { name: 'fr', type: 'string', title: 'Français', validation: (Rule: any) => Rule.required() },
+        { name: 'en', type: 'string', title: 'Anglais', validation: (Rule: any) => Rule.required() }
+      ]
     },
     {
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: { source: 'name_fr', maxLength: 96 },
+      options: { source: 'name.fr', maxLength: 96 },
       validation: (Rule: any) => Rule.required()
     },
     {
@@ -27,37 +24,22 @@ export default {
       title: 'Photo principale',
       type: 'image',
       options: { hotspot: true },
-      fields: [
-        {
-          name: 'alt',
-          type: 'string',
-          title: 'Texte alternatif'
-        }
-      ]
+      fields: [{ name: 'alt', type: 'string', title: 'Texte alternatif' }]
     },
     {
       name: 'gallery',
       title: 'Galerie de photos',
       type: 'array',
-      of: [
-        {
-          type: 'image',
-          options: { hotspot: true },
-          fields: [{ name: 'alt', type: 'string', title: 'Texte alternatif' }]
-        }
+      of: [{ type: 'image', options: { hotspot: true }, fields: [{ name: 'alt', type: 'string', title: 'Texte alternatif' }] }]
+    },
+    {
+      name: 'description',
+      title: 'Description',
+      type: 'object',
+      fields: [
+        { name: 'fr', type: 'array', of: [{ type: 'block' }], title: 'Français' },
+        { name: 'en', type: 'array', of: [{ type: 'block' }], title: 'Anglais' }
       ]
-    },
-    {
-      name: 'description_fr',
-      title: 'Description (Français)',
-      type: 'array',
-      of: [{ type: 'block' }]
-    },
-    {
-      name: 'description_en',
-      title: 'Description (Anglais)',
-      type: 'array',
-      of: [{ type: 'block' }]
     },
     {
       name: 'price',

@@ -16,16 +16,13 @@ export default {
       options: { hotspot: true }
     },
     {
-      name: 'content_fr',
-      title: 'Texte du témoignage (Français)',
-      type: 'text',
-      validation: (Rule: any) => Rule.required()
-    },
-    {
-      name: 'content_en',
-      title: 'Texte du témoignage (Anglais)',
-      type: 'text',
-      validation: (Rule: any) => Rule.required()
+      name: 'content',
+      title: 'Texte du témoignage',
+      type: 'object',
+      fields: [
+        { name: 'fr', type: 'text', title: 'Français', validation: (Rule: any) => Rule.required() },
+        { name: 'en', type: 'text', title: 'Anglais', validation: (Rule: any) => Rule.required() }
+      ]
     },
     {
       name: 'rating',
@@ -37,9 +34,7 @@ export default {
       name: 'date',
       title: 'Date',
       type: 'date',
-      options: {
-        dateFormat: 'YYYY-MM-DD',
-      }
+      options: { dateFormat: 'YYYY-MM-DD' }
     },
     {
       name: 'isVisible',

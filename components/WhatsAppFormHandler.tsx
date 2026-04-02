@@ -60,20 +60,20 @@ export function WhatsAppFormHandler({
     try {
       let photoUrl = ''
       
-      // Si une photo est présente, on l'uploade sur un service de partage temporaire (file.io)
+      // Si une photo est présente, on l'uploade via notre route API locale vers Sanity
       if (photo) {
         toast.loading("Transfert de la photo...", { id: 'upload' })
         const formData = new FormData()
         formData.append('file', photo)
         
         try {
-          const response = await fetch('https://file.io', {
+          const response = await fetch('/api/upload', {
             method: 'POST',
             body: formData
           })
           const result = await response.json()
-          if (result.success) {
-            photoUrl = result.link
+          if (response.ok && result.success) {
+            photoUrl = result.url
             toast.success("Photo prête !", { id: 'upload' })
           } else {
              throw new Error("Upload failed")
@@ -99,7 +99,7 @@ export function WhatsAppFormHandler({
       }
 
       if (photoUrl) {
-        messageContent += `\n\n🖼️ IMAGE D'INSPIRATION :\n${photoUrl}\n(Note: Le lien expire après consultation)`
+        messageContent += `\n\n🖼️ IMAGE D'INSPIRATION :\n${photoUrl}`
       } else if (photo) {
         messageContent += `\n\n📸 [Une photo a été sélectionnée mais n'a pas pu être uploadée]`
       }

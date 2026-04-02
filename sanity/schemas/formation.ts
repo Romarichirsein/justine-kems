@@ -4,22 +4,19 @@ export default {
   type: 'document',
   fields: [
     {
-      name: 'title_fr',
-      title: 'Titre (Français)',
-      type: 'string',
-      validation: (Rule: any) => Rule.required()
-    },
-    {
-      name: 'title_en',
-      title: 'Titre (Anglais)',
-      type: 'string',
-      validation: (Rule: any) => Rule.required()
+      name: 'title',
+      title: 'Titre',
+      type: 'object',
+      fields: [
+        { name: 'fr', type: 'string', title: 'Français', validation: (Rule: any) => Rule.required() },
+        { name: 'en', type: 'string', title: 'Anglais', validation: (Rule: any) => Rule.required() }
+      ]
     },
     {
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: { source: 'title_fr' },
+      options: { source: 'title.fr' },
       validation: (Rule: any) => Rule.required()
     },
     {
@@ -46,14 +43,13 @@ export default {
       type: 'number'
     },
     {
-      name: 'description_fr',
-      title: 'Description (Français)',
-      type: 'text'
-    },
-    {
-      name: 'description_en',
-      title: 'Description (Anglais)',
-      type: 'text'
+      name: 'description',
+      title: 'Description',
+      type: 'object',
+      fields: [
+        { name: 'fr', type: 'text', title: 'Français' },
+        { name: 'en', type: 'text', title: 'Anglais' }
+      ]
     },
     {
       name: 'image',

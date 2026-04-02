@@ -6,7 +6,11 @@ export default {
     {
       name: 'title',
       title: 'Nom de la galerie',
-      type: 'string',
+      type: 'object',
+      fields: [
+        { name: 'fr', type: 'string', title: 'Français' },
+        { name: 'en', type: 'string', title: 'Anglais' }
+      ]
     },
     {
       name: 'images',
@@ -20,21 +24,33 @@ export default {
             {
               name: 'title',
               title: 'Titre',
-              type: 'string',
+              type: 'object',
+              fields: [
+                { name: 'fr', type: 'string', title: 'Français' },
+                { name: 'en', type: 'string', title: 'Anglais' }
+              ]
             },
             {
               name: 'alt',
               title: 'Texte alternatif',
-              type: 'string',
+              type: 'object',
+              fields: [
+                { name: 'fr', type: 'string', title: 'Français' },
+                { name: 'en', type: 'string', title: 'Anglais' }
+              ]
             },
             {
               name: 'caption',
               title: 'Légende',
-              type: 'string',
-            },
-          ],
-        },
-      ],
-    },
-  ],
+              type: 'object',
+              fields: [
+                { name: 'fr', type: 'string', title: 'Français' },
+                { name: 'en', type: 'string', title: 'Anglais' }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

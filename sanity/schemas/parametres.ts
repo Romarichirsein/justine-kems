@@ -10,14 +10,13 @@ export default {
       options: { hotspot: true }
     },
     {
-      name: 'slogan_fr',
-      title: 'Slogan (Français)',
-      type: 'string'
-    },
-    {
-      name: 'slogan_en',
-      title: 'Slogan (Anglais)',
-      type: 'string'
+      name: 'slogan',
+      title: 'Slogan',
+      type: 'object',
+      fields: [
+        { name: 'fr', type: 'string', title: 'Français' },
+        { name: 'en', type: 'string', title: 'Anglais' }
+      ]
     },
     {
       name: 'contactEmail',
@@ -55,16 +54,13 @@ export default {
       ]
     },
     {
-      name: 'footerText_fr',
-      title: 'Texte du footer (Français)',
-      type: 'text',
-      rows: 3
-    },
-    {
-      name: 'footerText_en',
-      title: 'Texte du footer (Anglais)',
-      type: 'text',
-      rows: 3
+      name: 'footerText',
+      title: 'Texte du footer',
+      type: 'object',
+      fields: [
+        { name: 'fr', type: 'text', rows: 3, title: 'Français' },
+        { name: 'en', type: 'text', rows: 3, title: 'Anglais' }
+      ]
     }
   ],
   preview: {

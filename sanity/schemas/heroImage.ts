@@ -4,40 +4,37 @@ export default {
   type: 'document',
   fields: [
     {
-      name: 'title_fr',
-      title: 'Titre (Français)',
-      type: 'string',
-    },
-    {
-      name: 'title_en',
-      title: 'Titre (Anglais)',
-      type: 'string',
+      name: 'title',
+      title: 'Titre',
+      type: 'object',
+      fields: [
+        { name: 'fr', type: 'string', title: 'Français' },
+        { name: 'en', type: 'string', title: 'Anglais' }
+      ]
     },
     {
       name: 'image',
       title: 'Fichier Image',
       type: 'image',
-      options: { hotspot: true },
+      options: { hotspot: true }
     },
     {
-      name: 'alt_fr',
-      title: 'Texte alternatif (Français)',
-      type: 'string',
+      name: 'alt',
+      title: 'Texte alternatif',
+      type: 'object',
+      fields: [
+        { name: 'fr', type: 'string', title: 'Français' },
+        { name: 'en', type: 'string', title: 'Anglais' }
+      ]
     },
     {
-      name: 'alt_en',
-      title: 'Texte alternatif (Anglais)',
-      type: 'string',
-    },
-    {
-      name: 'caption_fr',
-      title: 'Légende (Français)',
-      type: 'string',
-    },
-    {
-      name: 'caption_en',
-      title: 'Légende (Anglais)',
-      type: 'string',
-    },
-  ],
+      name: 'caption',
+      title: 'Légende',
+      type: 'object',
+      fields: [
+        { name: 'fr', type: 'string', title: 'Français' },
+        { name: 'en', type: 'string', title: 'Anglais' }
+      ]
+    }
+  ]
 }

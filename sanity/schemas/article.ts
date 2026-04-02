@@ -4,22 +4,19 @@ export default {
   type: 'document',
   fields: [
     {
-      name: 'title_fr',
-      title: 'Titre (Français)',
-      type: 'string',
-      validation: (Rule: any) => Rule.required()
-    },
-    {
-      name: 'title_en',
-      title: 'Titre (Anglais)',
-      type: 'string',
-      validation: (Rule: any) => Rule.required()
+      name: 'title',
+      title: 'Titre',
+      type: 'object',
+      fields: [
+        { name: 'fr', type: 'string', title: 'Français', validation: (Rule: any) => Rule.required() },
+        { name: 'en', type: 'string', title: 'Anglais', validation: (Rule: any) => Rule.required() }
+      ]
     },
     {
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: { source: 'title_fr', maxLength: 96 },
+      options: { source: 'title.fr', maxLength: 96 },
       validation: (Rule: any) => Rule.required()
     },
     {
@@ -30,16 +27,13 @@ export default {
       fields: [{ name: 'alt', type: 'string', title: 'Texte alternatif' }]
     },
     {
-      name: 'content_fr',
-      title: 'Contenu (Français)',
-      type: 'array',
-      of: [{ type: 'block' }]
-    },
-    {
-      name: 'content_en',
-      title: 'Contenu (Anglais)',
-      type: 'array',
-      of: [{ type: 'block' }]
+      name: 'content',
+      title: 'Contenu complet',
+      type: 'object',
+      fields: [
+        { name: 'fr', type: 'array', of: [{ type: 'block' }], title: 'Français' },
+        { name: 'en', type: 'array', of: [{ type: 'block' }], title: 'Anglais' }
+      ]
     },
     {
       name: 'author',

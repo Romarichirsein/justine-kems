@@ -4,59 +4,44 @@ export default {
   type: 'document',
   fields: [
     {
-      name: 'name_fr',
-      title: 'Nom du produit (Français)',
-      type: 'string',
-      validation: (Rule: any) => Rule.required()
-    },
-    {
-      name: 'name_en',
-      title: 'Nom du produit (Anglais)',
-      type: 'string',
-      validation: (Rule: any) => Rule.required()
+      name: 'name',
+      title: 'Nom du produit',
+      type: 'object',
+      fields: [
+        { name: 'fr', type: 'string', title: 'Français', validation: (Rule: any) => Rule.required() },
+        { name: 'en', type: 'string', title: 'Anglais', validation: (Rule: any) => Rule.required() }
+      ]
     },
     {
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: { source: 'name', maxLength: 96 },
+      options: { source: 'name.fr', maxLength: 96 },
       validation: (Rule: any) => Rule.required()
     },
     {
       name: 'images',
       title: 'Images',
       type: 'array',
-      of: [
-        {
-          type: 'image',
-          options: { hotspot: true },
-          fields: [{ name: 'alt', type: 'string', title: 'Texte alternatif' }]
-        }
+      of: [{ type: 'image', options: { hotspot: true }, fields: [{ name: 'alt', type: 'string', title: 'Texte alternatif' }] }]
+    },
+    {
+      name: 'shortDescription',
+      title: 'Description courte',
+      type: 'object',
+      fields: [
+        { name: 'fr', type: 'text', rows: 3, title: 'Français' },
+        { name: 'en', type: 'text', rows: 3, title: 'Anglais' }
       ]
     },
     {
-      name: 'shortDescription_fr',
-      title: 'Description courte (Français)',
-      type: 'text',
-      rows: 3
-    },
-    {
-      name: 'shortDescription_en',
-      title: 'Description courte (Anglais)',
-      type: 'text',
-      rows: 3
-    },
-    {
-      name: 'longDescription_fr',
-      title: 'Description longue (Français)',
-      type: 'array',
-      of: [{ type: 'block' }]
-    },
-    {
-      name: 'longDescription_en',
-      title: 'Description longue (Anglais)',
-      type: 'array',
-      of: [{ type: 'block' }]
+      name: 'longDescription',
+      title: 'Description longue',
+      type: 'object',
+      fields: [
+        { name: 'fr', type: 'array', of: [{ type: 'block' }], title: 'Français' },
+        { name: 'en', type: 'array', of: [{ type: 'block' }], title: 'Anglais' }
+      ]
     },
     {
       name: 'price',
