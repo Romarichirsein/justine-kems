@@ -16,12 +16,14 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
+export const revalidate = 0
+
 export default async function TemoignagesPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   setRequestLocale(locale)
   const t = await getTranslations({ locale, namespace: 'temoignages' })
 
-  const testimonials = await safeFetch(queries.allTestimonials, { locale }) ?? []
+  const testimonials = await safeFetch(queries.allTestimonials, { locale }, { next: { revalidate: 0 } }) ?? []
 
   // Témoignages statiques de secours si Sanity est vide
   const fallbackKeys = ['f1', 'f2', 'f3', 'f4', 'f5', 'f6'] as const

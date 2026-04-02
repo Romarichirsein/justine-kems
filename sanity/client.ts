@@ -8,15 +8,20 @@ export const client = createClient({
   projectId,
   dataset,
   apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-03-18',
-  useCdn: process.env.NODE_ENV === 'production',
+  // On désactive le CDN pour avoir les données fraîches instantanément après un "Publish"
+  useCdn: false,
   token: process.env.SANITY_API_TOKEN,
 })
 
 // Safe fetch that returns null when Sanity isn't configured yet
-export async function safeFetch<T = any>(query: string, params?: Record<string, unknown>): Promise<T | null> {
+export async function safeFetch<T = any>(
+  query: string, 
+  params?: Record<string, unknown>,
+  options: any = { next: { revalidate: 0 } }
+): Promise<T | null> {
   if (!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) return null
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return client.fetch<T>(query, params as any).catch(() => null)
+  return client.fetch<T>(query, params as any, options).catch(() => null)
 }
 
 const builder = imageUrlBuilder(client)

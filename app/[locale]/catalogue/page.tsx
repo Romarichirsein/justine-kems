@@ -14,14 +14,16 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
+export const revalidate = 0
+
 export default async function CataloguePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   setRequestLocale(locale)
   const t = await getTranslations({ locale, namespace: 'catalogue' })
   
   const [products, heroImages] = await Promise.all([
-    client.fetch(queries.allProducts, { locale }).catch(() => []),
-    client.fetch(queries.heroImages, { locale }).catch(() => [])
+    client.fetch(queries.allProducts, { locale }, { next: { revalidate: 0 } }).catch(() => []),
+    client.fetch(queries.heroImages, { locale }, { next: { revalidate: 0 } }).catch(() => [])
   ])
 
   const heroImg = heroImages.find((img: any) => img.title?.toLowerCase().includes('catalogue') || img.title?.toLowerCase().includes('boutique')) || heroImages[0]

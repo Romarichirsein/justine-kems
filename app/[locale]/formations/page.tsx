@@ -29,9 +29,9 @@ export default async function FormationsPage({ params }: { params: Promise<{ loc
   const t = await getTranslations({ locale, namespace: 'formations' })
   
   const [heroImages, formations, testimonials] = await Promise.all([
-    client.fetch(queries.heroImages, { locale }).catch(() => []),
-    client.fetch(queries.allFormations, { locale }).catch(() => []),
-    client.fetch(queries.allTestimonials, { locale }).catch(() => [])
+    client.fetch(queries.heroImages, { locale }, { next: { revalidate: 0 } }).catch(() => []),
+    client.fetch(queries.allFormations, { locale }, { next: { revalidate: 0 } }).catch(() => []),
+    client.fetch(queries.allTestimonials, { locale }, { next: { revalidate: 0 } }).catch(() => [])
   ])
 
   const profilImage = heroImages.find((img: any) => img.title?.toLowerCase().includes('formation') || img.title?.toLowerCase().includes('atelier')) || heroImages[2] || heroImages[0]
