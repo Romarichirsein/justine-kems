@@ -8,7 +8,7 @@ export const client = createClient({
   projectId,
   dataset,
   apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-03-18',
-  useCdn: false,
+  useCdn: true,
   token: process.env.SANITY_API_TOKEN,
 })
 
@@ -25,25 +25,21 @@ const builder = imageUrlBuilder(client)
 export function urlForImage(source: any) { return builder.image(source) }
 
 export const queries = {
-  // Catalogue - Utilisation de product pour restaurer les données
+  // Catalogue
   allProducts: `*[_type == "product"] | order(_createdAt desc) {
     _id,
     "name": coalesce(name[$locale], name.fr, name),
     "slug": slug.current,
     "mainImage": coalesce(mainImage, images[0]),
     gallery,
-    "description": coalesce(description[$locale], description.fr, description, shortDescription[$locale], shortDescription.fr, shortDescription),
-    "shortDescription": coalesce(shortDescription[$locale], shortDescription.fr, shortDescription, description[$locale], description.fr, description),
-    "longDescription": coalesce(longDescription[$locale], longDescription.fr, longDescription, description[$locale], description.fr, description),
+    "shortDescription": coalesce(shortDescription[$locale], shortDescription.fr, shortDescription),
+    "longDescription": coalesce(longDescription[$locale], longDescription.fr, longDescription),
     price,
     promoPrice,
     category,
     stock,
     priceH,
-    priceF,
-    fabric,
-    occasion,
-    priceType
+    priceF
   }`,
   
   featuredProducts: `*[_type == "product" && isFeatured == true][0...4] {
@@ -51,7 +47,6 @@ export const queries = {
     "name": coalesce(name[$locale], name.fr, name),
     "slug": slug.current,
     "mainImage": coalesce(mainImage, images[0]),
-    "description": coalesce(description[$locale], description.fr, description, shortDescription[$locale], shortDescription.fr, shortDescription),
     price,
     promoPrice,
     priceH,
@@ -64,7 +59,6 @@ export const queries = {
     "slug": slug.current,
     "mainImage": coalesce(mainImage, images[0]),
     gallery,
-    "description": coalesce(description[$locale], description.fr, description, shortDescription[$locale], shortDescription.fr, shortDescription, longDescription[$locale], longDescription.fr, longDescription),
     "shortDescription": coalesce(shortDescription[$locale], shortDescription.fr, shortDescription),
     "longDescription": coalesce(longDescription[$locale], longDescription.fr, longDescription),
     price,
@@ -72,10 +66,7 @@ export const queries = {
     category,
     stock,
     priceH,
-    priceF,
-    fabric,
-    occasion,
-    priceType
+    priceF
   }`,
   
   allPosts: `*[_type == "article" && isPublished == true] | order(publishedAt desc) {
@@ -84,7 +75,6 @@ export const queries = {
     "slug": slug.current,
     mainImage,
     "content": coalesce(content[$locale], content.fr, content),
-    "description": coalesce(description[$locale], description.fr, description, excerpt[$locale], excerpt.fr, excerpt),
     author,
     publishedAt,
     category
@@ -94,7 +84,6 @@ export const queries = {
     "title": coalesce(title[$locale], title.fr, title),
     mainImage,
     "content": coalesce(content[$locale], content.fr, content),
-    "description": coalesce(description[$locale], description.fr, description),
     publishedAt,
     category,
     author

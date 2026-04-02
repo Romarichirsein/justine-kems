@@ -4,7 +4,7 @@ import { ProductSchema } from '@/components/StructuredData'
 import Image from 'next/image'
 
 type Props = {
-  params: { locale: string; id: string }
+  params: Promise<{ locale: string; id: string }>
 }
 
 export async function generateStaticParams() {
@@ -25,7 +25,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const product = await client.fetch(queries.productBySlug, { slug: params.id }).catch(() => null)
+  const { locale, id } = await params
+  const product = await client.fetch(queries.productBySlug, { slug: id }).catch(() => null)
   
   if (!product) {
     return {
@@ -44,12 +45,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   return {
-    title: titles[params.locale as keyof typeof titles],
-    description: descriptions[params.locale as keyof typeof descriptions],
+    title: titles[locale as keyof typeof titles],
+    description: descriptions[locale as keyof typeof descriptions],
     openGraph: {
       type: 'website',
       title: product.name,
-      description: descriptions[params.locale as keyof typeof descriptions],
+      description: descriptions[locale as keyof typeof descriptions],
       images: product.mainImage ? [
         {
           url: urlForImage(product.mainImage).width(1200).height(630).url(),
@@ -60,17 +61,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ] : [],
     },
     alternates: {
-      canonical: `/${params.locale}/catalogue/${product.slug?.current || params.id}`,
+      canonical: `/${locale}/catalogue/${product.slug?.current || id}`,
       languages: {
-        'fr': `/fr/catalogue/${product.slug?.current || params.id}`,
-        'en': `/en/catalogue/${product.slug?.current || params.id}`,
+        'fr': `/fr/catalogue/${product.slug?.current || id}`,
+        'en': `/en/catalogue/${product.slug?.current || id}`,
       }
     }
   }
 }
 
 export default async function ProductPage({ params }: Props) {
-  const product = await client.fetch(queries.productBySlug, { slug: params.id }).catch(() => null)
+  const { locale, id } = await params
+  const product = await client.fetch(queries.productBySlug, { slug: id }).catch(() => null)
 
   if (!product) {
     return <div className="min-h-screen flex items-center justify-center"><h1 className="text-4xl text-jk-royal-gold font-script">Création introuvable</h1></div>

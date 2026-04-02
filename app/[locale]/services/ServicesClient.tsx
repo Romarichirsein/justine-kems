@@ -275,7 +275,7 @@ export default function ServicesClient() {
           </div>
           <div className="text-center mt-10">
             <Link
-              href="/catalogue?category=gala"
+              href="/catalogue?category=robes-soirees"
               className="inline-block border border-jk-imperial-green dark:border-jk-royal-gold text-jk-imperial-green dark:text-jk-royal-gold px-8 py-3 rounded-full font-semibold hover:bg-jk-imperial-green hover:text-white dark:hover:bg-jk-royal-gold dark:hover:text-black transition-all"
             >
               {t('soiree.cta')}
@@ -315,7 +315,7 @@ export default function ServicesClient() {
         </div>
         <div className="text-center mt-10">
           <Link
-            href="/catalogue?category=mariage"
+            href="/catalogue?category=robes-mariage"
             className="inline-block border border-jk-imperial-green dark:border-jk-royal-gold text-jk-imperial-green dark:text-jk-royal-gold px-8 py-3 rounded-full font-semibold hover:bg-jk-imperial-green hover:text-white dark:hover:bg-jk-royal-gold dark:hover:text-black transition-all"
           >
             {t('mariage.cta')}
@@ -356,7 +356,7 @@ export default function ServicesClient() {
           </div>
           <div className="text-center mt-10">
             <Link
-              href="/catalogue?category=couple"
+              href="/catalogue?category=tenu-couple"
               className="inline-block border border-jk-imperial-green dark:border-jk-royal-gold text-jk-imperial-green dark:text-jk-royal-gold px-8 py-3 rounded-full font-semibold hover:bg-jk-imperial-green hover:text-white dark:hover:bg-jk-royal-gold dark:hover:text-black transition-all"
             >
               {t('couple.cta')}
@@ -465,7 +465,7 @@ export default function ServicesClient() {
                 </div>
                 <div className="text-center mt-5">
                   <Link
-                    href="/catalogue?category=traditionnel"
+                    href="/catalogue?category=tenue-traditionnels"
                     className="text-jk-imperial-green dark:text-jk-royal-gold text-sm font-medium hover:underline"
                   >
                     {t('others.cta')}
@@ -483,7 +483,7 @@ export default function ServicesClient() {
                 </div>
                 <div className="text-center mt-5">
                   <Link
-                    href="/catalogue?category=quotidien"
+                    href="/catalogue?category=tenue-ville"
                     className="text-jk-imperial-green dark:text-jk-royal-gold text-sm font-medium hover:underline"
                   >
                     {t('others.cta')}

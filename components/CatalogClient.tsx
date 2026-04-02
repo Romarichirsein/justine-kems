@@ -58,12 +58,12 @@ function CatalogContent({ initialModels, locale }: CatalogClientProps) {
 
   const CATEGORIES = [
     { key: 'all', label: t('filters.all') },
-    { key: 'mariage', label: t('categories.robes-mariage') },
-    { key: 'gala', label: t('categories.robes-soirees') },
-    { key: 'couple', label: t('categories.tenu-couple') },
-    { key: 'traditionnel', label: t('categories.tenue-traditionnels') },
-    { key: 'civil', label: t('categories.etat-civil') },
-    { key: 'quotidien', label: t('categories.tenue-ville') },
+    { key: 'robes-mariage', label: t('categories.robes-mariage') },
+    { key: 'robes-soirees', label: t('categories.robes-soirees') },
+    { key: 'tenu-couple', label: t('categories.tenu-couple') },
+    { key: 'tenue-traditionnels', label: t('categories.tenue-traditionnels') },
+    { key: 'etat-civil', label: t('categories.etat-civil') },
+    { key: 'tenue-ville', label: t('categories.tenue-ville') },
   ]
 
   const filtered = useMemo(() =>
