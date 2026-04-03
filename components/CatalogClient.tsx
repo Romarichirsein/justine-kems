@@ -58,12 +58,12 @@ function CatalogContent({ initialModels, locale }: CatalogClientProps) {
 
   const CATEGORIES = [
     { key: 'all', label: t('filters.all') },
-    { key: 'robes-mariage', label: t('categories.robes-mariage') },
-    { key: 'robes-soirees', label: t('categories.robes-soirees') },
-    { key: 'tenu-couple', label: t('categories.tenu-couple') },
-    { key: 'tenue-traditionnels', label: t('categories.tenue-traditionnels') },
-    { key: 'etat-civil', label: t('categories.etat-civil') },
-    { key: 'tenue-ville', label: t('categories.tenue-ville') },
+    { key: 'robes-mariage', label: t('filters.robes-mariage') },
+    { key: 'robes-soirees', label: t('filters.robes-soirees') },
+    { key: 'tenu-couple', label: t('filters.tenu-couple') },
+    { key: 'tenue-traditionnels', label: t('filters.tenue-traditionnels') },
+    { key: 'etat-civil', label: t('filters.etat-civil') },
+    { key: 'tenue-ville', label: t('filters.tenue-ville') },
   ]
 
   const filtered = useMemo(() =>
@@ -211,7 +211,7 @@ function CatalogContent({ initialModels, locale }: CatalogClientProps) {
 
 function ModelCard({ model, onSelect, hasError, onError, formatPrice, viewDetailLabel, notAvailableLabel, manLabel, womanLabel }: any) {
   const label = (() => {
-    if (model.priceH !== null && model.priceF !== null) {
+    if (model.priceH != null && model.priceF != null && model.category === 'tenu-couple') {
       return `H: ${formatPrice(model.priceH)} / F: ${formatPrice(model.priceF)}`
     }
     if (model.price) return formatPrice(model.price)

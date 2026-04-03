@@ -108,16 +108,19 @@ export const queries = {
     date
   }`,
   
-  allModeles: `*[_type == "modele"] | order(_createdAt desc) {
+  allModeles: `*[_type == "product"] | order(_createdAt desc) {
     _id,
     "name": coalesce(name[$locale], name.fr, name),
     "slug": slug.current,
-    mainImage,
+    "mainImage": coalesce(mainImage, images[0], gallery[0]),
     gallery,
     "description": coalesce(description[$locale], description.fr, description),
     price,
     category,
-    isAvailable
+    isAvailable,
+    priceH,
+    priceF,
+    gender
   }`,
 
   siteSettings: `*[_type == "parametres"][0] {
