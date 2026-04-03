@@ -8,7 +8,7 @@ export const client = createClient({
   projectId,
   dataset,
   apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-03-18',
-  useCdn: true,
+  useCdn: false,
   token: process.env.SANITY_API_TOKEN,
 })
 
@@ -28,17 +28,21 @@ export const queries = {
   // Catalogue
   allProducts: `*[_type == "product"] | order(_createdAt desc) {
     _id,
-    "name": coalesce(name[$locale], name.fr, name),
+    name,
     "slug": slug.current,
-    "mainImage": coalesce(mainImage, images[0]),
+    mainImage,
     gallery,
-    "description": coalesce(description[$locale], description.fr, description),
+    description,
     price,
-    promoPrice,
-    category,
-    stock,
     priceH,
-    priceF
+    priceF,
+    priceType,
+    category,
+    gender,
+    isFeatured,
+    isNew,
+    fabric,
+    occasion
   }`,
   
   featuredProducts: `*[_type == "product" && isFeatured == true][0...4] {
@@ -108,19 +112,15 @@ export const queries = {
     date
   }`,
   
-  allModeles: `*[_type == "product"] | order(_createdAt desc) {
+  allModeles: `*[_type == "modele"] | order(_createdAt desc) {
     _id,
-    "name": coalesce(name[$locale], name.fr, name),
+    "name": coalesce(name.fr, name),
     "slug": slug.current,
-    "mainImage": coalesce(mainImage, images[0], gallery[0]),
+    "mainImage": mainImage,
     gallery,
-    "description": coalesce(description[$locale], description.fr, description),
     price,
     category,
-    isAvailable,
-    priceH,
-    priceF,
-    gender
+    isAvailable
   }`,
 
   siteSettings: `*[_type == "parametres"][0] {
