@@ -4,6 +4,12 @@ import { RevealOnScroll } from '@/components/RevealOnScroll'
 import { FormationsClient } from '@/components/FormationsClient'
 import { queries, client } from '@/sanity/client'
 import { SanityImage } from '@/components/SanityImage'
+import React from 'react'
+
+const localize = (obj: any, locale: string, fallback: string | React.ReactNode) => {
+  if (!obj) return fallback
+  return obj[locale] || obj['fr'] || fallback
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
@@ -28,10 +34,11 @@ export default async function FormationsPage({ params }: { params: Promise<{ loc
   setRequestLocale(locale)
   const t = await getTranslations({ locale, namespace: 'formations' })
   
-  const [heroImages, formations, testimonials] = await Promise.all([
+  const [heroImages, formations, testimonials, pageData] = await Promise.all([
     client.fetch(queries.heroImages, { locale }, { next: { revalidate: 0 } }).catch(() => []),
     client.fetch(queries.allFormations, { locale }, { next: { revalidate: 0 } }).catch(() => []),
-    client.fetch(queries.allTestimonials, { locale }, { next: { revalidate: 0 } }).catch(() => [])
+    client.fetch(queries.allTestimonials, { locale }, { next: { revalidate: 0 } }).catch(() => []),
+    client.fetch(queries.pageFormations, { locale }, { next: { revalidate: 0 } }).catch(() => null)
   ])
 
   const profilImage = heroImages.find((img: any) => img.title?.toLowerCase().includes('formation') || img.title?.toLowerCase().includes('atelier')) || heroImages[2] || heroImages[0]
@@ -48,13 +55,13 @@ export default async function FormationsPage({ params }: { params: Promise<{ loc
 
         <div className="relative z-10 max-w-4xl mx-auto px-4">
           <p className="text-jk-royal-gold uppercase tracking-[0.4em] text-sm font-semibold mb-8">
-            {t('hero.tagline')}
+            {localize(pageData?.hero?.tagline, locale, t('hero.tagline'))}
           </p>
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-script text-jk-royal-gold mb-6 text-shadow-gold leading-tight whitespace-pre-line">
-            {t('hero.title')}
+            {localize(pageData?.hero?.title, locale, t('hero.title'))}
           </h1>
           <p className="text-xl md:text-2xl font-display mb-10 text-gray-200 max-w-2xl mx-auto">
-            {t('hero.subtitle', { exp: 10 })}
+            {localize(pageData?.hero?.subtitle, locale, t('hero.subtitle', { exp: 10 }))}
           </p>
 
           <FormationsClient heroOnly={true} />
@@ -85,10 +92,14 @@ export default async function FormationsPage({ params }: { params: Promise<{ loc
             </div>
 
             <div className="text-center md:text-left">
-              <p className="text-jk-royal-gold font-bold uppercase tracking-widest text-sm mb-2">{t('profil.tagline')}</p>
-              <h2 className="text-4xl font-display text-jk-imperial-green dark:text-jk-cream mb-4">{t('profil.name')}</h2>
+              <p className="text-jk-royal-gold font-bold uppercase tracking-widest text-sm mb-2">
+                {localize(pageData?.profil?.tagline, locale, t('profil.tagline'))}
+              </p>
+              <h2 className="text-4xl font-display text-jk-imperial-green dark:text-jk-cream mb-4">
+                {pageData?.profil?.name || t('profil.name')}
+              </h2>
               <blockquote className="text-lg text-jk-text-muted dark:text-gray-300 leading-relaxed mb-6 italic border-l-4 border-jk-royal-gold/40 pl-4">
-                {t('profil.quote')}
+                {localize(pageData?.profil?.quote, locale, t('profil.quote'))}
               </blockquote>
               <div className="flex flex-wrap gap-3 justify-center md:justify-start">
                 <span className="px-4 py-2 bg-jk-cream dark:bg-gray-800 rounded-full text-sm font-medium text-jk-imperial-green dark:text-jk-royal-gold border border-jk-royal-gold/20">{t('profil.labels.exp')}</span>

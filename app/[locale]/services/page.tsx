@@ -9,6 +9,12 @@ import { client, queries } from '@/sanity/client'
 import { SanityImage } from '@/components/SanityImage'
 import { Link } from '@/navigation'
 
+// Helper for selecting localized text
+const localize = (obj: any, locale: string, fallback: string | React.ReactNode) => {
+  if (!obj) return fallback
+  return obj[locale] || obj['fr'] || fallback
+}
+
 // ─── ImageSlider composant interne ─────────────────────────────────────────
 function ImageSlider({
   images,
@@ -118,9 +124,11 @@ export default function ServicesPage() {
   const locale = useLocale()
 
   const [sanityImages, setSanityImages] = useState<any[]>([])
+  const [pageData, setPageData] = useState<any>(null)
   
   useEffect(() => {
     client.fetch(queries.productImages).then(setSanityImages)
+    client.fetch(`*[_type == "pageServices"][0]`).then(setPageData)
   }, [])
 
   const prevLabel = t('prev')
@@ -194,10 +202,10 @@ export default function ServicesPage() {
         </div>
         <div className="relative z-10 text-center px-4 animate-fade-in-up">
           <h1 className="text-6xl md:text-7xl font-script text-jk-royal-gold mb-6 text-shadow-gold">
-            {t.rich('heroTitle', { br: () => <br /> })}
+            {localize(pageData?.heroTitle, locale, t.rich('heroTitle', { br: () => <br /> }))}
           </h1>
-          <p className="text-white/80 text-lg max-w-xl mx-auto">
-            {t('heroSubtitle')}
+          <p className="text-white/80 text-lg max-w-xl mx-auto whitespace-pre-line">
+            {localize(pageData?.heroSubtitle, locale, t('heroSubtitle'))}
           </p>
         </div>
       </section>
@@ -208,11 +216,11 @@ export default function ServicesPage() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Texte */}
             <div className="order-2 lg:order-1">
-              <h2 className="text-4xl md:text-5xl font-display text-jk-imperial-green dark:text-jk-cream mb-6">
-                {t('hauteCouture.title')}
+              <h2 className="text-4xl md:text-5xl font-display text-jk-imperial-green dark:text-jk-cream mb-6 whitespace-pre-line">
+                {localize(pageData?.hauteCouture?.title, locale, t('hauteCouture.title'))}
               </h2>
-              <p className="text-lg text-jk-text-muted dark:text-gray-300 mb-8 leading-relaxed">
-                {t('hauteCouture.description')}
+              <p className="text-lg text-jk-text-muted dark:text-gray-300 mb-8 leading-relaxed whitespace-pre-line">
+                {localize(pageData?.hauteCouture?.description, locale, t('hauteCouture.description'))}
               </p>
 
               <ul className="space-y-6 mb-10">
@@ -234,7 +242,7 @@ export default function ServicesPage() {
 
               <div className="bg-gray-100 dark:bg-jk-dark-surface p-6 rounded-xl border border-gray-200 dark:border-gray-800 mb-8 inline-block">
                 <span className="text-gray-500 text-sm uppercase block mb-1">{t('hauteCouture.pricingLabel')}</span>
-                <span className="text-2xl font-bold text-jk-royal-gold">{t('hauteCouture.pricingValue')}</span>
+                <span className="text-2xl font-bold text-jk-royal-gold">{localize(pageData?.hauteCouture?.pricing, locale, t('hauteCouture.pricingValue'))}</span>
               </div>
 
               <button
@@ -451,11 +459,11 @@ export default function ServicesPage() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Texte */}
             <div className="order-2 lg:order-1">
-              <h2 className="text-4xl md:text-5xl font-display text-jk-imperial-green dark:text-jk-cream mb-6">
-                {t('location.title')}
+              <h2 className="text-4xl md:text-5xl font-display text-jk-imperial-green dark:text-jk-cream mb-6 whitespace-pre-line">
+                {localize(pageData?.location?.title, locale, t('location.title'))}
               </h2>
-              <p className="text-lg text-jk-text-muted dark:text-gray-300 mb-8 leading-relaxed">
-                {t('location.description')}
+              <p className="text-lg text-jk-text-muted dark:text-gray-300 mb-8 leading-relaxed whitespace-pre-line">
+                {localize(pageData?.location?.description, locale, t('location.description'))}
               </p>
 
               <div className="bg-jk-cream dark:bg-jk-dark-surface p-8 rounded-2xl border border-jk-royal-gold/20 mb-8">
@@ -477,7 +485,7 @@ export default function ServicesPage() {
                   </li>
                 </ul>
                 <div className="mt-6 text-center">
-                  <span className="text-jk-royal-gold text-2xl font-bold">{t('location.pricing')}</span>
+                  <span className="text-jk-royal-gold text-2xl font-bold">{localize(pageData?.location?.pricing, locale, t('location.pricing'))}</span>
                 </div>
               </div>
 

@@ -146,5 +146,8 @@ export const queries = {
     image,
     "alt": coalesce(alt[$locale], alt.fr, alt),
     "caption": coalesce(caption[$locale], caption.fr, caption)
-  }`
+  }`,
+
+  pageServices: `*[_type == "pageServices"][0]`,
+  pageFormations: `*[_type == "pageFormations"][0]`
 }

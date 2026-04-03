@@ -12,6 +12,8 @@ import formation from './sanity/schemas/formation'
 import parametres from './sanity/schemas/parametres'
 import heroImage from './sanity/schemas/heroImage'
 import productImage from './sanity/schemas/productImage'
+import pageServices from './sanity/schemas/pageServices'
+import pageFormations from './sanity/schemas/pageFormations'
 
 export default defineConfig({
   name: 'justine-kems',
@@ -49,6 +51,21 @@ export default defineConfig({
               .child(S.documentTypeList('formation').title('Formations')),
             S.divider(),
             S.listItem()
+              .title('Pages (Textes Globaux)')
+              .icon(() => '📄')
+              .child(
+                S.list()
+                  .title('Pages du site')
+                  .items([
+                    S.listItem()
+                      .title('Page Services')
+                      .child(S.document().schemaType('pageServices').documentId('pageServices')),
+                    S.listItem()
+                      .title('Page Formations')
+                      .child(S.document().schemaType('pageFormations').documentId('pageFormations'))
+                  ])
+              ),
+            S.listItem()
               .title('Paramètres du site')
               .icon(() => '⚙️')
               .child(
@@ -57,7 +74,7 @@ export default defineConfig({
                   .documentId('parametres')
               ),
             ...S.documentTypeListItems().filter(
-              (listItem) => !['modele', 'product', 'temoignage', 'article', 'formation', 'parametres'].includes(listItem.getId() as string)
+              (listItem) => !['modele', 'product', 'temoignage', 'article', 'formation', 'parametres', 'pageServices', 'pageFormations'].includes(listItem.getId() as string)
             )
           ])
     }),
@@ -66,6 +83,6 @@ export default defineConfig({
   ],
 
   schema: {
-    types: [modele, product, temoignage, article, formation, parametres, heroImage, productImage],
+    types: [modele, product, temoignage, article, formation, parametres, heroImage, productImage, pageServices, pageFormations],
   },
 })
