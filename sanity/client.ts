@@ -26,13 +26,13 @@ export function urlForImage(source: any) { return builder.image(source) }
 
 export const queries = {
   // Catalogue
-  allProducts: `*[_type == "product"] | order(_createdAt desc) {
+  allProducts: `*[_type in ["product", "modele"]] | order(_createdAt desc) {
     _id,
-    name,
+    "name": coalesce(name[$locale], name.fr, name),
     "slug": slug.current,
-    mainImage,
+    "mainImage": coalesce(mainImage, images[0], gallery[0]),
     gallery,
-    description,
+    "description": coalesce(description[$locale], description.fr, description),
     price,
     priceH,
     priceF,
@@ -112,15 +112,19 @@ export const queries = {
     date
   }`,
   
-  allModeles: `*[_type == "modele"] | order(_createdAt desc) {
+  allModeles: `*[_type in ["product", "modele"]] | order(_createdAt desc) {
     _id,
-    "name": coalesce(name.fr, name),
+    "name": coalesce(name[$locale], name.fr, name),
     "slug": slug.current,
-    "mainImage": mainImage,
+    "mainImage": coalesce(mainImage, images[0], gallery[0]),
     gallery,
+    "description": coalesce(description[$locale], description.fr, description),
     price,
     category,
-    isAvailable
+    isAvailable,
+    priceH,
+    priceF,
+    gender
   }`,
 
   siteSettings: `*[_type == "parametres"][0] {
