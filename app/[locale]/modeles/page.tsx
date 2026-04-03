@@ -4,6 +4,11 @@ import { client, queries } from '@/sanity/client'
 import { CatalogClient } from '@/components/CatalogClient'
 import { SanityImage } from '@/components/SanityImage'
 
+const localize = (obj: any, locale: string, fallback: string | React.ReactNode) => {
+  if (!obj) return fallback
+  return obj[locale] || obj['fr'] || fallback
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'modeles.metadata' })
@@ -21,9 +26,10 @@ export default async function ModelesPage({ params }: { params: Promise<{ locale
   setRequestLocale(locale)
   const t = await getTranslations({ locale, namespace: 'modeles' })
   
-  const [models, heroImages] = await Promise.all([
+  const [models, heroImages, pageData] = await Promise.all([
     client.fetch(queries.allModeles, { locale }, { next: { revalidate: 0 } }).catch(() => []),
-    client.fetch(queries.heroImages, { locale }, { next: { revalidate: 0 } }).catch(() => [])
+    client.fetch(queries.heroImages, { locale }, { next: { revalidate: 0 } }).catch(() => []),
+    client.fetch(queries.pageModeles, { locale }, { next: { revalidate: 0 } }).catch(() => null)
   ])
 
   const heroImg = heroImages.find((img: any) => img.title?.toLowerCase().includes('modeles') || img.title?.toLowerCase().includes('création')) || heroImages[0]
@@ -38,9 +44,15 @@ export default async function ModelesPage({ params }: { params: Promise<{ locale
           </div>
         )}
         <div className="container mx-auto px-4 text-center relative z-10">
-          <p className="text-[#c9a96e] text-sm tracking-[0.3em] uppercase mb-3">{t('hero.tagline')}</p>
-          <h1 className="text-5xl md:text-7xl font-serif text-white mb-4">{t('hero.title')}</h1>
-          <p className="text-white/50 max-w-lg mx-auto">{t('hero.desc')}</p>
+          <p className="text-[#c9a96e] text-sm tracking-[0.3em] uppercase mb-3">
+            {localize(pageData?.hero?.tagline, locale, t('hero.tagline'))}
+          </p>
+          <h1 className="text-5xl md:text-7xl font-serif text-white mb-4">
+            {localize(pageData?.hero?.title, locale, t('hero.title'))}
+          </h1>
+          <p className="text-white/50 max-w-lg mx-auto">
+            {localize(pageData?.hero?.desc, locale, t('hero.desc'))}
+          </p>
         </div>
       </section>
 

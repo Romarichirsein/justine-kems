@@ -9,10 +9,16 @@ import { useTranslations } from 'next-intl'
 
 interface BlogClientProps {
   initialPosts: any[]
+  pageData?: any
   locale: string
 }
 
-export function BlogClient({ initialPosts, locale }: BlogClientProps) {
+const localize = (obj: any, locale: string, fallback: string | React.ReactNode) => {
+  if (!obj) return fallback
+  return obj[locale] || obj['fr'] || fallback
+}
+
+export function BlogClient({ initialPosts, pageData, locale }: BlogClientProps) {
   const t = useTranslations('blog')
   const [categoryFilter, setCategoryFilter] = useState('all')
   const [search, setSearch] = useState('')
@@ -48,19 +54,19 @@ export function BlogClient({ initialPosts, locale }: BlogClientProps) {
             initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
             className="text-jk-royal-gold uppercase tracking-[0.4em] text-xs font-bold mb-5"
           >
-            {t('hero.tagline')}
+            {localize(pageData?.hero?.tagline, locale, t('hero.tagline'))}
           </motion.p>
           <motion.h1
             initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }}
             className="text-6xl md:text-7xl font-script text-jk-royal-gold mb-4 text-shadow-gold"
           >
-            {t('hero.title')}
+            {localize(pageData?.hero?.title, locale, t('hero.title'))}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}
-            className="text-xl font-display text-gray-200 mb-10"
+            className="text-xl font-display text-gray-200 mb-10 mx-auto max-w-2xl"
           >
-            {t('hero.subtitle')}
+            {localize(pageData?.hero?.subtitle, locale, t('hero.subtitle'))}
           </motion.p>
 
           <motion.div

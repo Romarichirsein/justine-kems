@@ -2,8 +2,13 @@ import { setRequestLocale, getTranslations } from 'next-intl/server'
 import { Link } from '@/navigation'
 import Image from 'next/image'
 import { Metadata } from 'next'
-import { safeFetch, queries } from '@/sanity/client'
+import { safeFetch, queries, client } from '@/sanity/client'
 import { RevealOnScroll } from '@/components/RevealOnScroll'
+
+const localize = (obj: any, locale: string, fallback: string | React.ReactNode) => {
+  if (!obj) return fallback
+  return obj[locale] || obj['fr'] || fallback
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
@@ -23,7 +28,10 @@ export default async function TemoignagesPage({ params }: { params: Promise<{ lo
   setRequestLocale(locale)
   const t = await getTranslations({ locale, namespace: 'temoignages' })
 
-  const testimonials = await safeFetch(queries.allTestimonials, { locale }, { next: { revalidate: 0 } }) ?? []
+  const [testimonials, pageData] = await Promise.all([
+    safeFetch(queries.allTestimonials, { locale }, { next: { revalidate: 0 } }).catch(() => []),
+    client.fetch(queries.pageTemoignages, { locale }, { next: { revalidate: 0 } }).catch(() => null)
+  ])
 
   // Témoignages statiques de secours si Sanity est vide
   const fallbackKeys = ['f1', 'f2', 'f3', 'f4', 'f5', 'f6'] as const
@@ -48,14 +56,14 @@ export default async function TemoignagesPage({ params }: { params: Promise<{ lo
         <div className="container mx-auto px-4 relative z-10 text-center">
           <RevealOnScroll variant="blur-in">
             <p className="text-jk-royal-gold uppercase text-xs tracking-[4px] font-bold mb-4">
-              {t('hero.tagline')}
+              {localize(pageData?.hero?.tagline, locale, t('hero.tagline'))}
             </p>
             <h1 className="text-5xl md:text-6xl font-script text-jk-cream mb-6">
-              {t('hero.title')}
+              {localize(pageData?.hero?.title, locale, t('hero.title'))}
             </h1>
             <div className="w-24 h-0.5 bg-jk-royal-gold mx-auto mb-8" />
             <p className="text-gray-400 max-w-xl mx-auto text-lg leading-relaxed">
-              {t('hero.desc')}
+              {localize(pageData?.hero?.desc, locale, t('hero.desc'))}
             </p>
           </RevealOnScroll>
         </div>
@@ -67,7 +75,7 @@ export default async function TemoignagesPage({ params }: { params: Promise<{ lo
         <div className="container mx-auto px-4 relative z-10">
           <RevealOnScroll variant="fade-up">
             <h2 className="text-3xl font-script text-jk-royal-gold text-center mb-4">
-              {t('written.title')}
+              {localize(pageData?.written?.title, locale, t('written.title'))}
             </h2>
             <div className="w-16 h-0.5 bg-jk-royal-gold mx-auto mb-16" />
           </RevealOnScroll>
@@ -136,11 +144,11 @@ export default async function TemoignagesPage({ params }: { params: Promise<{ lo
         <div className="container mx-auto px-4 relative z-10">
           <RevealOnScroll variant="fade-up">
             <h2 className="text-3xl font-script text-jk-royal-gold text-center mb-4">
-              {t('screenshots.title')}
+              {localize(pageData?.screenshots?.title, locale, t('screenshots.title'))}
             </h2>
             <div className="w-16 h-0.5 bg-jk-royal-gold mx-auto mb-6" />
             <p className="text-center text-gray-500 text-sm mb-16 max-w-md mx-auto">
-              {t('screenshots.desc')}
+              {localize(pageData?.screenshots?.desc, locale, t('screenshots.desc'))}
             </p>
           </RevealOnScroll>
 

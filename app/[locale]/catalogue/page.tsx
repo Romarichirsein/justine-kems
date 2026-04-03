@@ -3,6 +3,12 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { client, queries } from '@/sanity/client'
 import { CatalogueClient } from '@/components/CatalogueClient'
 import { SanityImage } from '@/components/SanityImage'
+import React from 'react'
+
+const localize = (obj: any, locale: string, fallback: string | React.ReactNode) => {
+  if (!obj) return fallback
+  return obj[locale] || obj['fr'] || fallback
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
@@ -21,9 +27,10 @@ export default async function CataloguePage({ params }: { params: Promise<{ loca
   setRequestLocale(locale)
   const t = await getTranslations({ locale, namespace: 'catalogue' })
   
-  const [products, heroImages] = await Promise.all([
+  const [products, heroImages, pageData] = await Promise.all([
     client.fetch(queries.allProducts, { locale }, { next: { revalidate: 0 } }).catch(() => []),
-    client.fetch(queries.heroImages, { locale }, { next: { revalidate: 0 } }).catch(() => [])
+    client.fetch(queries.heroImages, { locale }, { next: { revalidate: 0 } }).catch(() => []),
+    client.fetch(queries.pageCatalogue, { locale }, { next: { revalidate: 0 } }).catch(() => null)
   ])
 
   const heroImg = heroImages.find((img: any) => img.title?.toLowerCase().includes('catalogue') || img.title?.toLowerCase().includes('boutique')) || heroImages[0]
@@ -42,10 +49,10 @@ export default async function CataloguePage({ params }: { params: Promise<{ loca
         />
         <div className="relative z-10 px-4">
             <h1 className="text-5xl md:text-7xl font-script text-jk-royal-gold mb-4">
-              {t('hero.title')}
+              {localize(pageData?.hero?.title, locale, t('hero.title'))}
             </h1>
             <p className="text-jk-cream/80 text-lg max-w-2xl mx-auto">
-              {t('hero.subtitle', { count: products.length })}
+              {localize(pageData?.hero?.subtitle, locale, t('hero.subtitle', { count: products.length })).toString().replace('{count}', products.length.toString())}
             </p>
         </div>
       </div>

@@ -149,5 +149,9 @@ export const queries = {
   }`,
 
   pageServices: `*[_type == "pageServices"][0]`,
-  pageFormations: `*[_type == "pageFormations"][0]`
+  pageFormations: `*[_type == "pageFormations"][0]`,
+  pageModeles: `*[_type == "pageModeles"][0]`,
+  pageCatalogue: `*[_type == "pageCatalogue"][0]`,
+  pageTemoignages: `*[_type == "pageTemoignages"][0]`,
+  pageBlog: `*[_type == "pageBlog"][0]`
 }

@@ -14,6 +14,10 @@ import heroImage from './sanity/schemas/heroImage'
 import productImage from './sanity/schemas/productImage'
 import pageServices from './sanity/schemas/pageServices'
 import pageFormations from './sanity/schemas/pageFormations'
+import pageModeles from './sanity/schemas/pageModeles'
+import pageCatalogue from './sanity/schemas/pageCatalogue'
+import pageTemoignages from './sanity/schemas/pageTemoignages'
+import pageBlog from './sanity/schemas/pageBlog'
 
 export default defineConfig({
   name: 'justine-kems',
@@ -62,7 +66,19 @@ export default defineConfig({
                       .child(S.document().schemaType('pageServices').documentId('pageServices')),
                     S.listItem()
                       .title('Page Formations')
-                      .child(S.document().schemaType('pageFormations').documentId('pageFormations'))
+                      .child(S.document().schemaType('pageFormations').documentId('pageFormations')),
+                    S.listItem()
+                      .title('Page Modèles')
+                      .child(S.document().schemaType('pageModeles').documentId('pageModeles')),
+                    S.listItem()
+                      .title('Page Catalogue')
+                      .child(S.document().schemaType('pageCatalogue').documentId('pageCatalogue')),
+                    S.listItem()
+                      .title('Page Témoignages')
+                      .child(S.document().schemaType('pageTemoignages').documentId('pageTemoignages')),
+                    S.listItem()
+                      .title('Page Blog')
+                      .child(S.document().schemaType('pageBlog').documentId('pageBlog'))
                   ])
               ),
             S.listItem()
@@ -74,7 +90,7 @@ export default defineConfig({
                   .documentId('parametres')
               ),
             ...S.documentTypeListItems().filter(
-              (listItem) => !['modele', 'product', 'temoignage', 'article', 'formation', 'parametres', 'pageServices', 'pageFormations'].includes(listItem.getId() as string)
+              (listItem) => !['modele', 'product', 'temoignage', 'article', 'formation', 'parametres', 'pageServices', 'pageFormations', 'pageModeles', 'pageCatalogue', 'pageTemoignages', 'pageBlog'].includes(listItem.getId() as string)
             )
           ])
     }),
@@ -83,6 +99,6 @@ export default defineConfig({
   ],
 
   schema: {
-    types: [modele, product, temoignage, article, formation, parametres, heroImage, productImage, pageServices, pageFormations],
+    types: [modele, product, temoignage, article, formation, parametres, heroImage, productImage, pageServices, pageFormations, pageModeles, pageCatalogue, pageTemoignages, pageBlog],
   },
 })

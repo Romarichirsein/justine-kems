@@ -18,11 +18,14 @@ export const revalidate = 0
 export default async function BlogPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   setRequestLocale(locale)
-  const posts = await client.fetch(queries.allPosts, { locale }, { next: { revalidate: 0 } }).catch(() => [])
+  const [posts, pageData] = await Promise.all([
+    client.fetch(queries.allPosts, { locale }, { next: { revalidate: 0 } }).catch(() => []),
+    client.fetch(queries.pageBlog, { locale }, { next: { revalidate: 0 } }).catch(() => null)
+  ])
 
   return (
     <div className="bg-jk-cream dark:bg-jk-dark-bg min-h-screen pb-24">
-      <BlogClient initialPosts={posts} locale={locale} />
+      <BlogClient initialPosts={posts} pageData={pageData} locale={locale} />
     </div>
   )
 }
