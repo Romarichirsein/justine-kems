@@ -13,11 +13,9 @@ export default function LocaleSwitcher() {
 
   const switchLocale = (newLocale: string) => {
     if (newLocale === locale) return
-    router.replace(
-      // @ts-ignore
-      { pathname, params },
-      { locale: newLocale }
-    )
+    
+    // next-intl expects the pathname as a string (not an object with pathname/params)
+    router.replace(pathname, { locale: newLocale })
   }
 
   return (
