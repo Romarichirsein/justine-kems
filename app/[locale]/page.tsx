@@ -1,4 +1,4 @@
-import ScrollSequence from '@/components/ScrollSequence'
+import HeroSlider from '@/components/HeroSlider'
 import { SanityImage } from '@/components/SanityImage'
 import { safeFetch, queries } from '@/sanity/client'
 import { OrganizationSchema } from '@/components/StructuredData'
@@ -37,17 +37,23 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const featuredProducts = await safeFetch(queries.featuredProducts, { locale }) ?? []
   const testimonials = await safeFetch(queries.allTestimonials, { locale }) ?? []
   const siteSettings = await safeFetch(queries.siteSettings, { locale })
+  const heroImages = await safeFetch(queries.heroImages, { locale }) ?? []
   
   const tTrust = await getTranslations({ locale, namespace: 'trustBar' })
   const tHome = await getTranslations({ locale, namespace: 'homeExt' })
+  const tHero = await getTranslations({ locale, namespace: 'hero' })
 
   return (
     <>
       <OrganizationSchema />
       <CustomCursor />
       
-      {/* Hero Experience - Using ScrollSequence as default or a custom hero if needed */}
-      <ScrollSequence frameCount={16} baseUrl="/motion/ezgif-frame-" />
+      {/* Hero Experience - Using static HeroSlider instead of ScrollSequence */}
+      <HeroSlider 
+        slides={heroImages} 
+        fallbackTitle={tHero('title')}
+        fallbackSubtitle={tHero('subtitle')}
+      />
 
       {/* Trust Bar */}
       <section className="bg-jk-imperial-green text-jk-cream py-4 relative z-20 shadow-xl overflow-hidden">
