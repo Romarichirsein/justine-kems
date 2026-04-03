@@ -11,7 +11,7 @@ export default function LocaleSwitcher() {
   const locale = useLocale()
   const params = useParams()
 
-  const switchLocale = (newLocale: string) => {
+  const switchLocale = (newLocale: 'fr' | 'en') => {
     if (newLocale === locale) return
     
     // next-intl expects the pathname as a string (not an object with pathname/params)
