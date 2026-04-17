@@ -97,9 +97,10 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
     return found ? found.label : catId
   }
 
-  const formatPrice = useCallback((n: number) => {
-    return n.toLocaleString(locale === 'fr' ? 'fr-FR' : 'en-US') + ' FCFA'
-  }, [locale])
+  const formatPrice = useCallback((n: number | null | undefined) => {
+    if (n == null || isNaN(n) || n === 0) return t('onQuote')
+    return Number(n).toLocaleString(locale === 'fr' ? 'fr-FR' : 'en-US') + ' FCFA'
+  }, [locale, t])
 
   const handleOrder = useCallback((product: CatalogueProduct) => {
     const prices = parsePrices(product)
@@ -230,14 +231,17 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
                     {product.name}
                   </h3>
                   <p className="text-sm font-bold text-jk-royal-gold leading-tight">
-                    {product.promoPrice ? (
-                      <span className="flex flex-col">
-                        <span className="text-xs line-through text-gray-500 opacity-70">{formatPrice(product.price)}</span>
-                        <span>{formatPrice(product.promoPrice)}</span>
-                      </span>
-                    ) : (
-                      formatPrice(product.price)
-                    )}
+                    {(() => {
+                      const prices = parsePrices(product)
+                      return product.promoPrice ? (
+                        <span className="flex flex-col">
+                          <span className="text-xs line-through text-gray-500 opacity-70">{formatPrice(prices.total)}</span>
+                          <span>{formatPrice(product.promoPrice)}</span>
+                        </span>
+                      ) : (
+                        formatPrice(prices.total)
+                      )
+                    })()}
                   </p>
                 </div>
               </motion.div>

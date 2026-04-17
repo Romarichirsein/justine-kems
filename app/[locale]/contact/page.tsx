@@ -129,7 +129,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
             </svg>
             <h3 className="font-bold text-jk-imperial-green dark:text-jk-cream text-lg">{t('map.title')}</h3>
             <a
-              href="https://maps.google.com/?q=Marché+Essos+Yaoundé+Cameroun"
+              href="https://share.google/M6yK8W9eolTl7R1fJ"
               target="_blank"
               rel="noreferrer"
               className="ml-auto text-sm text-jk-royal-gold hover:underline"
