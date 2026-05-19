@@ -106,8 +106,16 @@ export const queries = {
   allTestimonials: `*[_type == "temoignage" && isVisible == true] | order(date desc) {
     _id,
     name,
-    photo,
-    "content": coalesce(content[$locale], content.fr, content),
+    "avatar": photo.asset->url,
+    "content": coalesce(
+      content[$locale],
+      select($locale == "en" => content_en, content_fr),
+      content.fr,
+      content_fr,
+      content.en,
+      content_en,
+      content
+    ),
     rating,
     date
   }`,
