@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { Metadata } from 'next'
 import { safeFetch, queries, client } from '@/sanity/client'
 import { RevealOnScroll } from '@/components/RevealOnScroll'
+import { TestimonialsGallery } from '@/components/TestimonialsGallery'
 
 const localize = (obj: any, locale: string, fallback: string | React.ReactNode) => {
   if (!obj) return fallback
@@ -152,19 +153,16 @@ export default async function TemoignagesPage({ params }: { params: Promise<{ lo
             </p>
           </RevealOnScroll>
 
-          {/* Placeholder — les captures seront ajoutées ici */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {[...Array(8)].map((_, i) => (
-              <RevealOnScroll key={i} delay={i * 0.06} variant="zoom-in">
-                <div className="aspect-[3/4] rounded-xl border border-jk-royal-gold/10 bg-jk-dark-bg flex flex-col items-center justify-center text-center p-4 hover:border-jk-royal-gold/30 transition-all">
-                  <div className="text-3xl mb-3 opacity-20">📱</div>
-                  <p className="text-gray-600 text-xs">
-                    {t('screenshots.placeholder')}
-                  </p>
-                </div>
-              </RevealOnScroll>
-            ))}
-          </div>
+          <TestimonialsGallery
+            translations={{
+              showMore: t('screenshots.showMore'),
+              showLess: t('screenshots.showLess'),
+              zoom: t('screenshots.zoom'),
+              next: t('screenshots.next'),
+              prev: t('screenshots.prev'),
+              close: t('screenshots.close'),
+            }}
+          />
 
           <RevealOnScroll variant="fade-up" delay={0.4}>
             <p className="text-center text-gray-600 text-xs mt-10 max-w-sm mx-auto">

@@ -546,7 +546,13 @@
       "title": "Captures d'écran de clientes",
       "desc": "Messages WhatsApp, avis Facebook et Instagram — l'authenticité de nos clientes.",
       "placeholder": "Capture à venir",
-      "submitMsg": "Vous êtes cliente ? Partagez votre expérience sur WhatsApp et nous serons ravis de vous mettre en avant ici ✦"
+      "submitMsg": "Vous êtes cliente ? Partagez votre expérience sur WhatsApp et nous serons ravis de vous mettre en avant ici ✦",
+      "showMore": "Voir plus de captures ✦",
+      "showLess": "Voir moins",
+      "zoom": "Cliquer pour zoomer",
+      "next": "Suivant",
+      "prev": "Précédent",
+      "close": "Fermer"
     },
     "cta": {
       "title": "Prête à vivre votre expérience ?",

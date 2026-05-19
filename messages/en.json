@@ -546,7 +546,13 @@
       "title": "Client screenshots",
       "desc": "WhatsApp messages, Facebook and Instagram reviews — our clients' authenticity.",
       "placeholder": "Screenshot coming soon",
-      "submitMsg": "Are you a client? Share your experience on WhatsApp and we will be delighted to feature you here ✦"
+      "submitMsg": "Are you a client? Share your experience on WhatsApp and we will be delighted to feature you here ✦",
+      "showMore": "Show more screenshots ✦",
+      "showLess": "Show less",
+      "zoom": "Click to zoom",
+      "next": "Next",
+      "prev": "Previous",
+      "close": "Close"
     },
     "cta": {
       "title": "Ready to experience it yourself?",
