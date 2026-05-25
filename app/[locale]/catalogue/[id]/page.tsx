@@ -8,7 +8,7 @@ type Props = {
 }
 
 export async function generateStaticParams() {
-  const products = await client.fetch(`*[_type == "product"]{ "slug": slug.current }`).catch(() => []);
+  const products = await client.fetch(`*[_type in ["product", "modele"]]{ "slug": slug.current }`).catch(() => []);
   const locales = ['fr', 'en'];
   
   const params = [];
