@@ -10,6 +10,7 @@ interface CatalogueProduct {
   _id: string
   name: string
   reference?: string
+  slug?: string
   images?: any[]
   mainImage?: any
   category: string
@@ -117,7 +118,7 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
     }
 
     const productNameWithRef = product.reference ? `${product.name} #${product.reference}` : product.name
-    const message = `${t('whatsapp.greeting')}\n\n${t('whatsapp.interest')} *${productNameWithRef}*\n${t('whatsapp.category', { cat: getCategoryLabel(product.category) })}\n${t('whatsapp.price', { price: priceStr })}\n\n${t('whatsapp.thanks')}`
+    const message = `${t('whatsapp.greeting')}\n\n${t('whatsapp.interest')} *${productNameWithRef}*\n${t('whatsapp.category', { cat: getCategoryLabel(product.category) })}\n${t('whatsapp.price', { price: priceStr })}\n\nLien : https://justinekems.com/${locale}/catalogue/${product.slug || product._id}\n\n${t('whatsapp.thanks')}`
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
     window.open(url, '_blank')
   }, [locale, formatPrice, t, getCategoryLabel])

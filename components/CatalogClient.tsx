@@ -12,6 +12,7 @@ interface Model {
   _id: string
   name: string
   reference?: string
+  slug?: string
   mainImage?: any
   gallery?: any[]
   description?: any // Portable Text
@@ -137,7 +138,8 @@ function CatalogContent({ initialModels, locale }: CatalogClientProps) {
         priceInfo = formatPrice(item.price ?? 0)
       }
       const itemNameWithRef = item.reference ? `${item.name} #${item.reference}` : (item.name || item._id)
-      msg += `• *${catLabel}* - ${itemNameWithRef} (${priceInfo}) x${item.quantity}\n`
+      const itemUrl = `https://justinekems.com/${locale}/catalogue/${item.slug || item._id}`
+      msg += `• *${catLabel}* - ${itemNameWithRef} (${priceInfo}) x${item.quantity}\n  Lien: ${itemUrl}\n`
     })
     msg += `\n` + t('whatsapp.orderTotal', { total: formatPrice(cartTotal) }) + `\n\n` + t('whatsapp.orderThanks')
     return encodeURIComponent(msg)
