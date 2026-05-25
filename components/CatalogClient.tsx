@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useEffect, Suspense } from 'react'
+import { useState, useMemo, useEffect, Suspense, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
 import { client, urlForImage } from '@/sanity/client'
@@ -11,6 +11,7 @@ import { PortableText } from '@portabletext/react'
 interface Model {
   _id: string
   name: string
+  reference?: string
   mainImage?: any
   gallery?: any[]
   description?: any // Portable Text
@@ -55,6 +56,8 @@ function CatalogContent({ initialModels, locale }: CatalogClientProps) {
   const [showCart, setShowCart] = useState(false)
   const [genderChoice, setGenderChoice] = useState<'h' | 'f'>('f')
   const [imgErrors, setImgErrors] = useState<Set<string>>(new Set())
+  const [searchTerm, setSearchTerm] = useState('')
+  const [sortBy, setSortBy] = useState('default')
 
   const CATEGORIES = [
     { key: 'all', label: t('filters.all') },
@@ -66,10 +69,40 @@ function CatalogContent({ initialModels, locale }: CatalogClientProps) {
     { key: 'tenue-ville', label: t('filters.tenue-ville') },
   ]
 
-  const filtered = useMemo(() =>
-    activeCategory === 'all' ? initialModels : initialModels.filter(m => m.category === activeCategory),
-    [activeCategory, initialModels]
-  )
+  const filtered = useMemo(() => {
+    let result = initialModels.filter((m) => {
+      const matchesCategory = activeCategory === 'all' || m.category === activeCategory
+      
+      const displayName = m.name ? m.name.toLowerCase() : ''
+      const displayRef = m.reference ? m.reference.toLowerCase() : ''
+      const catLabel = CATEGORIES.find(c => c.key === m.category)?.label ?? m.category
+      const displayCategory = catLabel.toLowerCase()
+      const search = searchTerm.toLowerCase().trim()
+      
+      const matchesSearch = !search ||
+        displayName.includes(search) ||
+        displayRef.includes(search) ||
+        displayCategory.includes(search)
+        
+      return matchesCategory && matchesSearch
+    })
+
+    if (sortBy === 'price-asc') {
+      result = [...result].sort((a, b) => {
+        const priceA = a.price ?? 0
+        const priceB = b.price ?? 0
+        return priceA - priceB
+      })
+    } else if (sortBy === 'price-desc') {
+      result = [...result].sort((a, b) => {
+        const priceA = a.price ?? 0
+        const priceB = b.price ?? 0
+        return priceB - priceA
+      })
+    }
+
+    return result
+  }, [initialModels, activeCategory, searchTerm, sortBy, CATEGORIES])
 
   const cartCount = cart.reduce((s, i) => s + i.quantity, 0)
   const cartTotal = cart.reduce((s, i) => s + (i.price ?? 0) * i.quantity, 0)
@@ -103,7 +136,8 @@ function CatalogContent({ initialModels, locale }: CatalogClientProps) {
       } else {
         priceInfo = formatPrice(item.price ?? 0)
       }
-      msg += `• *${catLabel}* - ${item.name || item._id} (${priceInfo}) x${item.quantity}\n`
+      const itemNameWithRef = item.reference ? `${item.name} #${item.reference}` : (item.name || item._id)
+      msg += `• *${catLabel}* - ${itemNameWithRef} (${priceInfo}) x${item.quantity}\n`
     })
     msg += `\n` + t('whatsapp.orderTotal', { total: formatPrice(cartTotal) }) + `\n\n` + t('whatsapp.orderThanks')
     return encodeURIComponent(msg)
@@ -112,7 +146,8 @@ function CatalogContent({ initialModels, locale }: CatalogClientProps) {
   function getWhatsAppModelMessage(model: Model) {
     const catLabel = CATEGORIES.find(c => c.key === model.category)?.label ?? model.category
     const priceInfo = formatPrice(model.price ?? 0)
-    const msg = t('whatsapp.singleInterest', { cat: catLabel, price: priceInfo })
+    const modelNameWithRef = model.reference ? `${model.name} #${model.reference}` : model.name
+    const msg = `Bonjour ! Je suis intéressé(e) par le modèle *${modelNameWithRef}* de votre collection *${catLabel}* (${priceInfo}). Pouvez-vous me donner plus d'informations ?`
     return encodeURIComponent(msg)
   }
 
@@ -120,9 +155,9 @@ function CatalogContent({ initialModels, locale }: CatalogClientProps) {
 
   return (
     <>
-      <div className="sticky top-0 z-40 bg-black/95 backdrop-blur-md border-b border-white/10">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center gap-1 py-3 overflow-x-auto scrollbar-hide">
+      <div className="sticky top-0 z-40 bg-black/95 backdrop-blur-md border-b border-white/10 py-3">
+        <div className="container mx-auto px-4 space-y-4">
+          <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide">
             {CATEGORIES.map(cat => (
               <button
                 key={cat.key}
@@ -136,6 +171,50 @@ function CatalogContent({ initialModels, locale }: CatalogClientProps) {
                 {cat.label}
               </button>
             ))}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-3 border-t border-white/5">
+            {/* Search Bar */}
+            <div className="md:col-span-2">
+              <div className="relative">
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder={locale === 'fr' ? 'Rechercher un modèle par nom ou numéro (ex: 001)...' : 'Search model by name or number (ex: 001)...'}
+                  className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-white/10 bg-white/5 text-white focus:outline-none focus:ring-2 focus:ring-[#c9a96e]/50 focus:border-[#c9a96e] transition-all text-sm"
+                />
+                <svg className="absolute left-3.5 top-3 w-4 h-4 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                {searchTerm && (
+                  <button 
+                    onClick={() => setSearchTerm('')}
+                    className="absolute right-3.5 top-2.5 text-white/40 hover:text-white text-xl"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Sort dropdown */}
+            <div className="relative">
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/5 text-white focus:outline-none focus:ring-2 focus:ring-[#c9a96e]/50 focus:border-[#c9a96e] transition-all text-sm appearance-none cursor-pointer"
+              >
+                <option value="default" className="bg-[#111]">{locale === 'fr' ? 'Trier par défaut' : 'Sort by default'}</option>
+                <option value="price-asc" className="bg-[#111]">{locale === 'fr' ? 'Prix : du - cher au + cher' : 'Price: Low to High'}</option>
+                <option value="price-desc" className="bg-[#111]">{locale === 'fr' ? 'Prix : du + cher au - cher' : 'Price: High to Low'}</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-white/40">
+                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                </svg>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -189,6 +268,7 @@ function CatalogContent({ initialModels, locale }: CatalogClientProps) {
           formatPrice={formatPrice}
           categories={CATEGORIES}
           t={t}
+          locale={locale}
         />
       )}
 
@@ -231,7 +311,7 @@ function ModelCard({ model, onSelect, hasError, onError, formatPrice, viewDetail
         <div className="relative">
           <SanityImage
             asset={model.mainImage}
-            alt={model.name || label}
+            alt={model.reference ? `${model.name} #${model.reference}` : (model.name || label)}
             width={400}
             height={600}
             className="w-full h-full group-hover:scale-[1.03] transition-transform duration-500"
@@ -250,7 +330,7 @@ function ModelCard({ model, onSelect, hasError, onError, formatPrice, viewDetail
   )
 }
 
-function ModelModal({ model, onClose, onAddToCart, waNumber, getWhatsAppMessage, formatPrice, categories, t }: any) {
+function ModelModal({ model, onClose, onAddToCart, waNumber, getWhatsAppMessage, formatPrice, categories, t, locale }: any) {
   const displayPrice = model.price ? formatPrice(model.price) : (t('modal.onQuote' as any) || 'Sur devis')
   const catLabel = categories.find((c: any) => c.key === model.category)?.label ?? model.category
 
@@ -277,12 +357,17 @@ function ModelModal({ model, onClose, onAddToCart, waNumber, getWhatsAppMessage,
         </div>
 
         <div className="p-5 space-y-4">
-          <h2 className="text-2xl font-serif text-white">{model.name}</h2>
+          <h2 className="text-2xl font-serif text-white">
+            {model.name}{model.reference ? ` #${model.reference}` : ''}
+          </h2>
           
           <div className="flex items-baseline gap-2">
             <span className="text-3xl font-bold text-[#c9a96e]">{displayPrice}</span>
             <span className="text-white/30 text-sm">{t('modal.bespoke')}</span>
           </div>
+          <p className="text-xs font-semibold text-[#c9a96e] mt-1 flex items-center gap-1.5">
+            ✨ {locale === 'fr' ? 'Accessoires y compris' : 'Accessories included'}
+          </p>
 
           <div className="bg-white/5 rounded-xl p-4 space-y-2">
             {model.description && (

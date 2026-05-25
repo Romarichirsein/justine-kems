@@ -120,7 +120,7 @@ export default async function ProductPage({ params }: Props) {
           <div className="space-y-8 bg-white dark:bg-jk-dark-surface p-8 rounded-2xl shadow-xl">
             <div>
               <h1 className="text-4xl md:text-5xl font-display text-jk-imperial-green dark:text-jk-cream mb-4">
-                {product.name}
+                {product.name}{product.reference ? ` #${product.reference}` : ''}
               </h1>
               <div className="flex flex-wrap gap-2 text-sm uppercase tracking-wider font-semibold">
                 <span className="bg-jk-imperial-green text-jk-cream px-3 py-1 rounded-full">
@@ -154,10 +154,13 @@ export default async function ProductPage({ params }: Props) {
                   ? `${product.price.toLocaleString()} FCFA`
                   : 'Sur Devis'}
               </div>
+              <p className="text-sm font-semibold text-jk-imperial-green dark:text-jk-royal-gold mt-2 flex items-center gap-1.5">
+                ✨ {locale === 'fr' ? 'Accessoires y compris' : 'Accessories included'}
+              </p>
             </div>
 
             <a
-              href={`https://wa.me/237677463484?text=${encodeURIComponent(`Bonjour, je suis intéressé(e) par la création: ${product.name}`)}`}
+              href={`https://wa.me/237677463484?text=${encodeURIComponent(`Bonjour, je suis intéressé(e) par la création: ${product.name}${product.reference ? ` #${product.reference}` : ''}`)}`}
               target="_blank"
               rel="noreferrer"
               className="block w-full text-center bg-jk-imperial-green hover:bg-[#002a26] text-jk-cream font-medium py-4 rounded-xl shadow-lg hover:shadow-neon-gold transition-all tracking-wide"

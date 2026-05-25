@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
@@ -9,6 +9,7 @@ import { client, urlForImage } from '@/sanity/client'
 interface CatalogueProduct {
   _id: string
   name: string
+  reference?: string
   images?: any[]
   mainImage?: any
   category: string
@@ -67,8 +68,10 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
   const [activeCategory, setActiveCategory] = useState('all')
   const [selectedProduct, setSelectedProduct] = useState<CatalogueProduct | null>(null)
   const [imgErrors, setImgErrors] = useState<Set<string>>(new Set())
+  const [searchTerm, setSearchTerm] = useState('')
+  const [sortBy, setSortBy] = useState('default')
 
-  const CATEGORIES = [
+  const CATEGORIES = useMemo(() => [
     { id: 'all', label: t('filters.all') },
     { id: 'robes-mariage', label: t('categories.robes-mariage') },
     { id: 'robes-soirees', label: t('categories.robes-soirees') },
@@ -76,7 +79,7 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
     { id: 'tenue-traditionnels', label: t('categories.tenue-traditionnels') },
     { id: 'etat-civil', label: t('categories.etat-civil') },
     { id: 'tenue-ville', label: t('categories.tenue-ville') },
-  ]
+  ], [t])
 
   const WHATSAPP_NUMBER = '237677463484'
 
@@ -92,10 +95,10 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
     return map[cat] || '✨'
   }
 
-  function getCategoryLabel(catId: string) {
+  const getCategoryLabel = useCallback((catId: string) => {
     const found = CATEGORIES.find(c => c.id === catId)
     return found ? found.label : catId
-  }
+  }, [CATEGORIES])
 
   const formatPrice = useCallback((n: number | null | undefined) => {
     if (n == null || isNaN(n) || n === 0) return t('onQuote')
@@ -113,14 +116,45 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
         priceStr += breakdown
     }
 
-    const message = `${t('whatsapp.greeting')}\n\n${t('whatsapp.interest')} *${product.name}*\n${t('whatsapp.category', { cat: getCategoryLabel(product.category) })}\n${t('whatsapp.price', { price: priceStr })}\n\n${t('whatsapp.thanks')}`
+    const productNameWithRef = product.reference ? `${product.name} #${product.reference}` : product.name
+    const message = `${t('whatsapp.greeting')}\n\n${t('whatsapp.interest')} *${productNameWithRef}*\n${t('whatsapp.category', { cat: getCategoryLabel(product.category) })}\n${t('whatsapp.price', { price: priceStr })}\n\n${t('whatsapp.thanks')}`
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
     window.open(url, '_blank')
   }, [locale, formatPrice, t, getCategoryLabel])
 
-  const filtered = products.filter((p) => {
-    return activeCategory === 'all' || p.category === activeCategory
-  })
+  const filtered = useMemo(() => {
+    let result = products.filter((p) => {
+      const matchesCategory = activeCategory === 'all' || p.category === activeCategory
+
+      const displayName = p.name ? p.name.toLowerCase() : ''
+      const displayRef = p.reference ? p.reference.toLowerCase() : ''
+      const displayCategory = getCategoryLabel(p.category).toLowerCase()
+      const search = searchTerm.toLowerCase().trim()
+
+      const matchesSearch = !search || 
+        displayName.includes(search) || 
+        displayRef.includes(search) || 
+        displayCategory.includes(search)
+
+      return matchesCategory && matchesSearch
+    })
+
+    if (sortBy === 'price-asc') {
+      result = [...result].sort((a, b) => {
+        const priceA = parsePrices(a).total
+        const priceB = parsePrices(b).total
+        return priceA - priceB
+      })
+    } else if (sortBy === 'price-desc') {
+      result = [...result].sort((a, b) => {
+        const priceA = parsePrices(a).total
+        const priceB = parsePrices(b).total
+        return priceB - priceA
+      })
+    }
+
+    return result
+  }, [products, activeCategory, searchTerm, sortBy, getCategoryLabel])
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -172,7 +206,60 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
               ))}
             </div>
           </div>
-          <div className="flex items-center justify-between">
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 pt-6 border-t border-gray-100 dark:border-jk-dark-bg/30">
+            {/* Search Bar */}
+            <div className="md:col-span-2">
+              <label className="block text-xs font-semibold text-jk-text-muted dark:text-gray-400 uppercase tracking-widest mb-2">
+                {t('filters.search') || 'Rechercher un modèle / numéro'}
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder={locale === 'fr' ? 'Rechercher par nom ou numéro (ex: 001)...' : 'Search by name or number (ex: 001)...'}
+                  className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-gray-200 dark:border-jk-dark-bg bg-gray-50 dark:bg-jk-dark-bg text-jk-text-dark dark:text-white focus:outline-none focus:ring-2 focus:ring-jk-royal-gold/50 focus:border-jk-royal-gold transition-all text-sm"
+                />
+                <svg className="absolute left-3.5 top-3 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                {searchTerm && (
+                  <button 
+                    onClick={() => setSearchTerm('')}
+                    className="absolute right-3.5 top-2.5 text-gray-400 hover:text-gray-600 dark:hover:text-white text-xl"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Sort dropdown */}
+            <div>
+              <label className="block text-xs font-semibold text-jk-text-muted dark:text-gray-400 uppercase tracking-widest mb-2">
+                {t('filters.sortBy') || 'Trier par'}
+              </label>
+              <div className="relative">
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-jk-dark-bg bg-gray-50 dark:bg-jk-dark-bg text-jk-text-dark dark:text-white focus:outline-none focus:ring-2 focus:ring-jk-royal-gold/50 focus:border-jk-royal-gold transition-all text-sm appearance-none cursor-pointer"
+                >
+                  <option value="default">{locale === 'fr' ? 'Par défaut' : 'Default'}</option>
+                  <option value="price-asc">{locale === 'fr' ? 'Prix : du - cher au + cher' : 'Price: Low to High'}</option>
+                  <option value="price-desc">{locale === 'fr' ? 'Prix : du + cher au - cher' : 'Price: High to Low'}</option>
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
+                  <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between mt-4">
             <span className="text-sm text-jk-text-muted dark:text-gray-400">
               {t('filters.results', { count: filtered.length, s: filtered.length > 1 ? 's' : '' })}
             </span>
@@ -228,7 +315,7 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
                     {getCategoryEmoji(product.category)} {getCategoryLabel(product.category)}
                   </p>
                   <h3 className="text-sm font-bold text-jk-imperial-green dark:text-white truncate mb-1">
-                    {product.name}
+                    {product.name}{product.reference ? ` #${product.reference}` : ''}
                   </h3>
                   <p className="text-sm font-bold text-jk-royal-gold leading-tight">
                     {(() => {
@@ -321,6 +408,7 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
                   </p>
                   <h2 className="text-3xl font-display text-jk-imperial-green dark:text-jk-royal-gold mb-4 leading-tight">
                     {selectedProduct.category === 'tenu-couple' ? t('modal.tenueCouple') : selectedProduct.name}
+                    {selectedProduct.reference ? ` #${selectedProduct.reference}` : ''}
                   </h2>
 
                   <div className="mb-6">
@@ -381,6 +469,9 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
                     })()}
                     <p className="text-[10px] text-jk-text-muted mt-3 italic">
                       {t('modal.indicative')}
+                    </p>
+                    <p className="text-xs font-semibold text-jk-imperial-green dark:text-jk-royal-gold mt-2 flex items-center gap-1.5">
+                      ✨ {locale === 'fr' ? 'Accessoires y compris' : 'Accessories included'}
                     </p>
                   </div>
 

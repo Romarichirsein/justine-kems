@@ -20,6 +20,12 @@ export default {
       validation: (Rule: any) => Rule.required()
     },
     {
+      name: 'reference',
+      title: 'Référence / Numéro (ex: 001)',
+      type: 'string',
+      description: 'Numéro de référence pour identifier facilement la robe (ex: 001)'
+    },
+    {
       name: 'mainImage',
       title: 'Photo principale',
       type: 'image',

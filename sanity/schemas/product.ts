@@ -16,6 +16,12 @@ export default {
       options: { source: 'name', maxLength: 96 }
     },
     {
+      name: 'reference',
+      title: 'Référence / Numéro (ex: 001)',
+      type: 'string',
+      description: 'Numéro de référence pour identifier facilement la robe (ex: 001)'
+    },
+    {
       name: 'category',
       title: 'Catégorie',
       type: 'string',

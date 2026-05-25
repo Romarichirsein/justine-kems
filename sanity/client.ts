@@ -29,6 +29,7 @@ export const queries = {
   allProducts: `*[_type in ["product", "modele"]] | order(_createdAt desc) {
     _id,
     "name": coalesce(name[$locale], name.fr, name),
+    reference,
     "slug": slug.current,
     "mainImage": coalesce(mainImage, images[0], gallery[0]),
     gallery,
@@ -59,12 +60,14 @@ export const queries = {
   productBySlug: `*[_type == "product" && slug.current == $slug][0] {
     _id,
     "name": coalesce(name[$locale], name.fr, name),
+    reference,
     "slug": slug.current,
     "mainImage": coalesce(mainImage, images[0]),
     gallery,
     "description": coalesce(description[$locale], description.fr, description),
     price,
     promoPrice,
+    priceType,
     category,
     stock,
     priceH,
@@ -123,6 +126,7 @@ export const queries = {
   allModeles: `*[_type in ["product", "modele"]] | order(_createdAt desc) {
     _id,
     "name": coalesce(name[$locale], name.fr, name),
+    reference,
     "slug": slug.current,
     "mainImage": coalesce(mainImage, images[0], gallery[0]),
     gallery,
