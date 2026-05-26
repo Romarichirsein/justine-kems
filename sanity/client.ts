@@ -57,7 +57,7 @@ export const queries = {
     priceF
   }`,
   
-  productBySlug: `*[_type in ["product", "modele"] && slug.current == $slug][0] {
+  productBySlug: `*[_type in ["product", "modele"] && (slug.current == $slug || _id == $slug)][0] {
     _id,
     "name": coalesce(name[$locale], name.fr, name),
     reference,

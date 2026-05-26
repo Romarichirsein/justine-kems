@@ -8,7 +8,7 @@ type Props = {
 }
 
 export async function generateStaticParams() {
-  const products = await client.fetch(`*[_type in ["product", "modele"]]{ "slug": slug.current }`).catch(() => []);
+  const products = await client.fetch(`*[_type in ["product", "modele"]]{ "slug": slug.current, _id }`).catch(() => []);
   const locales = ['fr', 'en'];
   
   const params = [];
@@ -16,8 +16,11 @@ export async function generateStaticParams() {
     if (!products || products.length === 0) {
       params.push({ locale, id: 'empty-fallback' });
     } else {
-      products.filter((p: any) => p?.slug).forEach((p: any) => {
-        params.push({ locale, id: p.slug });
+      products.forEach((p: any) => {
+        const id = p.slug || p._id;
+        if (id) {
+          params.push({ locale, id });
+        }
       });
     }
   }
