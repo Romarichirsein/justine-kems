@@ -60,6 +60,16 @@ function CatalogContent({ initialModels, locale }: CatalogClientProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [sortBy, setSortBy] = useState('default')
 
+  const handleOpenModel = (model: Model) => {
+    setSelectedModel(model)
+    window.history.pushState(null, '', `/${locale}/catalogue/${model.slug || model._id}`)
+  }
+
+  const handleCloseModel = () => {
+    setSelectedModel(null)
+    window.history.pushState(null, '', `/${locale}/modeles`)
+  }
+
   const CATEGORIES = [
     { key: 'all', label: t('filters.all') },
     { key: 'robes-mariage', label: t('filters.robes-mariage') },
@@ -118,7 +128,7 @@ function CatalogContent({ initialModels, locale }: CatalogClientProps) {
       if (exist) return prev.map(c => c._id === model._id ? { ...c, quantity: c.quantity + 1 } : c)
       return [...prev, { ...model, quantity: 1 }]
     })
-    setSelectedModel(null)
+    handleCloseModel()
     setShowCart(true)
   }
 
@@ -228,7 +238,7 @@ function CatalogContent({ initialModels, locale }: CatalogClientProps) {
             <ModelCard
               key={model._id}
               model={model}
-              onSelect={() => setSelectedModel(model)}
+              onSelect={() => handleOpenModel(model)}
               hasError={imgErrors.has(model._id)}
               onError={() => setImgErrors(prev => {
                 const next = new Set(prev)
@@ -261,7 +271,7 @@ function CatalogContent({ initialModels, locale }: CatalogClientProps) {
       {selectedModel && (
         <ModelModal
           model={selectedModel}
-          onClose={() => setSelectedModel(null)}
+          onClose={() => handleCloseModel()}
           onAddToCart={addToCart}
           genderChoice={genderChoice}
           setGenderChoice={setGenderChoice}

@@ -72,6 +72,16 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [sortBy, setSortBy] = useState('default')
 
+  const handleOpenProduct = (product: CatalogueProduct) => {
+    setSelectedProduct(product)
+    window.history.pushState(null, '', `/${locale}/catalogue/${product.slug || product._id}`)
+  }
+
+  const handleCloseProduct = () => {
+    setSelectedProduct(null)
+    window.history.pushState(null, '', `/${locale}/catalogue`)
+  }
+
   const CATEGORIES = useMemo(() => [
     { id: 'all', label: t('filters.all') },
     { id: 'robes-mariage', label: t('categories.robes-mariage') },
@@ -278,7 +288,7 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.25 }}
-                onClick={() => setSelectedProduct(product)}
+                onClick={() => handleOpenProduct(product)}
                 className="group cursor-pointer bg-white dark:bg-jk-dark-surface rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:shadow-jk-royal-gold/20 transition-all duration-300 hover:-translate-y-1"
               >
                 <div className="relative aspect-[3/4] overflow-hidden bg-gray-100 dark:bg-gray-800">
@@ -355,7 +365,7 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            onClick={() => setSelectedProduct(null)}
+            onClick={() => handleCloseProduct()}
           >
             <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
             <motion.div
@@ -366,7 +376,7 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
               onClick={(e) => e.stopPropagation()}
               className="relative bg-white dark:bg-jk-dark-surface rounded-3xl overflow-hidden shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col md:flex-row"
             >
-              <button onClick={() => setSelectedProduct(null)} className="absolute top-4 right-4 z-10 w-10 h-10 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center text-white transition-colors">
+              <button onClick={() => handleCloseProduct()} className="absolute top-4 right-4 z-10 w-10 h-10 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center text-white transition-colors">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
