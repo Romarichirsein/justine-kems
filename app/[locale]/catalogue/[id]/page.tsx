@@ -223,7 +223,7 @@ export default async function ProductPage({ params }: Props) {
             </div>
 
             <a
-              href={`https://wa.me/237677463484?text=${encodeURIComponent(`Bonjour, je suis intéressé(e) par la création: ${nameWithRef}\n\nLien : https://justinekems.com/${locale}/catalogue/${pageSlug}`)}`}
+              href={`https://wa.me/237677463484?text=${encodeURIComponent(`Bonjour, je suis intéressé(e) par la création: ${nameWithRef}\n\nLien : https://www.justinekems.com/${locale}/catalogue/${pageSlug}`)}`}
               target="_blank"
               rel="noreferrer"
               className="block w-full text-center bg-jk-imperial-green hover:bg-[#002a26] text-jk-cream font-medium py-4 rounded-xl shadow-lg hover:shadow-neon-gold transition-all tracking-wide"

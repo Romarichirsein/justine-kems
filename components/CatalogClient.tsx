@@ -151,7 +151,7 @@ function CatalogContent({ initialModels, locale }: CatalogClientProps) {
       }
       const itemNameWithRef = item.reference ? `${item.name} #${item.reference}` : (item.name || item._id)
       const slug = productSlug(item.name, item.reference)
-      const itemUrl = `https://justinekems.com/${locale}/catalogue/${slug}`
+      const itemUrl = `https://www.justinekems.com/${locale}/catalogue/${slug}`
       msg += `• *${catLabel}* - ${itemNameWithRef} (${priceInfo}) x${item.quantity}\n  Lien: ${itemUrl}\n`
     })
     msg += `\n` + t('whatsapp.orderTotal', { total: formatPrice(cartTotal) }) + `\n\n` + t('whatsapp.orderThanks')
