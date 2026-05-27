@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { client, urlForImage } from '@/sanity/client'
+import { productSlug } from '@/lib/slugify'
 
 interface CatalogueProduct {
   _id: string
@@ -74,7 +75,8 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
 
   const handleOpenProduct = (product: CatalogueProduct) => {
     setSelectedProduct(product)
-    window.history.pushState(null, '', `/${locale}/catalogue/${product.slug || product._id}`)
+    const slug = productSlug(product.name, product.reference)
+    window.history.pushState(null, '', `/${locale}/catalogue/${slug}`)
   }
 
   const handleCloseProduct = () => {
@@ -128,7 +130,8 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
     }
 
     const productNameWithRef = product.reference ? `${product.name} #${product.reference}` : product.name
-    const message = `${t('whatsapp.greeting')}\n\n${t('whatsapp.interest')} *${productNameWithRef}*\n${t('whatsapp.category', { cat: getCategoryLabel(product.category) })}\n${t('whatsapp.price', { price: priceStr })}\n\nLien : https://justinekems.com/${locale}/catalogue/${product.slug || product._id}\n\n${t('whatsapp.thanks')}`
+    const slug = productSlug(product.name, product.reference)
+    const message = `${t('whatsapp.greeting')}\n\n${t('whatsapp.interest')} *${productNameWithRef}*\n${t('whatsapp.category', { cat: getCategoryLabel(product.category) })}\n${t('whatsapp.price', { price: priceStr })}\n\nLien : https://justinekems.com/${locale}/catalogue/${slug}\n\n${t('whatsapp.thanks')}`
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
     window.open(url, '_blank')
   }, [locale, formatPrice, t, getCategoryLabel])

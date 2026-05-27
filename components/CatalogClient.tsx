@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect, Suspense, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
 import { client, urlForImage } from '@/sanity/client'
+import { productSlug } from '@/lib/slugify'
 import { SanityImage } from '@/components/SanityImage'
 import { PortableText } from '@portabletext/react'
 
@@ -62,7 +63,8 @@ function CatalogContent({ initialModels, locale }: CatalogClientProps) {
 
   const handleOpenModel = (model: Model) => {
     setSelectedModel(model)
-    window.history.pushState(null, '', `/${locale}/catalogue/${model.slug || model._id}`)
+    const slug = productSlug(model.name, model.reference)
+    window.history.pushState(null, '', `/${locale}/catalogue/${slug}`)
   }
 
   const handleCloseModel = () => {
@@ -148,7 +150,8 @@ function CatalogContent({ initialModels, locale }: CatalogClientProps) {
         priceInfo = formatPrice(item.price ?? 0)
       }
       const itemNameWithRef = item.reference ? `${item.name} #${item.reference}` : (item.name || item._id)
-      const itemUrl = `https://justinekems.com/${locale}/catalogue/${item.slug || item._id}`
+      const slug = productSlug(item.name, item.reference)
+      const itemUrl = `https://justinekems.com/${locale}/catalogue/${slug}`
       msg += `• *${catLabel}* - ${itemNameWithRef} (${priceInfo}) x${item.quantity}\n  Lien: ${itemUrl}\n`
     })
     msg += `\n` + t('whatsapp.orderTotal', { total: formatPrice(cartTotal) }) + `\n\n` + t('whatsapp.orderThanks')
