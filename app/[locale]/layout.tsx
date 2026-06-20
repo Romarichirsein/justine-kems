@@ -60,9 +60,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: t('description'),
       images: [
         {
-          url: '/og-image.jpg',
-          width: 1200,
-          height: 630,
+          url: '/luxury-haute-couture-logo.jpg',
+          width: 1024,
+          height: 1024,
           alt: 'Justine Kem\'s - Haute Couture',
         },
       ],
@@ -71,7 +71,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: 'summary_large_image',
       title: t('title'),
       description: t('description'),
-      images: ['/og-image.jpg'],
+      images: ['/luxury-haute-couture-logo.jpg'],
       creator: '@justinekems',
     },
     robots: {
