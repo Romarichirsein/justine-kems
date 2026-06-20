@@ -735,6 +735,43 @@
       }
     }
   },
+  "promoPopup": {
+    "badge": "🏆 FORMATION D'EXCELLENCE 2026",
+    "title": "🚀 LES INSCRIPTIONS SONT OFFICIELLEMENT OUVERTES !",
+    "subtitle": "Rejoignez la formation professionnelle de référence de Justine KEM'S et développez les compétences qui vous permettront de bâtir une carrière solide et rentable.",
+    "advantages": [
+      "Encadrement professionnel",
+      "Formation pratique et intensive",
+      "Accompagnement personnalisé",
+      "Méthodes modernes & certifiantes",
+      "Opportunités de développement",
+      "Certificat de fin de formation"
+    ],
+    "datesTitle": "Sessions 2026",
+    "bafoussam": "Bafoussam",
+    "bafoussamDate": "14 Septembre 2026",
+    "yaounde": "Yaoundé",
+    "yaoundeDate": "21 Septembre 2026",
+    "urgencyTitle": "⚠️ PLACES STRICTEMENT LIMITÉES",
+    "urgencyDesc": "Un nombre réduit de participants est accepté afin de garantir un suivi de qualité.",
+    "urgencyHighlight": "🔥 Plus de 70% des places sont déjà réservées – Inscrivez-vous avant la clôture des inscriptions.",
+    "testimonialLabel": "Ce que disent nos étudiants",
+    "testimonial": "Une formation exceptionnelle qui m'a permis de développer mes compétences et d'obtenir de nouvelles opportunités.",
+    "testimonialAuthor": "Marie-Claire K.",
+    "testimonialRole": "Ancienne étudiante • Diplômée 2025",
+    "phone": "+237 6 77 46 34 84",
+    "cameroon": "Cameroun",
+    "btnPrimary": "JE M'INSCRIS MAINTENANT",
+    "btnSecondary": "OBTENIR PLUS D'INFORMATIONS",
+    "closeLabel": "Fermer",
+    "exit": {
+      "title": "Attendez !",
+      "subtitle": "🎁 Ne manquez pas cette opportunité de transformer votre avenir.",
+      "desc": "Les inscriptions pour la prochaine session se terminent bientôt.",
+      "action": "👉 Réservez votre place maintenant.",
+      "btn": "OUI, JE M'INSCRIS"
+    }
+  },
   "inscription": {
     "metadata": {
       "title": "Inscription à l'Académie - Justine Kem's",

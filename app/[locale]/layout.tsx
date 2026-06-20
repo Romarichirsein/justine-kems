@@ -8,6 +8,7 @@ import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import WhatsAppFloating from '@/components/WhatsAppFloating'
 import { OrganizationSchema, WebSiteSchema } from '@/components/StructuredData'
+import PromoPopup from '@/components/PromoPopup'
 
 // La police Montserrat est chargée directement via globals.css (@import Google Fonts)
 
@@ -117,6 +118,7 @@ export default async function RootLayout({
             {children}
           </main>
           <WhatsAppFloating />
+          <PromoPopup />
           <Footer />
         </Providers>
       </body>

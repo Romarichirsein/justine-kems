@@ -735,6 +735,43 @@
       }
     }
   },
+  "promoPopup": {
+    "badge": "🏆 EXCELLENCE TRAINING 2026",
+    "title": "🚀 REGISTRATIONS ARE OFFICIALLY OPEN!",
+    "subtitle": "Join the benchmark professional training of Justine KEM'S and develop the skills that will allow you to build a solid and profitable career.",
+    "advantages": [
+      "Professional mentorship",
+      "Practical and intensive training",
+      "Personalized support",
+      "Modern & certified methods",
+      "Development opportunities",
+      "End of training certificate"
+    ],
+    "datesTitle": "2026 Sessions",
+    "bafoussam": "Bafoussam",
+    "bafoussamDate": "September 14, 2026",
+    "yaounde": "Yaoundé",
+    "yaoundeDate": "September 21, 2026",
+    "urgencyTitle": "⚠️ PLACES ARE STRICTLY LIMITED",
+    "urgencyDesc": "A reduced number of participants is accepted to guarantee high-quality personalized support.",
+    "urgencyHighlight": "🔥 Over 70% of seats are already reserved – Register before registration closes.",
+    "testimonialLabel": "What our students say",
+    "testimonial": "An exceptional training that allowed me to develop my skills and obtain new professional opportunities.",
+    "testimonialAuthor": "Marie-Claire K.",
+    "testimonialRole": "Former Student • Graduated 2025",
+    "phone": "+237 6 77 46 34 84",
+    "cameroon": "Cameroon",
+    "btnPrimary": "REGISTER NOW",
+    "btnSecondary": "GET MORE INFORMATION",
+    "closeLabel": "Close",
+    "exit": {
+      "title": "Wait!",
+      "subtitle": "🎁 Don't miss this opportunity to transform your future.",
+      "desc": "Registrations for the next session are ending soon.",
+      "action": "👉 Reserve your seat now.",
+      "btn": "YES, I'M REGISTERING"
+    }
+  },
   "inscription": {
     "metadata": {
       "title": "Academy Registration - Justine Kem's",
