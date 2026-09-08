@@ -647,6 +647,8 @@
     "filters": {
       "category": "Catégorie",
       "gender": "Pour :",
+      "search": "Rechercher un modèle / numéro",
+      "sortBy": "Trier par",
       "results": "{count} résultat{s}",
       "all": "Toutes les créations",
       "genders": {

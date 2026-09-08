@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-export const revalidate = 0
+export const revalidate = 60
 
 export default async function TemoignagesPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
@@ -30,8 +30,8 @@ export default async function TemoignagesPage({ params }: { params: Promise<{ lo
   const t = await getTranslations({ locale, namespace: 'temoignages' })
 
   const [testimonials, pageData] = await Promise.all([
-    safeFetch(queries.allTestimonials, { locale }, { next: { revalidate: 0 } }).catch(() => []),
-    client.fetch(queries.pageTemoignages, { locale }, { next: { revalidate: 0 } }).catch(() => null)
+    safeFetch(queries.allTestimonials, { locale }, { next: { revalidate: 60 } }).catch(() => []),
+    client.fetch(queries.pageTemoignages, { locale }, { next: { revalidate: 60 } }).catch(() => null)
   ])
 
   // Témoignages statiques de secours si Sanity est vide

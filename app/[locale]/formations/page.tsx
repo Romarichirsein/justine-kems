@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-export const revalidate = 0
+export const revalidate = 60
 
 export default async function FormationsPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
@@ -35,10 +35,10 @@ export default async function FormationsPage({ params }: { params: Promise<{ loc
   const t = await getTranslations({ locale, namespace: 'formations' })
   
   const [heroImages, formations, testimonials, pageData] = await Promise.all([
-    client.fetch(queries.heroImages, { locale }, { next: { revalidate: 0 } }).catch(() => []),
-    client.fetch(queries.allFormations, { locale }, { next: { revalidate: 0 } }).catch(() => []),
-    client.fetch(queries.allTestimonials, { locale }, { next: { revalidate: 0 } }).catch(() => []),
-    client.fetch(queries.pageFormations, { locale }, { next: { revalidate: 0 } }).catch(() => null)
+    client.fetch(queries.heroImages, { locale }, { next: { revalidate: 60 } }).catch(() => []),
+    client.fetch(queries.allFormations, { locale }, { next: { revalidate: 60 } }).catch(() => []),
+    client.fetch(queries.allTestimonials, { locale }, { next: { revalidate: 60 } }).catch(() => []),
+    client.fetch(queries.pageFormations, { locale }, { next: { revalidate: 60 } }).catch(() => null)
   ])
 
   const profilImage = heroImages.find((img: any) => img.title?.toLowerCase().includes('formation') || img.title?.toLowerCase().includes('atelier')) || heroImages[2] || heroImages[0]

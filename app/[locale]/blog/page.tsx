@@ -13,14 +13,14 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-export const revalidate = 0
+export const revalidate = 60
 
 export default async function BlogPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   setRequestLocale(locale)
   const [posts, pageData] = await Promise.all([
-    client.fetch(queries.allPosts, { locale }, { next: { revalidate: 0 } }).catch(() => []),
-    client.fetch(queries.pageBlog, { locale }, { next: { revalidate: 0 } }).catch(() => null)
+    client.fetch(queries.allPosts, { locale }, { next: { revalidate: 60 } }).catch(() => []),
+    client.fetch(queries.pageBlog, { locale }, { next: { revalidate: 60 } }).catch(() => null)
   ])
 
   return (

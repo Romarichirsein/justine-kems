@@ -647,6 +647,8 @@
     "filters": {
       "category": "Category",
       "gender": "For:",
+      "search": "Search a design / number",
+      "sortBy": "Sort by",
       "results": "{count} result{s}",
       "all": "All creations",
       "genders": {

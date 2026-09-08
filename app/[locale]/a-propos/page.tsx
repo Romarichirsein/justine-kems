@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 import { SanityImageInfo } from '@/types/sanity'
 
-export const revalidate = 0
+export const revalidate = 60
 
 export default async function AboutPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params

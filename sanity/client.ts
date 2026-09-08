@@ -4,7 +4,16 @@ import imageUrlBuilder from '@sanity/image-url'
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'd8v5zxvs'
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
 
+// Client de lecture avec CDN activé (rapide, mis en cache)
 export const client = createClient({
+  projectId,
+  dataset,
+  apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-03-18',
+  useCdn: true,
+})
+
+// Client d'écriture avec token (pour uploads, mutations)
+export const writeClient = createClient({
   projectId,
   dataset,
   apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-03-18',
@@ -15,7 +24,7 @@ export const client = createClient({
 export async function safeFetch<T = any>(
   query: string, 
   params?: Record<string, unknown>,
-  options: any = { next: { revalidate: 0 } }
+  options: any = { next: { revalidate: 60 } }
 ): Promise<T | null> {
   if (!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) return null
   return client.fetch<T>(query, params as any, options).catch(() => null)

@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-export const revalidate = 0
+export const revalidate = 60
 
 export default async function ModelesPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
@@ -27,9 +27,9 @@ export default async function ModelesPage({ params }: { params: Promise<{ locale
   const t = await getTranslations({ locale, namespace: 'modeles' })
   
   const [models, heroImages, pageData] = await Promise.all([
-    client.fetch(queries.allModeles, { locale }, { next: { revalidate: 0 } }).catch(() => []),
-    client.fetch(queries.heroImages, { locale }, { next: { revalidate: 0 } }).catch(() => []),
-    client.fetch(queries.pageModeles, { locale }, { next: { revalidate: 0 } }).catch(() => null)
+    client.fetch(queries.allModeles, { locale }, { next: { revalidate: 60 } }).catch(() => []),
+    client.fetch(queries.heroImages, { locale }, { next: { revalidate: 60 } }).catch(() => []),
+    client.fetch(queries.pageModeles, { locale }, { next: { revalidate: 60 } }).catch(() => null)
   ])
 
   const heroImg = heroImages.find((img: any) => img.title?.toLowerCase().includes('modeles') || img.title?.toLowerCase().includes('création')) || heroImages[0]

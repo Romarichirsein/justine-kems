@@ -151,7 +151,7 @@ function CatalogContent({ initialModels, locale }: CatalogClientProps) {
       }
       const itemNameWithRef = item.reference ? `${item.name} #${item.reference}` : (item.name || item._id)
       const slug = productSlug(item.name, item.reference)
-      const itemUrl = `https://www.justinekems.com/${locale}/catalogue/${slug}`
+      const itemUrl = `https://www.justinekems.com/${locale}/catalogue/${slug}/`
       msg += `• *${catLabel}* - ${itemNameWithRef} (${priceInfo}) x${item.quantity}\n  Lien: ${itemUrl}\n`
     })
     msg += `\n` + t('whatsapp.orderTotal', { total: formatPrice(cartTotal) }) + `\n\n` + t('whatsapp.orderThanks')
@@ -162,7 +162,9 @@ function CatalogContent({ initialModels, locale }: CatalogClientProps) {
     const catLabel = CATEGORIES.find(c => c.key === model.category)?.label ?? model.category
     const priceInfo = formatPrice(model.price ?? 0)
     const modelNameWithRef = model.reference ? `${model.name} #${model.reference}` : model.name
-    const msg = `Bonjour ! Je suis intéressé(e) par le modèle *${modelNameWithRef}* de votre collection *${catLabel}* (${priceInfo}). Pouvez-vous me donner plus d'informations ?`
+    const slug = productSlug(model.name, model.reference)
+    const itemUrl = `https://www.justinekems.com/${locale}/catalogue/${slug}/`
+    const msg = `Bonjour ! Je suis intéressé(e) par le modèle *${modelNameWithRef}* de votre collection *${catLabel}* (${priceInfo}).\n\nLien : ${itemUrl}\n\nPouvez-vous me donner plus d'informations ?`
     return encodeURIComponent(msg)
   }
 
