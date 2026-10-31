@@ -24,6 +24,8 @@ interface CatalogueProduct {
   longDescription?: any
   stock?: number
   gender?: string
+  accessories?: string
+  hasAccessories?: boolean
 }
 
 const parsePrices = (product: CatalogueProduct) => {
@@ -131,7 +133,11 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
 
     const productNameWithRef = product.reference ? `${product.name} #${product.reference}` : product.name
     const slug = productSlug(product.name, product.reference)
-    const message = `${t('whatsapp.greeting')}\n\n${t('whatsapp.interest')} *${productNameWithRef}*\n${t('whatsapp.category', { cat: getCategoryLabel(product.category) })}\n${t('whatsapp.price', { price: priceStr })}\n\nLien : https://www.justinekems.com/${locale}/catalogue/${slug}/\n\n${t('whatsapp.thanks')}`
+    const hasAcc = product.hasAccessories || product.accessories === 'avec'
+    const accLabel = hasAcc
+      ? (locale === 'fr' ? 'Avec accessoire' : 'With accessories')
+      : (locale === 'fr' ? 'Sans accessoire' : 'Without accessories')
+    const message = `${t('whatsapp.greeting')}\n\n${t('whatsapp.interest')} *${productNameWithRef}* (${accLabel})\n${t('whatsapp.category', { cat: getCategoryLabel(product.category) })}\n${t('whatsapp.price', { price: priceStr })}\n\nLien : https://www.justinekems.com/${locale}/catalogue/${slug}/\n\n${t('whatsapp.thanks')}`
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
     window.open(url, '_blank')
   }, [locale, formatPrice, t, getCategoryLabel])
@@ -317,6 +323,12 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
                     </span>
                   )}
 
+                  {(product.hasAccessories || product.accessories === 'avec') && (
+                    <span className="absolute top-2 right-2 bg-jk-imperial-green/90 text-jk-cream text-[10px] font-semibold px-2 py-0.5 rounded-full shadow backdrop-blur-sm">
+                      ✨ {locale === 'fr' ? 'Avec accessoires' : 'With accessories'}
+                    </span>
+                  )}
+
                   <div className="absolute inset-0 bg-jk-imperial-green/0 group-hover:bg-jk-imperial-green/30 transition-colors duration-300 flex items-center justify-center">
                     <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-jk-royal-gold text-white text-xs font-bold px-3 py-1.5 rounded-full">
                       {t('card.viewDetail')}
@@ -484,9 +496,15 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
                     <p className="text-[10px] text-jk-text-muted mt-3 italic">
                       {t('modal.indicative')}
                     </p>
-                    <p className="text-xs font-semibold text-jk-imperial-green dark:text-jk-royal-gold mt-2 flex items-center gap-1.5">
-                      ✨ {locale === 'fr' ? 'Accessoires y compris' : 'Accessories included'}
-                    </p>
+                    {selectedProduct.hasAccessories || selectedProduct.accessories === 'avec' ? (
+                      <p className="text-xs font-semibold text-jk-imperial-green dark:text-jk-royal-gold mt-2 flex items-center gap-1.5">
+                        ✨ {locale === 'fr' ? 'Accessoires y compris' : 'Accessories included'}
+                      </p>
+                    ) : (
+                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mt-2 flex items-center gap-1.5">
+                        {locale === 'fr' ? 'Sans accessoire' : 'Without accessories'}
+                      </p>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-2 gap-3 mb-8">

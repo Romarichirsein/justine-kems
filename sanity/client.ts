@@ -52,7 +52,9 @@ export const queries = {
     isFeatured,
     isNew,
     fabric,
-    occasion
+    occasion,
+    accessories,
+    "hasAccessories": accessories == "avec" || hasAccessories == true
   }`,
   
   featuredProducts: `*[_type == "product" && isFeatured == true][0...4] {
@@ -80,7 +82,9 @@ export const queries = {
     category,
     stock,
     priceH,
-    priceF
+    priceF,
+    accessories,
+    "hasAccessories": accessories == "avec" || hasAccessories == true
   }`,
   
   allPosts: `*[_type == "article" && isPublished == true] | order(publishedAt desc) {
@@ -145,7 +149,9 @@ export const queries = {
     isAvailable,
     priceH,
     priceF,
-    gender
+    gender,
+    accessories,
+    "hasAccessories": accessories == "avec" || hasAccessories == true
   }`,
 
   siteSettings: `*[_type == "parametres"][0] {

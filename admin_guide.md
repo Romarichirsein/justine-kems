@@ -17,11 +17,11 @@ Le menu de gauche est organisé en sections claires :
 ### 📸 Modèles
 Permet de gérer les pièces de haute couture.
 - **Ajouter** : Cliquez sur le `+`.
-- **Champs** : Nom, Photo principale, Galerie (plusieurs photos), Description riche, Prix, Catégorie, Disponibilité.
+- **Champs** : Nom, Photo principale, Galerie (plusieurs photos), Description riche, Prix, Catégorie, Option Accessoires (Avec ou Sans accessoire), Disponibilité.
 
 ### 🛍️ Catalogue
 Pour les produits en vente directe (Prêt-à-porter, accessoires).
-- **Champs** : Nom, Images, Description courte et longue, Prix de base, Prix promotionnel, Stock, Catégorie.
+- **Champs** : Nom, Images, Description courte et longue, Prix de base, Prix promotionnel, Stock, Catégorie, Option Accessoires (Avec ou Sans accessoire).
 
 ### 💬 Témoignages
 Gérez les avis de vos clients.

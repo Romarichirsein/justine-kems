@@ -23,6 +23,8 @@ interface Model {
   priceF?: number   // prix femme (tenues couple)
   gender?: 'h' | 'f'
   isAvailable?: boolean
+  accessories?: string
+  hasAccessories?: boolean
 }
 
 interface CartItem extends Model {
@@ -164,7 +166,11 @@ function CatalogContent({ initialModels, locale }: CatalogClientProps) {
     const modelNameWithRef = model.reference ? `${model.name} #${model.reference}` : model.name
     const slug = productSlug(model.name, model.reference)
     const itemUrl = `https://www.justinekems.com/${locale}/catalogue/${slug}/`
-    const msg = `Bonjour ! Je suis intéressé(e) par le modèle *${modelNameWithRef}* de votre collection *${catLabel}* (${priceInfo}).\n\nLien : ${itemUrl}\n\nPouvez-vous me donner plus d'informations ?`
+    const hasAcc = model.hasAccessories || model.accessories === 'avec'
+    const accLabel = hasAcc
+      ? (locale === 'fr' ? 'Avec accessoire' : 'With accessories')
+      : (locale === 'fr' ? 'Sans accessoire' : 'Without accessories')
+    const msg = `Bonjour ! Je suis intéressé(e) par le modèle *${modelNameWithRef}* (${accLabel}) de votre collection *${catLabel}* (${priceInfo}).\n\nLien : ${itemUrl}\n\nPouvez-vous me donner plus d'informations ?`
     return encodeURIComponent(msg)
   }
 
@@ -255,6 +261,7 @@ function CatalogContent({ initialModels, locale }: CatalogClientProps) {
               notAvailableLabel={t('controls.notAvailable')}
               manLabel={t('modal.man')}
               womanLabel={t('modal.woman')}
+              locale={locale}
             />
           ))}
         </div>
@@ -306,7 +313,7 @@ function CatalogContent({ initialModels, locale }: CatalogClientProps) {
   )
 }
 
-function ModelCard({ model, onSelect, hasError, onError, formatPrice, viewDetailLabel, notAvailableLabel, manLabel, womanLabel }: any) {
+function ModelCard({ model, onSelect, hasError, onError, formatPrice, viewDetailLabel, notAvailableLabel, manLabel, womanLabel, locale }: any) {
   const label = (() => {
     if (model.priceH != null && model.priceF != null && model.category === 'tenu-couple') {
       return `H: ${formatPrice(model.priceH)} / F: ${formatPrice(model.priceF)}`
@@ -333,6 +340,11 @@ function ModelCard({ model, onSelect, hasError, onError, formatPrice, viewDetail
             height={600}
             className="w-full h-full group-hover:scale-[1.03] transition-transform duration-500"
           />
+          {(model.hasAccessories || model.accessories === 'avec') && (
+            <span className="absolute top-2 right-2 bg-black/75 border border-[#c9a96e]/50 text-[#c9a96e] text-[9px] font-semibold px-2 py-0.5 rounded-full shadow backdrop-blur-sm z-10">
+              ✨ {locale === 'fr' ? 'Avec accessoires' : 'With accessories'}
+            </span>
+          )}
           <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-end p-3">
             <span className="text-white text-xs font-medium text-center">{viewDetailLabel}</span>
           </div>
@@ -382,9 +394,15 @@ function ModelModal({ model, onClose, onAddToCart, waNumber, getWhatsAppMessage,
             <span className="text-3xl font-bold text-[#c9a96e]">{displayPrice}</span>
             <span className="text-white/30 text-sm">{t('modal.bespoke')}</span>
           </div>
-          <p className="text-xs font-semibold text-[#c9a96e] mt-1 flex items-center gap-1.5">
-            ✨ {locale === 'fr' ? 'Accessoires y compris' : 'Accessories included'}
-          </p>
+          {model.hasAccessories || model.accessories === 'avec' ? (
+            <p className="text-xs font-semibold text-[#c9a96e] mt-1 flex items-center gap-1.5">
+              ✨ {locale === 'fr' ? 'Accessoires y compris' : 'Accessories included'}
+            </p>
+          ) : (
+            <p className="text-xs font-medium text-white/50 mt-1 flex items-center gap-1.5">
+              {locale === 'fr' ? 'Sans accessoire' : 'Without accessories'}
+            </p>
+          )}
 
           <div className="bg-white/5 rounded-xl p-4 space-y-2">
             {model.description && (

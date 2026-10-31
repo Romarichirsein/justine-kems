@@ -68,6 +68,20 @@ export default {
       }
     },
     {
+      name: 'accessories',
+      title: 'Option Accessoires',
+      type: 'string',
+      description: 'Cochez si le modèle est vendu avec ou sans accessoire',
+      options: {
+        list: [
+          { title: '✨ Avec accessoire', value: 'avec' },
+          { title: 'Sans accessoire', value: 'sans' }
+        ],
+        layout: 'radio'
+      },
+      initialValue: 'sans'
+    },
+    {
       name: 'isAvailable',
       title: 'Disponible',
       type: 'boolean',

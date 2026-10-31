@@ -89,6 +89,20 @@ export default {
       type: 'string'
     },
     {
+      name: 'accessories',
+      title: 'Option Accessoires',
+      type: 'string',
+      description: 'Cochez si le vêtement est vendu avec ou sans accessoire',
+      options: {
+        list: [
+          { title: '✨ Avec accessoire', value: 'avec' },
+          { title: 'Sans accessoire', value: 'sans' }
+        ],
+        layout: 'radio'
+      },
+      initialValue: 'sans'
+    },
+    {
       name: 'price',
       title: 'Prix (FCFA)',
       type: 'number'

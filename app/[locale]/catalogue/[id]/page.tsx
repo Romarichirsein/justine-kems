@@ -32,7 +32,9 @@ const allProductsFullQuery = `*[_type in ["product", "modele"]] {
   priceF,
   fabric,
   occasion,
-  gender
+  gender,
+  accessories,
+  "hasAccessories": accessories == "avec" || hasAccessories == true
 }`
 
 /**
@@ -118,7 +120,9 @@ async function findProductByNameSlug(rawSlug: string, locale: string) {
         priceF,
         fabric,
         occasion,
-        gender
+        gender,
+        accessories,
+        "hasAccessories": accessories == "avec" || hasAccessories == true
       }`,
       { slug: decodedSlug },
       { next: { revalidate: 60 } }
@@ -328,13 +332,19 @@ export default async function ProductPage({ params }: Props) {
                   ? `${product.price.toLocaleString()} FCFA`
                   : 'Sur Devis'}
               </div>
-              <p className="text-sm font-semibold text-jk-imperial-green dark:text-jk-royal-gold mt-2 flex items-center gap-1.5">
-                ✨ {locale === 'fr' ? 'Accessoires y compris' : 'Accessories included'}
-              </p>
+              {product.hasAccessories || product.accessories === 'avec' ? (
+                <p className="text-sm font-semibold text-jk-imperial-green dark:text-jk-royal-gold mt-2 flex items-center gap-1.5">
+                  ✨ {locale === 'fr' ? 'Accessoires y compris' : 'Accessories included'}
+                </p>
+              ) : (
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mt-2 flex items-center gap-1.5">
+                  {locale === 'fr' ? 'Sans accessoire' : 'Without accessories'}
+                </p>
+              )}
             </div>
 
             <a
-              href={`https://wa.me/237677463484?text=${encodeURIComponent(`Bonjour, je suis intéressé(e) par la création: ${nameWithRef}\n\nLien : https://www.justinekems.com/${locale}/catalogue/${pageSlug}/`)}`}
+              href={`https://wa.me/237677463484?text=${encodeURIComponent(`Bonjour, je suis intéressé(e) par la création: ${nameWithRef} (${(product.hasAccessories || product.accessories === 'avec') ? (locale === 'fr' ? 'Avec accessoire' : 'With accessories') : (locale === 'fr' ? 'Sans accessoire' : 'Without accessories')})\n\nLien : https://www.justinekems.com/${locale}/catalogue/${pageSlug}/`)}`}
               target="_blank"
               rel="noreferrer"
               className="block w-full text-center bg-jk-imperial-green hover:bg-[#002a26] text-jk-cream font-medium py-4 rounded-xl shadow-lg hover:shadow-neon-gold transition-all tracking-wide"

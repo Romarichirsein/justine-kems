@@ -39,6 +39,7 @@ Une fois connectée, vous verrez un menu sur votre gauche. Il est divisé en deu
    * **Galerie :** Ajoutez d'autres angles de vue si vous en avez.
    * **Catégorie :** Choisissez si c'est une Robe de Soirée, Mariage, etc.
    * **Prix :** Le montant en FCFA (sans la devise).
+   * **Option Accessoires :** Cochez **"✨ Avec accessoire"** ou **"Sans accessoire"** selon si les accessoires visibles ou associés sont inclus avec la tenue.
 4. Cliquez sur **Publish**. La tenue apparaît instantanément sur le site !
 
 ### 🎓 Ajouter une Formation
