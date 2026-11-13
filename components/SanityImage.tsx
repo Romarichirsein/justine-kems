@@ -66,6 +66,7 @@ export const SanityImage = ({
         src={imageUrl}
         alt={alt}
         priority={priority}
+        unoptimized
         className={`object-cover transition-opacity duration-300 ${className}`}
         width={!fill ? width || 800 : undefined}
         height={!fill ? height || 1000 : undefined}

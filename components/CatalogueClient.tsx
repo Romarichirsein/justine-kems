@@ -311,6 +311,7 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
                         src={imgSrc}
                         alt={product.name}
                         fill
+                        unoptimized
                         className="object-cover group-hover:scale-105 transition-transform duration-500"
                         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
                         onError={() => handleImgError(product._id)}
@@ -415,6 +416,7 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
                         src={imgSrc}
                         alt={selectedProduct.name}
                         fill
+                        unoptimized
                         className="object-contain md:object-cover"
                         sizes="(max-width: 768px) 100vw, 50vw"
                         priority

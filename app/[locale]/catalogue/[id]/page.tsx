@@ -281,6 +281,7 @@ export default async function ProductPage({ params }: Props) {
                     src={imgSrc}
                     alt={nameWithRef}
                     fill
+                    unoptimized
                     className="object-cover"
                     priority
                   />
@@ -303,6 +304,7 @@ export default async function ProductPage({ params }: Props) {
                           src={galSrc}
                           alt={`Gallery image ${i+1}`}
                           fill
+                          unoptimized
                           className="object-cover"
                        />
                      </div>
