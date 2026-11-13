@@ -33,8 +33,32 @@ export const SanityImage = ({
     )
   }
 
-  // Calculate URL using Sanity builder
-  const imageUrl = urlForImage(asset).url()
+  // Vérifier que l'asset a bien une référence valide
+  const hasRef =
+    asset?.asset?._ref ||
+    asset?.asset?._id ||
+    asset?._ref ||
+    asset?.asset?.url ||
+    asset?.url
+
+  if (!hasRef) {
+    return (
+      <div className={`bg-gray-200 flex items-center justify-center ${className}`}>
+        <span className="text-gray-400 text-xs">Image non disponible</span>
+      </div>
+    )
+  }
+
+  let imageUrl: string
+  try {
+    imageUrl = urlForImage(asset).url()
+  } catch {
+    return (
+      <div className={`bg-gray-200 flex items-center justify-center ${className}`}>
+        <span className="text-gray-400 text-xs">Image non disponible</span>
+      </div>
+    )
+  }
 
   return (
     <div className={`relative overflow-hidden ${fill ? 'w-full h-full' : ''} ${className}`}>

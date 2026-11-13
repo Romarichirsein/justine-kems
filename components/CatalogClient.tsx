@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect, Suspense, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
-import { client, urlForImage } from '@/sanity/client'
+import { client, urlForImage, safeImageUrl } from '@/sanity/client'
 import { productSlug } from '@/lib/slugify'
 import { SanityImage } from '@/components/SanityImage'
 import { PortableText } from '@portabletext/react'
@@ -327,29 +327,34 @@ function ModelCard({ model, onSelect, hasError, onError, formatPrice, viewDetail
       className="break-inside-avoid mb-3 group relative cursor-pointer rounded-lg overflow-hidden bg-[#111]"
       onClick={onSelect}
     >
-      {hasError || !model.mainImage ? (
-        <div className="aspect-[3/4] flex items-center justify-center text-white/20 text-xs p-4 text-center bg-[#111]">
-          {notAvailableLabel}
-        </div>
-      ) : (
-        <div className="relative">
-          <SanityImage
-            asset={model.mainImage}
-            alt={model.reference ? `${model.name} #${model.reference}` : (model.name || label)}
-            width={400}
-            height={600}
-            className="w-full h-full group-hover:scale-[1.03] transition-transform duration-500"
-          />
-          {(model.hasAccessories || model.accessories === 'avec') && (
-            <span className="absolute top-2 right-2 bg-black/75 border border-[#c9a96e]/50 text-[#c9a96e] text-[9px] font-semibold px-2 py-0.5 rounded-full shadow backdrop-blur-sm z-10">
-              ✨ {locale === 'fr' ? 'Avec accessoires' : 'With accessories'}
-            </span>
-          )}
-          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-end p-3">
-            <span className="text-white text-xs font-medium text-center">{viewDetailLabel}</span>
+      {(() => {
+        const imgSrc = !hasError
+          ? safeImageUrl(model.mainImage, 400, 600)
+          : null
+        return imgSrc ? (
+          <div className="relative">
+            <SanityImage
+              asset={model.mainImage}
+              alt={model.reference ? `${model.name} #${model.reference}` : (model.name || label)}
+              width={400}
+              height={600}
+              className="w-full h-full group-hover:scale-[1.03] transition-transform duration-500"
+            />
+            {(model.hasAccessories || model.accessories === 'avec') && (
+              <span className="absolute top-2 right-2 bg-black/75 border border-[#c9a96e]/50 text-[#c9a96e] text-[9px] font-semibold px-2 py-0.5 rounded-full shadow backdrop-blur-sm z-10">
+                ✨ {locale === 'fr' ? 'Avec accessoires' : 'With accessories'}
+              </span>
+            )}
+            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-end p-3">
+              <span className="text-white text-xs font-medium text-center">{viewDetailLabel}</span>
+            </div>
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="aspect-[3/4] flex items-center justify-center text-white/20 text-xs p-4 text-center bg-[#111]">
+            {notAvailableLabel}
+          </div>
+        )
+      })()}
       {label && (
         <div className="absolute bottom-0 left-0 right-0 bg-black/80 backdrop-blur-sm px-2 py-1.5 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
           <p className="text-[#c9a96e] text-xs font-semibold text-center leading-tight">{label}</p>

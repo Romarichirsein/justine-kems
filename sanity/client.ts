@@ -33,6 +33,23 @@ export async function safeFetch<T = any>(
 const builder = imageUrlBuilder(client)
 export function urlForImage(source: any) { return builder.image(source) }
 
+/** Version sécurisée : retourne null si l'image n'est pas utilisable */
+export function safeImageUrl(source: any, width = 400, height = 533): string | null {
+  try {
+    if (!source) return null
+    // Accepte asset._ref, asset._id, ou _ref direct
+    const ref =
+      source?.asset?._ref ||
+      source?.asset?._id ||
+      source?._ref ||
+      source?.url
+    if (!ref) return null
+    return builder.image(source).width(width).height(height).auto('format').url()
+  } catch {
+    return null
+  }
+}
+
 export const queries = {
   // Catalogue
   allProducts: `*[_type in ["product", "modele"]] | order(_createdAt desc) {
@@ -40,8 +57,12 @@ export const queries = {
     "name": coalesce(name[$locale], name.fr, name),
     reference,
     "slug": slug.current,
-    "mainImage": coalesce(mainImage, images[0], gallery[0]),
-    gallery,
+    "mainImage": coalesce(
+      mainImage{..., asset->{_id, _ref, url, metadata{dimensions}}},
+      images[0]{..., asset->{_id, _ref, url, metadata{dimensions}}},
+      gallery[0]{..., asset->{_id, _ref, url, metadata{dimensions}}}
+    ),
+    "gallery": coalesce(gallery, images)[]{..., asset->{_id, _ref, url}},
     "description": coalesce(description[$locale], description.fr, description),
     price,
     priceH,
@@ -61,7 +82,10 @@ export const queries = {
     _id,
     "name": coalesce(name[$locale], name.fr, name),
     "slug": slug.current,
-    "mainImage": coalesce(mainImage, images[0]),
+    "mainImage": coalesce(
+      mainImage{..., asset->{_id, _ref, url}},
+      images[0]{..., asset->{_id, _ref, url}}
+    ),
     price,
     promoPrice,
     priceH,
@@ -73,8 +97,11 @@ export const queries = {
     "name": coalesce(name[$locale], name.fr, name),
     reference,
     "slug": slug.current,
-    "mainImage": coalesce(mainImage, images[0]),
-    gallery,
+    "mainImage": coalesce(
+      mainImage{..., asset->{_id, _ref, url, metadata{dimensions}}},
+      images[0]{..., asset->{_id, _ref, url}}
+    ),
+    "gallery": coalesce(gallery, images)[]{..., asset->{_id, _ref, url}},
     "description": coalesce(description[$locale], description.fr, description),
     price,
     promoPrice,
@@ -141,8 +168,12 @@ export const queries = {
     "name": coalesce(name[$locale], name.fr, name),
     reference,
     "slug": slug.current,
-    "mainImage": coalesce(mainImage, images[0], gallery[0]),
-    gallery,
+    "mainImage": coalesce(
+      mainImage{..., asset->{_id, _ref, url, metadata{dimensions}}},
+      images[0]{..., asset->{_id, _ref, url}},
+      gallery[0]{..., asset->{_id, _ref, url}}
+    ),
+    "gallery": coalesce(gallery, images)[]{..., asset->{_id, _ref, url}},
     "description": coalesce(description[$locale], description.fr, description),
     price,
     category,

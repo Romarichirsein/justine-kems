@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { client, urlForImage } from '@/sanity/client'
+import { client, urlForImage, safeImageUrl } from '@/sanity/client'
 import { ProductSchema } from '@/components/StructuredData'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -19,8 +19,12 @@ const allProductsFullQuery = `*[_type in ["product", "modele"]] {
   "nameEn": coalesce(name.en, name.fr, name),
   reference,
   "slug": slug.current,
-  "mainImage": coalesce(mainImage, images[0], gallery[0]),
-  gallery,
+  "mainImage": coalesce(
+    mainImage{..., asset->{_id, _ref, url, metadata{dimensions}}},
+    images[0]{..., asset->{_id, _ref, url}},
+    gallery[0]{..., asset->{_id, _ref, url}}
+  ),
+  "gallery": coalesce(gallery, images)[]{..., asset->{_id, _ref, url}},
   "descriptionFr": coalesce(description.fr, description),
   "descriptionEn": coalesce(description.en, description.fr, description),
   price,
@@ -107,8 +111,12 @@ async function findProductByNameSlug(rawSlug: string, locale: string) {
         "nameEn": coalesce(name.en, name.fr, name),
         reference,
         "slug": slug.current,
-        "mainImage": coalesce(mainImage, images[0], gallery[0]),
-        gallery,
+        "mainImage": coalesce(
+          mainImage{..., asset->{_id, _ref, url, metadata{dimensions}}},
+          images[0]{..., asset->{_id, _ref, url}},
+          gallery[0]{..., asset->{_id, _ref, url}}
+        ),
+        "gallery": coalesce(gallery, images)[]{..., asset->{_id, _ref, url}},
         "descriptionFr": coalesce(description.fr, description),
         "descriptionEn": coalesce(description.en, description.fr, description),
         price,
@@ -265,31 +273,41 @@ export default async function ProductPage({ params }: Props) {
           
           {/* Images */}
           <div className="space-y-6">
-            <div className="relative aspect-[3/4] w-full rounded-xl overflow-hidden shadow-2xl">
-              {product.mainImage && (
-                <Image
-                  src={urlForImage(product.mainImage).url()}
-                  alt={nameWithRef}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              )}
+            <div className="relative aspect-[3/4] w-full rounded-xl overflow-hidden shadow-2xl bg-gray-100 dark:bg-gray-800">
+              {(() => {
+                const imgSrc = safeImageUrl(product.mainImage, 800, 1067)
+                return imgSrc ? (
+                  <Image
+                    src={imgSrc}
+                    alt={nameWithRef}
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm">
+                    Image non disponible
+                  </div>
+                )
+              })()}
             </div>
 
             {/* Gallery (if any) */}
             {product.gallery && product.gallery.length > 0 && (
                <div className="grid grid-cols-4 gap-4">
-                 {product.gallery.map((img: any, i: number) => (
-                   <div key={i} className="relative aspect-square rounded-lg overflow-hidden shadow-md">
-                     <Image
-                        src={urlForImage(img).url()}
-                        alt={`Gallery image ${i+1}`}
-                        fill
-                        className="object-cover"
-                     />
-                   </div>
-                 ))}
+                 {product.gallery.map((img: any, i: number) => {
+                   const galSrc = safeImageUrl(img, 300, 300)
+                   return galSrc ? (
+                     <div key={i} className="relative aspect-square rounded-lg overflow-hidden shadow-md">
+                       <Image
+                          src={galSrc}
+                          alt={`Gallery image ${i+1}`}
+                          fill
+                          className="object-cover"
+                       />
+                     </div>
+                   ) : null
+                 })}
                </div>
             )}
           </div>

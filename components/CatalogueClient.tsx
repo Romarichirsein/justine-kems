@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
-import { client, urlForImage } from '@/sanity/client'
+import { client, urlForImage, safeImageUrl } from '@/sanity/client'
 import { productSlug } from '@/lib/slugify'
 
 interface CatalogueProduct {
@@ -301,21 +301,27 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
                 className="group cursor-pointer bg-white dark:bg-jk-dark-surface rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:shadow-jk-royal-gold/20 transition-all duration-300 hover:-translate-y-1"
               >
                 <div className="relative aspect-[3/4] overflow-hidden bg-gray-100 dark:bg-gray-800">
-                  {imgErrors.has(product._id) || (!product.images?.[0] && !product.mainImage) ? (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
-                      <span className="text-4xl mb-2">{getCategoryEmoji(product.category)}</span>
-                      <span className="text-xs text-center px-2">{getCategoryLabel(product.category)}</span>
-                    </div>
-                  ) : (
-                    <Image
-                      src={urlForImage(product.mainImage || product.images![0]).width(400).height(533).url()}
-                      alt={product.name}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                      onError={() => handleImgError(product._id)}
-                    />
-                  )}
+                  {(() => {
+                    const imgSrc = !imgErrors.has(product._id)
+                      ? safeImageUrl(product.mainImage, 400, 533) ||
+                        safeImageUrl(product.images?.[0], 400, 533)
+                      : null
+                    return imgSrc ? (
+                      <Image
+                        src={imgSrc}
+                        alt={product.name}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                        onError={() => handleImgError(product._id)}
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                        <span className="text-4xl mb-2">{getCategoryEmoji(product.category)}</span>
+                        <span className="text-xs text-center px-2">{getCategoryLabel(product.category)}</span>
+                      </div>
+                    )
+                  })()}
 
                   {product.promoPrice && (
                     <span className="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
@@ -399,30 +405,28 @@ export function CatalogueClient({ products, locale }: CatalogueClientProps) {
 
               {/* Left Column: Image */}
               <div className="relative md:w-1/2 h-72 md:h-auto bg-gray-100 dark:bg-gray-800 shrink-0">
-                {selectedProduct.mainImage || (selectedProduct.images && selectedProduct.images.length > 0) ? (
-                  <div className="relative w-full h-full">
-                    <Image 
-                      src={urlForImage(selectedProduct.mainImage || selectedProduct.images![0]).url()} 
-                      alt={selectedProduct.name} 
-                      fill 
-                      className="object-contain md:object-cover" 
-                      sizes="(max-width: 768px) 100vw, 50vw" 
-                      priority 
-                    />
-                    {(selectedProduct.images?.length || 0) > 1 && (
-                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                        {selectedProduct.images!.map((_, i) => (
-                          <div key={i} className={`w-2 h-2 rounded-full ${i === 0 ? 'bg-jk-royal-gold' : 'bg-white/50'}`} />
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                   <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
-                     <span className="text-6xl mb-3">{getCategoryEmoji(selectedProduct.category)}</span>
-                     <span className="text-sm">{getCategoryLabel(selectedProduct.category)}</span>
-                   </div>
-                )}
+                {(() => {
+                  const imgSrc =
+                    safeImageUrl(selectedProduct.mainImage, 800, 1067) ||
+                    safeImageUrl(selectedProduct.images?.[0], 800, 1067)
+                  return imgSrc ? (
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={imgSrc}
+                        alt={selectedProduct.name}
+                        fill
+                        className="object-contain md:object-cover"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        priority
+                      />
+                    </div>
+                  ) : (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                      <span className="text-6xl mb-3">{getCategoryEmoji(selectedProduct.category)}</span>
+                      <span className="text-sm">{getCategoryLabel(selectedProduct.category)}</span>
+                    </div>
+                  )
+                })()}
               </div>
 
               {/* Right Column: Details */}
